@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+	--color-brand: #62ace8;
+	--color-ink: #353c4b;
+	--color-base: #ffffff;
+}
+
+@layer base {
+	body {
+		@apply bg-base text-ink;
+	}
+}
