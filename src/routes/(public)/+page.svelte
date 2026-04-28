@@ -1,9 +1,28 @@
 <svelte:head>
-	<title>AllCare Refrigeration | Reliable Service Across Illawarra NSW</title>
+	<title>AllCare Refrigeration | HVAC, Refrigeration & Air Conditioning Illawarra NSW</title>
 	<meta
 		name="description"
-		content="Repairs, installations, servicing and urgent refrigeration or air conditioning support for homes and businesses across Illawarra NSW."
+		content="AllCare Refrigeration provides refrigeration, air conditioning and HVAC repairs, installations and maintenance from Albion Park across Wollongong, Shellharbour and Illawarra NSW."
 	/>
+	<link rel="canonical" href="https://allcarerefrigeration.com.au/" />
+	<meta name="robots" content="index, follow" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="AllCare Refrigeration | HVAC Services Across Illawarra NSW" />
+	<meta
+		property="og:description"
+		content="Local refrigeration, air conditioning and HVAC repairs, installations and maintenance for homes, businesses and commercial sites across Illawarra NSW."
+	/>
+	<meta property="og:url" content="https://allcarerefrigeration.com.au/" />
+	<meta property="og:site_name" content="AllCare Refrigeration" />
+	<meta property="og:locale" content="en_AU" />
+	<meta name="theme-color" content="#62ace8" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="AllCare Refrigeration | HVAC Services Across Illawarra NSW" />
+	<meta
+		name="twitter:description"
+		content="Refrigeration, air conditioning and HVAC service from Albion Park for customers across Wollongong, Shellharbour and the Illawarra."
+	/>
+	<script type="application/ld+json">{localBusinessJsonLd}</script>
 </svelte:head>
 
 <script>
@@ -15,20 +34,33 @@
 		'Clear advice before work begins'
 	];
 
+	const serviceAreas = [
+		'Albion Park',
+		'Wollongong',
+		'Shellharbour',
+		'Kiama',
+		'Warrawong',
+		'Dapto',
+		'Oak Flats',
+		'Port Kembla',
+		'Unanderra',
+		'Corrimal'
+	];
+
 	const services = [
 		{
-			title: 'Condenser Services',
-			text: 'Installation, repairs and planned maintenance for rooftop and commercial condenser units, including fan motors, coil cleaning and pressure diagnostics.',
+			title: 'Commercial Refrigeration & Condenser Services',
+			text: 'Installation, repairs and planned maintenance for cool rooms, freezers, rooftop units and commercial condensers, including fan motors, coil cleaning and pressure diagnostics.',
 			label: 'Image placeholder: condenser units'
 		},
 		{
-			title: 'Evaporator Services',
-			text: 'Cool room, freezer and air conditioning evaporator support that improves airflow, temperature consistency and long-term system reliability.',
+			title: 'Evaporator, Cool Room & Freezer Repairs',
+			text: 'Cool room, freezer and air conditioning evaporator support that improves airflow, temperature consistency, stock protection and long-term system reliability.',
 			label: 'Image placeholder: evaporator servicing'
 		},
 		{
 			title: 'Air Conditioning Installation & Repairs',
-			text: 'Split and ducted system supply, installation, fault finding and preventative servicing for homes, offices and light commercial properties.',
+			text: 'Split and ducted air conditioning supply, installation, HVAC fault finding and preventative servicing for homes, offices and light commercial properties.',
 			label: 'Image placeholder: air conditioning work'
 		}
 	];
@@ -59,16 +91,101 @@
 			name: 'David, Shellharbour'
 		}
 	];
+
+	const faqs = [
+		{
+			question: 'Do you service both refrigeration and air conditioning systems?',
+			answer:
+				'Yes. AllCare Refrigeration works on commercial refrigeration, cool rooms, freezers, condensers, evaporators, split systems and ducted air conditioning across the Illawarra.'
+		},
+		{
+			question: 'Which areas do you cover?',
+			answer:
+				'We are based at 157 Church St, Albion Park NSW 2527 and support customers across Albion Park, Wollongong, Shellharbour, Kiama, Dapto and surrounding Illawarra NSW suburbs.'
+		},
+		{
+			question: 'Can you help with urgent breakdowns?',
+			answer:
+				'Call 0411 532 233 if a refrigeration or air conditioning fault is affecting comfort, stock or trade. We will talk through the issue and help with the next practical step.'
+		}
+	];
+
+	const localBusinessJsonLd = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@graph': [
+			{
+				'@type': ['LocalBusiness', 'HVACBusiness'],
+				'@id': 'https://allcarerefrigeration.com.au/#business',
+				name: 'AllCare Refrigeration',
+				url: 'https://allcarerefrigeration.com.au/',
+				telephone: '+61411532233',
+				address: {
+					'@type': 'PostalAddress',
+					streetAddress: '157 Church St',
+					addressLocality: 'Albion Park',
+					addressRegion: 'NSW',
+					postalCode: '2527',
+					addressCountry: 'AU'
+				},
+				areaServed: [
+					{
+						'@type': 'AdministrativeArea',
+						name: 'Illawarra NSW'
+					},
+					...serviceAreas.map((area) => ({
+						'@type': 'City',
+						name: `${area} NSW`
+					}))
+				],
+				openingHoursSpecification: [
+					{
+						'@type': 'OpeningHoursSpecification',
+						dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+						opens: '08:00',
+						closes: '17:00'
+					}
+				],
+				priceRange: '$$',
+				description:
+					'Refrigeration, air conditioning and HVAC repairs, installations and maintenance for homes, businesses and commercial sites across Illawarra NSW.',
+				hasOfferCatalog: {
+					'@type': 'OfferCatalog',
+					name: 'Refrigeration and air conditioning services',
+					itemListElement: services.map((service) => ({
+						'@type': 'Offer',
+						itemOffered: {
+							'@type': 'Service',
+							name: service.title,
+							description: service.text,
+							areaServed: 'Illawarra NSW'
+						}
+					}))
+				}
+			},
+			{
+				'@type': 'FAQPage',
+				'@id': 'https://allcarerefrigeration.com.au/#faq',
+				mainEntity: faqs.map((faq) => ({
+					'@type': 'Question',
+					name: faq.question,
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: faq.answer
+					}
+				}))
+			}
+		]
+	});
 </script>
 
 <section class="hero">
 	<div class="hero-copy">
-		<p class="hero-kicker">The Most Reliable Refrigeration Services in Illawarra NSW</p>
-		<h1>Refrigeration and air conditioning service that keeps your day moving.</h1>
+		<p class="hero-kicker">Local Refrigeration, HVAC and Air Conditioning in Illawarra NSW</p>
+		<h1>Refrigeration and air conditioning service for Albion Park and the Illawarra.</h1>
 		<p class="hero-lead">
-			AllCare Refrigeration helps local homes and businesses with repairs, installations,
-			servicing and urgent breakdown support delivered with clear communication and no hidden
-			surprises.
+			AllCare Refrigeration helps local homes, shops, cafes, offices and commercial sites with
+			HVAC repairs, refrigeration installations, preventative servicing and urgent breakdown
+			support delivered with clear communication and no hidden surprises.
 		</p>
 		<div class="hero-actions" aria-label="Primary actions">
 			<a href="#contact">Request a Callback</a>
@@ -93,15 +210,16 @@
 <section class="about">
 	<div class="section-copy">
 		<p class="section-label">Who Are We?</p>
-		<h2>A full-service refrigeration and air conditioning team you can rely on.</h2>
+		<h2>A full-service refrigeration and air conditioning team based in Albion Park.</h2>
 		<p>
-			From condenser faults and evaporator maintenance to complete installations, we handle each
-			job end-to-end. We diagnose issues properly, explain options clearly and focus on quality
-			workmanship that lasts.
+			From condenser faults and evaporator maintenance to cool room repairs and complete air
+			conditioning installations, we handle each job end-to-end. We diagnose issues properly,
+			explain options clearly and focus on quality workmanship that lasts.
 		</p>
 		<p>
-			Whether you manage a commercial site or need dependable support at home, our goal is simple:
-			restore comfort, protect stock and keep your equipment running efficiently.
+			Whether you manage a commercial site in Wollongong, need dependable support at home in
+			Shellharbour or operate a business elsewhere in the Illawarra, our goal is simple: restore
+			comfort, protect stock and keep your equipment running efficiently.
 		</p>
 	</div>
 	<div
@@ -117,10 +235,10 @@
 <section class="services">
 	<div class="section-intro">
 		<p class="section-label">How can we help you?</p>
-		<h2>Core services for homes, businesses and commercial sites</h2>
+		<h2>HVAC, refrigeration and air conditioning services for local properties</h2>
 		<p>
-			Get practical support for the equipment that matters most, from urgent faults through to
-			planned servicing that reduces downtime.
+			Get practical support for the equipment that matters most, from urgent refrigeration faults
+			and air conditioning repairs through to planned servicing that reduces downtime.
 		</p>
 	</div>
 	<div class="service-grid">
@@ -136,15 +254,31 @@
 	</div>
 </section>
 
+<section class="service-areas" aria-labelledby="service-areas-heading">
+	<div class="section-intro">
+		<p class="section-label">Service Areas</p>
+		<h2 id="service-areas-heading">Refrigeration and air conditioning support across Illawarra NSW</h2>
+		<p>
+			Based in Albion Park, AllCare Refrigeration services nearby homes, businesses and
+			commercial sites across Wollongong, Shellharbour, Kiama and the wider Illawarra region.
+		</p>
+	</div>
+	<ul class="area-list" aria-label="Illawarra service areas">
+		{#each serviceAreas as area (area)}
+			<li>{area}</li>
+		{/each}
+	</ul>
+</section>
+
 <section class="emergency">
 	<div class="emergency-copy">
 		<p class="section-label">Emergency Support</p>
 		<h2>Have an urgent refrigeration or air conditioning problem?</h2>
 		<p>
 			When a system failure threatens comfort, stock or trade, call AllCare Refrigeration for
-			rapid-response support and practical next steps.
+			rapid-response support, clear advice and practical next steps from a local Illawarra team.
 		</p>
-		<a href="tel:0411532233">Call 041-1532-233</a>
+		<a href="tel:0411532233">Call 0411 532 233</a>
 	</div>
 	<div
 		class="image-placeholder emergency-placeholder"
@@ -185,6 +319,25 @@
 				{/each}
 			</ul>
 		</aside>
+	</div>
+</section>
+
+<section class="faq" aria-labelledby="faq-heading">
+	<div class="section-intro">
+		<p class="section-label">Frequently Asked Questions</p>
+		<h2 id="faq-heading">Common questions about our refrigeration and HVAC services</h2>
+		<p>
+			Planning a service visit or dealing with a breakdown? These answers cover the basics for
+			local customers across Albion Park and Illawarra NSW.
+		</p>
+	</div>
+	<div class="faq-grid">
+		{#each faqs as faq (faq.question)}
+			<details>
+				<summary>{faq.question}</summary>
+				<p>{faq.answer}</p>
+			</details>
+		{/each}
 	</div>
 </section>
 
@@ -239,7 +392,7 @@
 		</div>
 		<div>
 			<h3>Call Us</h3>
-			<p><a href="tel:0411532233">041-1532-233</a></p>
+			<p><a href="tel:0411532233">0411 532 233</a></p>
 		</div>
 		<div>
 			<h3>Operating Hours</h3>
@@ -582,6 +735,46 @@
 
 	.recent-placeholder {
 		min-height: 210px;
+	}
+
+	.area-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.7rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.area-list li {
+		border: 1px solid #d9e7f4;
+		border-radius: 999px;
+		background: #f8fbff;
+		color: #353c4b;
+		font-weight: 700;
+		padding: 0.65rem 0.95rem;
+	}
+
+	.faq-grid {
+		display: grid;
+		gap: 0.85rem;
+	}
+
+	.faq details {
+		border: 1px solid #d9e7f4;
+		border-radius: 16px;
+		background: #f8fbff;
+		padding: 1rem;
+	}
+
+	.faq summary {
+		cursor: pointer;
+		color: #353c4b;
+		font-weight: 800;
+	}
+
+	.faq details p {
+		margin-bottom: 0;
 	}
 
 	.gallery-grid {
