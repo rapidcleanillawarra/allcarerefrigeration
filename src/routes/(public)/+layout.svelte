@@ -7,7 +7,7 @@
 		<a href="/">Home</a>
 		<a href="/about">About</a>
 		<a href="/services">Services</a>
-		<a href="/admin">Admin</a>
+		<a href="/login">Admin Login</a>
 	</nav>
 </header>
 

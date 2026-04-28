@@ -1,2 +1,2 @@
 <h2>Dashboard</h2>
-<p>Use this area to monitor operations and manage internal pages.</p>
+<p>Welcome to the Allcare Refrigeration dashboard. Monitor operations and manage internal pages.</p>
