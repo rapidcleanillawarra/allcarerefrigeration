@@ -9,7 +9,6 @@
 			<a href="/">Home</a>
 			<a href="/about">About</a>
 			<a href="/services">Services</a>
-			<a href="/login">Admin Login</a>
 		</nav>
 		<a class="quote-btn" href="#contact">Get a Quote</a>
 	</div>
