@@ -1,19 +1,36 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	let { children } = $props();
 </script>
 
-<header>
-	<div class="nav-wrap">
-		<a class="brand" href="/">AllCare Refrigeration</a>
-		<nav aria-label="Public navigation">
-			<a href="/">Home</a>
-			<a href="/about">About</a>
-			<a href="/services">Services</a>
-		</nav>
-		<a class="quote-btn" href="#contact">Get a Quote</a>
+<header class="site-header">
+	<div class="emergency-strip">
+		<div class="header-shell emergency-content">
+			<span>Emergency refrigeration help available</span>
+			<a href="tel:0411532233">Call 041-1532-233</a>
+		</div>
 	</div>
-	<div class="emergency">Emergency? Call: <a href="tel:0411532233">041-1532-233</a></div>
-	<div class="container-line"></div>
+
+	<div class="header-glass">
+		<div class="header-shell nav-wrap">
+			<a class="brand" href={resolve('/')} aria-label="AllCare Refrigeration home">
+				<span class="brand-mark">AC</span>
+				<span class="brand-copy">
+					<span class="brand-name">AllCare Refrigeration</span>
+					<span class="brand-tagline">Rapid cooling support</span>
+				</span>
+			</a>
+
+			<nav aria-label="Public navigation">
+				<a href={resolve('/')}>Home</a>
+				<a href={resolve('/about')}>About</a>
+				<a href={resolve('/services')}>Services</a>
+			</nav>
+
+			<a class="quote-btn" href="#contact">Get a Quote</a>
+		</div>
+	</div>
 </header>
 
 <main class="container">
@@ -29,87 +46,207 @@
 			BlinkMacSystemFont,
 			'Segoe UI',
 			sans-serif;
-		background: #ffffff;
-		color: #353c4b;
+		background:
+			radial-gradient(circle at top left, rgba(98, 172, 232, 0.16), transparent 32rem),
+			linear-gradient(180deg, #f7fbff 0%, #ffffff 42%, #eef7ff 100%);
+		color: #243040;
 	}
 
-	header {
-		background: #ffffff;
+	:global(*) {
+		box-sizing: border-box;
+	}
+
+	.site-header {
 		position: sticky;
 		top: 0;
-		z-index: 20;
-		box-shadow: 0 2px 14px rgba(2, 6, 23, 0.06);
+		z-index: 30;
 	}
 
-	.nav-wrap {
+	.header-shell {
 		max-width: 1120px;
 		margin: 0 auto;
-		padding: 1rem 1.25rem;
+		padding-inline: 1.25rem;
+	}
+
+	.emergency-strip {
+		background: linear-gradient(90deg, #0f4c81, #256fa8);
+		color: #ffffff;
+		font-size: 0.9rem;
+		font-weight: 700;
+		letter-spacing: 0.01em;
+	}
+
+	.emergency-content {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
+		gap: 0.75rem;
+		padding-block: 0.55rem;
 		flex-wrap: wrap;
 	}
 
-	.brand {
-		color: #353c4b;
-		font-weight: 800;
+	.emergency-content a {
+		color: #ffffff;
 		text-decoration: none;
-		letter-spacing: 0.015em;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+	}
+
+	.emergency-content a:hover {
+		border-color: #ffffff;
+	}
+
+	.header-glass {
+		background: rgba(255, 255, 255, 0.78);
+		border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+		box-shadow: 0 16px 40px rgba(15, 76, 129, 0.08);
+		backdrop-filter: blur(18px);
+	}
+
+	.nav-wrap {
+		display: grid;
+		grid-template-columns: minmax(13rem, 1fr) auto auto;
+		align-items: center;
+		gap: 1rem;
+		padding-block: 1rem;
+	}
+
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		min-width: 0;
+		color: #243040;
+		text-decoration: none;
+	}
+
+	.brand-mark {
+		display: grid;
+		width: 2.75rem;
+		height: 2.75rem;
+		flex: 0 0 auto;
+		place-items: center;
+		border-radius: 0.9rem;
+		background: linear-gradient(135deg, #62ace8, #0f4c81);
+		color: #ffffff;
+		font-size: 0.95rem;
+		font-weight: 900;
+		letter-spacing: 0.04em;
+		box-shadow: 0 12px 28px rgba(98, 172, 232, 0.28);
+	}
+
+	.brand-copy {
+		display: grid;
+		line-height: 1.1;
+	}
+
+	.brand-name {
+		font-size: clamp(1rem, 2vw, 1.15rem);
+		font-weight: 900;
+		letter-spacing: -0.02em;
+	}
+
+	.brand-tagline {
+		margin-top: 0.2rem;
+		color: #64748b;
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
 	}
 
 	nav {
 		display: flex;
-		gap: 1.15rem;
+		justify-content: center;
+		gap: 0.35rem;
 		flex-wrap: wrap;
 	}
 
 	nav a {
-		color: #353c4b;
+		color: #334155;
 		text-decoration: none;
 		font-weight: 600;
+		padding: 0.65rem 0.85rem;
+		border-radius: 999px;
+		transition:
+			background 160ms ease,
+			color 160ms ease;
 	}
 
 	nav a:hover,
-	.brand:hover {
-		color: #62ace8;
+	nav a:focus-visible {
+		background: rgba(98, 172, 232, 0.12);
+		color: #0f4c81;
+	}
+
+	.brand:hover .brand-name,
+	.brand:focus-visible .brand-name {
+		color: #0f4c81;
 	}
 
 	.quote-btn {
-		background: #62ace8;
+		justify-self: end;
+		background: linear-gradient(135deg, #62ace8, #2476b4);
 		color: #ffffff;
 		text-decoration: none;
-		font-weight: 700;
-		padding: 0.6rem 1rem;
+		font-weight: 900;
+		padding: 0.78rem 1.15rem;
 		border-radius: 999px;
+		box-shadow: 0 14px 32px rgba(36, 118, 180, 0.28);
+		transition:
+			box-shadow 160ms ease,
+			transform 160ms ease;
 	}
 
-	.quote-btn:hover {
-		background: #4b96d4;
-	}
-
-	.emergency {
-		max-width: 1120px;
-		margin: 0 auto;
-		padding: 0 1.25rem 0.8rem;
-		font-size: 0.93rem;
-		color: #475569;
-	}
-
-	.emergency a {
-		color: #62ace8;
-		text-decoration: none;
-		font-weight: 700;
-	}
-
-	.container-line {
-		border-top: 1px solid #d9e7f4;
+	.quote-btn:hover,
+	.quote-btn:focus-visible {
+		box-shadow: 0 18px 38px rgba(36, 118, 180, 0.36);
+		transform: translateY(-1px);
 	}
 
 	.container {
-		max-width: 1120px;
+		width: min(100% - 2.5rem, 1120px);
 		margin: 0 auto;
-		padding: 2rem 1.25rem 3rem;
+		padding: 2.5rem 0 4rem;
+	}
+
+	@media (max-width: 760px) {
+		.nav-wrap {
+			grid-template-columns: 1fr;
+			justify-items: stretch;
+			gap: 0.9rem;
+		}
+
+		nav {
+			justify-content: flex-start;
+		}
+
+		.quote-btn {
+			justify-self: start;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.header-shell {
+			padding-inline: 1rem;
+		}
+
+		.emergency-content {
+			align-items: flex-start;
+			flex-direction: column;
+		}
+
+		.brand-mark {
+			width: 2.5rem;
+			height: 2.5rem;
+		}
+
+		nav a {
+			padding-inline: 0.7rem;
+		}
+
+		.container {
+			width: min(100% - 2rem, 1120px);
+			padding-top: 2rem;
+		}
 	}
 </style>
