@@ -111,14 +111,14 @@
 		min-height: 240px;
 		place-items: center;
 		overflow: hidden;
-		border: 1px solid rgba(98, 172, 232, 0.28);
+		border: 1px solid rgba(15, 87, 251, 0.28);
 		border-radius: 22px;
 		background:
 			linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(217, 231, 244, 0.72)),
 			repeating-linear-gradient(
 				-45deg,
-				rgba(98, 172, 232, 0.16) 0,
-				rgba(98, 172, 232, 0.16) 12px,
+				rgba(15, 87, 251, 0.16) 0,
+				rgba(15, 87, 251, 0.16) 12px,
 				rgba(255, 255, 255, 0.24) 12px,
 				rgba(255, 255, 255, 0.24) 24px
 			);
@@ -140,12 +140,12 @@
 	}
 
 	button.site-image-slot:focus-visible {
-		outline: 2px solid #62ace8;
+		outline: 2px solid var(--color-brand);
 	}
 
 	.site-image-slot--has-image {
 		padding: 0;
-		border-color: rgba(98, 172, 232, 0.35);
+		border-color: rgba(15, 87, 251, 0.35);
 		background: #0f172a;
 	}
 

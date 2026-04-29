@@ -15,7 +15,7 @@
 	<meta property="og:url" content="https://allcarerefrigeration.com.au/" />
 	<meta property="og:site_name" content="AllCare Refrigeration" />
 	<meta property="og:locale" content="en_AU" />
-	<meta name="theme-color" content="#62ace8" />
+	<meta name="theme-color" content="#0f57fb" />
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:title" content="AllCare Refrigeration | HVAC Services Across Illawarra NSW" />
 	<meta
@@ -772,9 +772,9 @@
 		overflow: clip;
 		color: #ffffff;
 		background:
-			radial-gradient(ellipse 90% 70% at 12% 88%, rgba(28, 45, 120, 0.55), transparent 52%),
+			radial-gradient(ellipse 90% 70% at 12% 88%, rgba(4, 28, 100, 0.5), transparent 52%),
 			radial-gradient(circle at 88% 14%, rgba(255, 255, 255, 0.22), transparent 26%),
-			linear-gradient(115deg, #4d6fff 0%, #3b59ff 42%, #2848d8 100%);
+			linear-gradient(115deg, var(--color-brand-light) 0%, var(--color-brand) 45%, var(--color-brand-deeper) 100%);
 	}
 
 	.hero-bg {
@@ -798,7 +798,7 @@
 		left: -10%;
 		width: 36rem;
 		height: 36rem;
-		background: radial-gradient(circle, rgba(120, 150, 255, 0.5), transparent 70%);
+		background: radial-gradient(circle, rgba(77, 132, 255, 0.48), transparent 70%);
 	}
 
 	.hero-bg__layer--2 {
@@ -900,7 +900,7 @@
 
 	.btn-primary {
 		background: #ffffff;
-		color: #2a3fd4;
+		color: var(--color-brand);
 		box-shadow: 0 14px 30px -10px rgba(15, 23, 42, 0.4);
 		border-radius: 0.65rem;
 	}
@@ -1005,7 +1005,7 @@
 		width: 2.4rem;
 		height: 2.4rem;
 		border-radius: 0.75rem;
-		background: linear-gradient(135deg, #62ace8, #1e5f95);
+		background: linear-gradient(135deg, var(--color-brand-light), var(--color-brand));
 		color: #ffffff;
 	}
 
@@ -1128,8 +1128,8 @@
 
 	.service-card:hover {
 		transform: translateY(-6px);
-		box-shadow: 0 28px 60px -22px rgba(15, 76, 129, 0.32);
-		border-color: rgba(98, 172, 232, 0.45);
+		box-shadow: 0 28px 60px -22px rgba(4, 45, 122, 0.32);
+		border-color: rgba(15, 87, 251, 0.45);
 	}
 
 	.service-card__media {
@@ -1197,7 +1197,7 @@
 		color: var(--color-ink);
 		font-weight: 700;
 		font-size: 0.9rem;
-		box-shadow: 0 4px 14px -8px rgba(15, 76, 129, 0.18);
+		box-shadow: 0 4px 14px -8px rgba(4, 45, 122, 0.18);
 		transition:
 			transform 220ms var(--ease-spring),
 			border-color 220ms var(--ease-spring),
@@ -1214,7 +1214,7 @@
 
 	.area-pill:hover {
 		transform: translateY(-3px);
-		border-color: rgba(98, 172, 232, 0.5);
+		border-color: rgba(15, 87, 251, 0.5);
 		background: linear-gradient(135deg, #ffffff, #eef7ff);
 		color: var(--color-brand-deeper);
 	}
@@ -1239,8 +1239,8 @@
 		border-radius: var(--radius-xl);
 		margin: 0 clamp(1rem, 4vw, 2.75rem);
 		background:
-			radial-gradient(ellipse at 90% 20%, rgba(143, 199, 240, 0.4), transparent 60%),
-			linear-gradient(135deg, #0f4c81, #1e5f95 60%, #0a2e51);
+			radial-gradient(ellipse at 90% 20%, rgba(77, 132, 255, 0.38), transparent 60%),
+			linear-gradient(135deg, var(--color-brand-deeper), var(--color-brand) 60%, var(--color-brand-night));
 		box-shadow: 0 32px 80px -28px rgba(15, 23, 42, 0.5);
 	}
 
@@ -1306,7 +1306,7 @@
 		width: 1.25rem;
 		height: 1.25rem;
 		color: #ffffff;
-		background: linear-gradient(135deg, #62ace8, #1e5f95);
+		background: linear-gradient(135deg, var(--color-brand-light), var(--color-brand));
 		padding: 0.55rem;
 		border-radius: 999px;
 		box-sizing: content-box;
@@ -1336,7 +1336,7 @@
 		width: 1.25rem;
 		height: 1.25rem;
 		border-radius: 999px;
-		background: rgba(98, 172, 232, 0.5);
+		background: rgba(15, 87, 251, 0.5);
 		pointer-events: none;
 	}
 
@@ -1377,7 +1377,7 @@
 
 	.testimonial:hover {
 		transform: translateY(-3px);
-		box-shadow: 0 24px 52px -22px rgba(15, 76, 129, 0.28);
+		box-shadow: 0 24px 52px -22px rgba(4, 45, 122, 0.28);
 	}
 
 	.testimonial__quote {
@@ -1406,7 +1406,7 @@
 		width: 2.2rem;
 		height: 2.2rem;
 		border-radius: 999px;
-		background: linear-gradient(135deg, #62ace8, #1e5f95);
+		background: linear-gradient(135deg, var(--color-brand-light), var(--color-brand));
 		color: #ffffff;
 		font-weight: 900;
 		font-size: 0.95rem;
@@ -1469,7 +1469,7 @@
 		height: 1rem;
 		flex: 0 0 auto;
 		padding: 0.2rem;
-		background: rgba(98, 172, 232, 0.16);
+		background: rgba(15, 87, 251, 0.16);
 		border-radius: 999px;
 		color: var(--color-brand-deep);
 	}
@@ -1487,15 +1487,15 @@
 		border-radius: var(--radius-md);
 		background: #ffffff;
 		padding: 1.1rem 1.25rem;
-		box-shadow: 0 4px 16px -10px rgba(15, 76, 129, 0.18);
+		box-shadow: 0 4px 16px -10px rgba(4, 45, 122, 0.18);
 		transition:
 			border-color 220ms var(--ease-spring),
 			box-shadow 220ms var(--ease-spring);
 	}
 
 	.faq-item[open] {
-		border-color: rgba(98, 172, 232, 0.45);
-		box-shadow: 0 14px 30px -16px rgba(15, 76, 129, 0.28);
+		border-color: rgba(15, 87, 251, 0.45);
+		box-shadow: 0 14px 30px -16px rgba(4, 45, 122, 0.28);
 	}
 
 	.faq-item summary {
@@ -1519,7 +1519,7 @@
 		width: 1.4rem;
 		height: 1.4rem;
 		border-radius: 999px;
-		background: rgba(98, 172, 232, 0.16);
+		background: rgba(15, 87, 251, 0.16);
 		transition: transform 280ms var(--ease-spring);
 	}
 
@@ -1579,7 +1579,7 @@
 
 	.gallery-item:hover {
 		transform: translateY(-4px);
-		box-shadow: 0 28px 56px -22px rgba(15, 76, 129, 0.3);
+		box-shadow: 0 28px 56px -22px rgba(4, 45, 122, 0.3);
 	}
 
 	.gallery-item :global(.image-placeholder) {
@@ -1615,8 +1615,8 @@
 		padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem);
 		border-radius: var(--radius-xl);
 		background:
-			radial-gradient(circle at 80% 20%, rgba(143, 199, 240, 0.35), transparent 60%),
-			linear-gradient(135deg, #0f4c81, #1e5f95 60%, #2476b4);
+			radial-gradient(circle at 80% 20%, rgba(77, 132, 255, 0.32), transparent 60%),
+			linear-gradient(135deg, var(--color-brand-deeper), var(--color-brand) 60%, var(--color-brand-light));
 		color: #ffffff;
 		box-shadow: 0 32px 80px -28px rgba(15, 23, 42, 0.45);
 	}
@@ -1675,7 +1675,7 @@
 			linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(232, 245, 255, 0.78)),
 			repeating-linear-gradient(
 				-45deg,
-				rgba(98, 172, 232, 0.16) 0 14px,
+				rgba(15, 87, 251, 0.16) 0 14px,
 				rgba(255, 255, 255, 0.24) 14px 28px
 			);
 	}
@@ -1702,7 +1702,7 @@
 
 	.contact-card:hover {
 		transform: translateY(-3px);
-		box-shadow: 0 22px 44px -22px rgba(15, 76, 129, 0.3);
+		box-shadow: 0 22px 44px -22px rgba(4, 45, 122, 0.3);
 	}
 
 	.contact-card__icon {
@@ -1711,7 +1711,7 @@
 		width: 2.4rem;
 		height: 2.4rem;
 		border-radius: 0.75rem;
-		background: linear-gradient(135deg, rgba(98, 172, 232, 0.18), rgba(15, 76, 129, 0.18));
+		background: linear-gradient(135deg, rgba(15, 87, 251, 0.18), rgba(4, 45, 122, 0.18));
 		color: var(--color-brand-deep);
 	}
 
@@ -1750,13 +1750,13 @@
 		min-height: 16rem;
 		place-items: center;
 		overflow: hidden;
-		border: 1px solid rgba(98, 172, 232, 0.28);
+		border: 1px solid rgba(15, 87, 251, 0.28);
 		border-radius: var(--radius-lg);
 		background:
 			linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(217, 231, 244, 0.72)),
 			repeating-linear-gradient(
 				-45deg,
-				rgba(98, 172, 232, 0.16) 0 12px,
+				rgba(15, 87, 251, 0.16) 0 12px,
 				rgba(255, 255, 255, 0.24) 12px 24px
 			);
 		color: var(--color-ink);

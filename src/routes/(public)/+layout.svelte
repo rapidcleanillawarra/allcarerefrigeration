@@ -272,9 +272,9 @@
 		isolation: isolate;
 		min-height: 100vh;
 		background:
-			radial-gradient(1200px 600px at 90% -10%, rgba(98, 172, 232, 0.18), transparent 70%),
-			radial-gradient(1000px 600px at -10% 30%, rgba(15, 76, 129, 0.12), transparent 70%),
-			linear-gradient(180deg, #f7fbff 0%, #ffffff 38%, #eef7ff 100%);
+			radial-gradient(1200px 600px at 90% -10%, rgba(15, 87, 251, 0.16), transparent 70%),
+			radial-gradient(1000px 600px at -10% 30%, rgba(4, 45, 122, 0.1), transparent 70%),
+			linear-gradient(180deg, var(--color-mist) 0%, #ffffff 38%, var(--color-frost) 100%);
 		color: var(--color-ink);
 		overflow: clip;
 	}
@@ -302,7 +302,7 @@
 		left: -8rem;
 		width: 30rem;
 		height: 30rem;
-		background: radial-gradient(circle, rgba(98, 172, 232, 0.55), rgba(98, 172, 232, 0));
+		background: radial-gradient(circle, rgba(15, 87, 251, 0.5), rgba(15, 87, 251, 0));
 		transform: translate3d(0, var(--py, 0px), 0);
 	}
 
@@ -311,7 +311,7 @@
 		right: -10rem;
 		width: 36rem;
 		height: 36rem;
-		background: radial-gradient(circle, rgba(143, 199, 240, 0.55), rgba(143, 199, 240, 0));
+		background: radial-gradient(circle, rgba(77, 132, 255, 0.52), rgba(77, 132, 255, 0));
 		animation-duration: 28s;
 		transform: translate3d(0, var(--py, 0px), 0);
 	}
@@ -321,7 +321,7 @@
 		left: 30%;
 		width: 32rem;
 		height: 32rem;
-		background: radial-gradient(circle, rgba(15, 76, 129, 0.32), rgba(15, 76, 129, 0));
+		background: radial-gradient(circle, rgba(4, 45, 122, 0.34), rgba(4, 45, 122, 0));
 		animation-duration: 32s;
 		transform: translate3d(0, var(--py, 0px), 0);
 	}
@@ -338,7 +338,12 @@
 
 	.emergency-strip {
 		position: relative;
-		background: linear-gradient(90deg, #0f4c81, #1e5f95 55%, #2476b4);
+		background: linear-gradient(
+			90deg,
+			var(--color-brand-deeper),
+			var(--color-brand) 55%,
+			var(--color-brand-light)
+		);
 		color: #ffffff;
 		font-size: 0.86rem;
 		font-weight: 700;
@@ -415,7 +420,7 @@
 
 	.site-header--condensed .header-glass {
 		background: rgba(255, 255, 255, 0.92);
-		box-shadow: 0 16px 36px -22px rgba(15, 76, 129, 0.32);
+		box-shadow: 0 16px 36px -22px rgba(4, 45, 122, 0.32);
 	}
 
 	.nav-wrap {
@@ -465,7 +470,7 @@
 		font-weight: 700;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
-		color: #9dc4e6;
+		color: #a8c5f5;
 	}
 
 	.site-header--condensed .brand-logo {
@@ -499,7 +504,7 @@
 		bottom: 0.35rem;
 		width: 0;
 		height: 2px;
-		background: linear-gradient(90deg, #62ace8, #0f4c81);
+		background: linear-gradient(90deg, var(--color-brand-light), var(--color-brand-deeper));
 		border-radius: 2px;
 		transform: translateX(-50%);
 		transition: width 240ms var(--ease-spring);
@@ -507,7 +512,7 @@
 
 	.primary-nav a:hover,
 	.primary-nav a:focus-visible {
-		background: rgba(98, 172, 232, 0.12);
+		background: rgba(15, 87, 251, 0.12);
 		color: var(--color-brand-deeper);
 	}
 
@@ -521,13 +526,13 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.4rem;
-		background: linear-gradient(135deg, #62ace8, #1e5f95);
+		background: linear-gradient(135deg, var(--color-brand-light), var(--color-brand));
 		color: #ffffff;
 		text-decoration: none;
 		font-weight: 800;
 		padding: 0.7rem 1.1rem;
 		border-radius: 999px;
-		box-shadow: 0 14px 32px -10px rgba(36, 118, 180, 0.55);
+		box-shadow: 0 14px 32px -10px rgba(15, 87, 251, 0.5);
 		transition:
 			box-shadow 220ms var(--ease-spring),
 			transform 220ms var(--ease-spring),
@@ -542,7 +547,7 @@
 
 	.quote-btn:hover,
 	.quote-btn:focus-visible {
-		box-shadow: 0 18px 38px -8px rgba(36, 118, 180, 0.6);
+		box-shadow: 0 18px 38px -8px rgba(15, 87, 251, 0.55);
 		transform: translateY(-1px);
 		filter: brightness(1.04);
 	}
@@ -593,12 +598,12 @@
 	}
 
 	.mobile-nav a:hover {
-		background: rgba(98, 172, 232, 0.12);
+		background: rgba(15, 87, 251, 0.12);
 	}
 
 	.mobile-nav__cta {
 		margin-top: 0.4rem;
-		background: linear-gradient(135deg, #62ace8, #1e5f95);
+		background: linear-gradient(135deg, var(--color-brand-light), var(--color-brand));
 		color: #ffffff !important;
 		text-align: center;
 	}
@@ -638,8 +643,8 @@
 		padding-top: clamp(2.5rem, 5vw, 4rem);
 		padding-bottom: 2rem;
 		background:
-			radial-gradient(800px 320px at 90% 0%, rgba(98, 172, 232, 0.18), transparent 70%),
-			linear-gradient(180deg, #0f4c81, #0a2e51);
+			radial-gradient(800px 320px at 90% 0%, rgba(15, 87, 251, 0.16), transparent 70%),
+			linear-gradient(180deg, var(--color-brand-deeper), var(--color-brand-night));
 		color: #d6e8f7;
 		overflow: hidden;
 	}
@@ -653,8 +658,8 @@
 		background: linear-gradient(
 			90deg,
 			transparent,
-			rgba(98, 172, 232, 0.6),
-			rgba(143, 199, 240, 0.6),
+			rgba(77, 132, 255, 0.55),
+			rgba(15, 87, 251, 0.55),
 			transparent
 		);
 	}

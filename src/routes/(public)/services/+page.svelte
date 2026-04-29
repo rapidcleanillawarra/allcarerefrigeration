@@ -415,7 +415,7 @@
 		color: #ffffff;
 		background:
 			radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.28), transparent 26rem),
-			linear-gradient(135deg, #1e5f95 0%, #4b96d4 52%, #62ace8 100%);
+			linear-gradient(135deg, var(--color-brand-deeper) 0%, var(--color-brand) 52%, var(--color-brand-light) 100%);
 	}
 
 	.hero-bg {
@@ -446,7 +446,7 @@
 		left: -8rem;
 		width: 30rem;
 		height: 30rem;
-		background: radial-gradient(circle, rgba(143, 199, 240, 0.6), transparent 65%);
+		background: radial-gradient(circle, rgba(77, 132, 255, 0.58), transparent 65%);
 	}
 
 	.hero-bg__grid {
@@ -480,7 +480,7 @@
 
 	.hero-highlight {
 		display: inline-block;
-		background: linear-gradient(120deg, #ffffff, #cfe6f8 65%, #80c0eb);
+		background: linear-gradient(120deg, #ffffff, #dbe8ff 65%, var(--color-brand-light));
 		-webkit-background-clip: text;
 		background-clip: text;
 		color: transparent;
@@ -607,8 +607,8 @@
 
 	.service-card:hover {
 		transform: translateY(-6px);
-		box-shadow: 0 28px 60px -22px rgba(15, 76, 129, 0.32);
-		border-color: rgba(98, 172, 232, 0.45);
+		box-shadow: 0 28px 60px -22px rgba(4, 45, 122, 0.32);
+		border-color: rgba(15, 87, 251, 0.45);
 	}
 
 	.service-card__media {
@@ -622,7 +622,7 @@
 		min-height: 11rem;
 		place-items: center;
 		background:
-			linear-gradient(135deg, rgba(98, 172, 232, 0.95), rgba(30, 95, 149, 0.95)),
+			linear-gradient(135deg, rgba(15, 87, 251, 0.95), rgba(4, 45, 122, 0.95)),
 			repeating-linear-gradient(
 				-45deg,
 				rgba(255, 255, 255, 0.18) 0 8px,
@@ -691,7 +691,7 @@
 		flex: 0 0 auto;
 		padding: 0.2rem;
 		border-radius: 999px;
-		background: rgba(98, 172, 232, 0.16);
+		background: rgba(15, 87, 251, 0.16);
 		color: var(--color-brand-deep);
 	}
 
@@ -699,8 +699,8 @@
 		margin-bottom: 0;
 		padding: 0.7rem 0.85rem;
 		border-radius: 0.7rem;
-		background: linear-gradient(135deg, rgba(98, 172, 232, 0.12), rgba(98, 172, 232, 0.04));
-		border: 1px solid rgba(98, 172, 232, 0.22);
+		background: linear-gradient(135deg, rgba(15, 87, 251, 0.12), rgba(15, 87, 251, 0.04));
+		border: 1px solid rgba(15, 87, 251, 0.22);
 		font-weight: 700;
 		color: var(--color-brand-deep);
 	}
@@ -721,8 +721,8 @@
 		padding: clamp(1.8rem, 4vw, 3rem);
 		border-radius: var(--radius-xl);
 		background:
-			radial-gradient(ellipse at 90% 20%, rgba(143, 199, 240, 0.32), transparent 60%),
-			linear-gradient(135deg, rgba(30, 95, 149, 0.96), rgba(53, 60, 75, 0.97));
+			radial-gradient(ellipse at 90% 20%, rgba(77, 132, 255, 0.28), transparent 60%),
+			linear-gradient(135deg, rgba(4, 45, 122, 0.96), rgba(53, 60, 75, 0.97));
 		color: #ffffff;
 		box-shadow: 0 32px 80px -28px rgba(15, 23, 42, 0.45);
 	}
@@ -789,7 +789,7 @@
 	.locations li svg {
 		width: 0.85rem;
 		height: 0.85rem;
-		color: #cfe6f8;
+		color: #d6e4ff;
 	}
 
 	.locations li:hover {
@@ -804,12 +804,12 @@
 		gap: 0.18rem;
 		min-width: min(100%, 280px);
 		padding: 1.1rem 1.4rem;
-		background: linear-gradient(135deg, #62ace8, #1e5f95);
+		background: linear-gradient(135deg, var(--color-brand-light), var(--color-brand));
 		color: #ffffff;
 		text-decoration: none;
 		font-weight: 800;
 		border-radius: var(--radius-lg);
-		box-shadow: 0 22px 48px -18px rgba(98, 172, 232, 0.55);
+		box-shadow: 0 22px 48px -18px rgba(15, 87, 251, 0.55);
 		transition:
 			transform 220ms var(--ease-spring),
 			box-shadow 220ms var(--ease-spring),
@@ -835,7 +835,7 @@
 
 	.emergency-call:hover {
 		transform: translateY(-3px);
-		box-shadow: 0 26px 56px -18px rgba(98, 172, 232, 0.7);
+		box-shadow: 0 26px 56px -18px rgba(15, 87, 251, 0.7);
 		filter: brightness(1.04);
 	}
 
@@ -892,7 +892,7 @@
 
 	.contact-card:hover {
 		transform: translateY(-3px);
-		box-shadow: 0 22px 44px -22px rgba(15, 76, 129, 0.3);
+		box-shadow: 0 22px 44px -22px rgba(4, 45, 122, 0.3);
 	}
 
 	.contact-card__icon {
@@ -901,7 +901,7 @@
 		width: 2.4rem;
 		height: 2.4rem;
 		border-radius: 0.75rem;
-		background: linear-gradient(135deg, rgba(98, 172, 232, 0.18), rgba(15, 76, 129, 0.18));
+		background: linear-gradient(135deg, rgba(15, 87, 251, 0.18), rgba(4, 45, 122, 0.18));
 		color: var(--color-brand-deep);
 	}
 

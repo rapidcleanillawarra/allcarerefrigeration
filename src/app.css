@@ -4,18 +4,22 @@
  * Design tokens
  * ---------------------------------------------------------------- */
 @theme {
-	/* Brand */
-	--color-brand: #62ace8;
-	--color-brand-soft: #e6f3fc;
-	--color-brand-deep: #1e5f95;
-	--color-brand-deeper: #0f4c81;
-	--color-brand-shadow: rgba(98, 172, 232, 0.45);
+	/* Brand — primary #0f57fb */
+	--color-brand: #0f57fb;
+	--color-brand-light: #4d84ff;
+	--color-brand-soft: #e8f0ff;
+	--color-brand-deep: #0b4dd4;
+	--color-brand-deeper: #042d7a;
+	--color-brand-night: #021224;
+	--color-brand-shadow: rgba(15, 87, 251, 0.45);
+	--color-brand-rgb: 15, 87, 251;
+	--color-brand-deeper-rgb: 4, 45, 122;
 
 	/* Surfaces */
 	--color-base: #ffffff;
-	--color-mist: #f7fbff;
-	--color-frost: #eef7ff;
-	--color-surface-soft: #f8fbff;
+	--color-mist: #f5f8ff;
+	--color-frost: #edf2ff;
+	--color-surface-soft: #f7f9ff;
 
 	/* Ink */
 	--color-ink: #1f2937;
@@ -23,8 +27,8 @@
 	--color-ink-subtle: #94a3b8;
 
 	/* Lines */
-	--color-line: rgba(15, 76, 129, 0.1);
-	--color-line-strong: rgba(15, 76, 129, 0.18);
+	--color-line: rgba(15, 87, 251, 0.1);
+	--color-line-strong: rgba(15, 87, 251, 0.18);
 
 	/* Typography */
 	--font-sans:
@@ -41,8 +45,8 @@
 
 	/* Shadows */
 	--shadow-soft: 0 8px 24px -12px rgba(15, 23, 42, 0.18);
-	--shadow-card: 0 18px 48px -16px rgba(15, 76, 129, 0.18);
-	--shadow-glow: 0 16px 40px -8px rgba(98, 172, 232, 0.42);
+	--shadow-card: 0 18px 48px -16px rgba(4, 45, 122, 0.18);
+	--shadow-glow: 0 16px 40px -8px rgba(15, 87, 251, 0.35);
 	--shadow-deep: 0 32px 80px -28px rgba(15, 23, 42, 0.34);
 
 	/* Easing */
@@ -87,7 +91,7 @@
 	/* Modern, subtle scrollbar */
 	* {
 		scrollbar-width: thin;
-		scrollbar-color: rgba(98, 172, 232, 0.4) transparent;
+		scrollbar-color: rgba(15, 87, 251, 0.4) transparent;
 	}
 
 	*::-webkit-scrollbar {
@@ -96,19 +100,19 @@
 	}
 
 	*::-webkit-scrollbar-thumb {
-		background: linear-gradient(180deg, rgba(98, 172, 232, 0.5), rgba(30, 95, 149, 0.55));
+		background: linear-gradient(180deg, rgba(15, 87, 251, 0.5), rgba(4, 45, 122, 0.55));
 		border-radius: 999px;
 		border: 2px solid transparent;
 		background-clip: padding-box;
 	}
 
 	*::-webkit-scrollbar-thumb:hover {
-		background: linear-gradient(180deg, rgba(98, 172, 232, 0.75), rgba(30, 95, 149, 0.85));
+		background: linear-gradient(180deg, rgba(15, 87, 251, 0.75), rgba(4, 45, 122, 0.85));
 		background-clip: padding-box;
 	}
 
 	::selection {
-		background: rgba(98, 172, 232, 0.32);
+		background: rgba(15, 87, 251, 0.28);
 		color: var(--color-brand-deeper);
 	}
 
@@ -184,10 +188,10 @@
 @keyframes pulse-glow {
 	0%,
 	100% {
-		box-shadow: 0 0 0 0 rgba(98, 172, 232, 0.55);
+		box-shadow: 0 0 0 0 rgba(15, 87, 251, 0.55);
 	}
 	50% {
-		box-shadow: 0 0 0 14px rgba(98, 172, 232, 0);
+		box-shadow: 0 0 0 14px rgba(15, 87, 251, 0);
 	}
 }
 
@@ -352,7 +356,7 @@
 
 	/* Pretty gradient text */
 	.text-gradient {
-		background: linear-gradient(120deg, var(--color-brand-deeper), var(--color-brand) 60%, #8fc7f0);
+		background: linear-gradient(120deg, var(--color-brand-deeper), var(--color-brand) 60%, #93b4ff);
 		-webkit-background-clip: text;
 		background-clip: text;
 		color: transparent;
@@ -368,7 +372,7 @@
 	}
 
 	.eyebrow--on-dark {
-		color: #cce8fb;
+		color: #d4e4ff;
 	}
 
 	.glow-ring::after {
@@ -377,7 +381,7 @@
 		inset: -2px;
 		border-radius: inherit;
 		padding: 1px;
-		background: linear-gradient(140deg, rgba(98, 172, 232, 0.7), rgba(15, 76, 129, 0.1) 65%);
+		background: linear-gradient(140deg, rgba(15, 87, 251, 0.7), rgba(4, 45, 122, 0.1) 65%);
 		mask:
 			linear-gradient(#000 0 0) content-box,
 			linear-gradient(#000 0 0);
