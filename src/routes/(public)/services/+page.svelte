@@ -6,7 +6,16 @@
 	/>
 </svelte:head>
 
-<script>
+<script lang="ts">
+	import type { PageData } from './$types';
+	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+
+	let { data }: { data: PageData } = $props();
+
+	function cardKey(accent: string): string {
+		return accent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+	}
+
 	const services = [
 		{
 			title: 'Condenser Installation & Repairs',
@@ -131,9 +140,17 @@
 	<div class="service-grid">
 		{#each services as service (service.title)}
 			<article class="service-card">
-				<div class="service-image" aria-hidden="true">
-					<span>{service.accent}</span>
-				</div>
+				<SiteImageSlot
+					placeholderKey={`services:card:${cardKey(service.accent)}`}
+					ariaLabel={`${service.accent} service image`}
+					edit={data.edit}
+					imageUrl={data.imageMap[`services:card:${cardKey(service.accent)}`]}
+					wrapperClass="service-image"
+				>
+					{#snippet children()}
+						<span>{service.accent}</span>
+					{/snippet}
+				</SiteImageSlot>
 				<div class="service-content">
 					<h3>{service.title}</h3>
 					<p>{service.summary}</p>
@@ -367,7 +384,7 @@
 		box-shadow: 0 12px 30px rgba(53, 60, 75, 0.07);
 	}
 
-	.service-image {
+	:global(.site-image-slot.service-image) {
 		display: grid;
 		min-height: 165px;
 		place-items: center;
@@ -381,7 +398,7 @@
 		color: #ffffff;
 	}
 
-	.service-image span {
+	:global(.site-image-slot.service-image) :global(span) {
 		border: 1px solid rgba(255, 255, 255, 0.42);
 		border-radius: 999px;
 		padding: 0.55rem 0.85rem;

@@ -1,4 +1,9 @@
-<script>
+<script lang="ts">
+	import type { PageData } from './$types';
+	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+
+	let { data }: { data: PageData } = $props();
+
 	const featureSections = [
 		{
 			id: 'mission',
@@ -92,13 +97,17 @@
 				honest advice, and respect at every step.
 			</p>
 		</div>
-		<div
-			class="image-placeholder image-placeholder--hero"
-			role="img"
-			aria-label="Hero image placeholder: AllCare Refrigeration technician servicing commercial equipment"
+		<SiteImageSlot
+			placeholderKey="about:hero"
+			ariaLabel="Hero image placeholder: AllCare Refrigeration technician servicing commercial equipment"
+			edit={data.edit}
+			imageUrl={data.imageMap['about:hero']}
+			wrapperClass="image-placeholder image-placeholder--hero"
 		>
-			<span>Replace with service team image</span>
-		</div>
+			{#snippet children()}
+				<span>Replace with service team image</span>
+			{/snippet}
+		</SiteImageSlot>
 	</section>
 
 	<div class="feature-stack">
@@ -125,9 +134,17 @@
 				</div>
 
 				<div class="feature__visual">
-					<div class="image-placeholder" role="img" aria-label={section.imageLabel}>
-						<span>{section.imageLabel}</span>
-					</div>
+					<SiteImageSlot
+						placeholderKey={`about:feature:${section.id}`}
+						ariaLabel={section.imageLabel}
+						edit={data.edit}
+						imageUrl={data.imageMap[`about:feature:${section.id}`]}
+						wrapperClass="image-placeholder"
+					>
+						{#snippet children()}
+							<span>{section.imageLabel}</span>
+						{/snippet}
+					</SiteImageSlot>
 				</div>
 			</section>
 		{/each}
@@ -189,7 +206,7 @@
 	}
 
 	.hero__content,
-	.hero .image-placeholder {
+	.hero :global(.site-image-slot.image-placeholder) {
 		position: relative;
 		z-index: 1;
 	}
@@ -265,7 +282,7 @@
 		max-width: 70ch;
 	}
 
-	.image-placeholder {
+	:global(.site-image-slot.image-placeholder) {
 		position: relative;
 		display: grid;
 		min-height: 21rem;
@@ -285,7 +302,7 @@
 		text-align: center;
 	}
 
-	.image-placeholder::before {
+	:global(.site-image-slot.image-placeholder)::before {
 		position: absolute;
 		inset: 1rem;
 		content: '';
@@ -293,7 +310,7 @@
 		border-radius: 18px;
 	}
 
-	.image-placeholder::after {
+	:global(.site-image-slot.image-placeholder)::after {
 		position: absolute;
 		width: 9rem;
 		height: 9rem;
@@ -303,7 +320,7 @@
 		filter: blur(2px);
 	}
 
-	.image-placeholder span {
+	:global(.site-image-slot.image-placeholder) :global(span) {
 		position: relative;
 		z-index: 1;
 		max-width: 18rem;
@@ -316,7 +333,7 @@
 		text-transform: uppercase;
 	}
 
-	.image-placeholder--hero {
+	:global(.site-image-slot.image-placeholder--hero) {
 		min-height: 24rem;
 		border-color: rgba(255, 255, 255, 0.4);
 		background:
@@ -403,7 +420,7 @@
 			border-radius: 20px;
 		}
 
-		.image-placeholder {
+		:global(.site-image-slot.image-placeholder) {
 			min-height: 16rem;
 		}
 	}

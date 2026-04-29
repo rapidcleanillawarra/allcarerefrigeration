@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 
-	let { children } = $props();
+	let { children, data } = $props();
 </script>
 
 <header class="site-header">
@@ -34,6 +34,11 @@
 </header>
 
 <main class="container">
+	{#if data.edit}
+		<p class="edit-banner" role="status">
+			Edit mode: click any image area to upload or replace photos (add <code>?edit=true</code> to the URL).
+		</p>
+	{/if}
 	{@render children()}
 </main>
 
@@ -201,6 +206,24 @@
 	.quote-btn:focus-visible {
 		box-shadow: 0 18px 38px rgba(36, 118, 180, 0.36);
 		transform: translateY(-1px);
+	}
+
+	.edit-banner {
+		margin: 0 0 1rem;
+		padding: 0.65rem 1.25rem;
+		background: #fef3c7;
+		border: 1px solid #facc15;
+		border-radius: 12px;
+		color: #713f12;
+		font-weight: 700;
+		font-size: 0.9rem;
+	}
+
+	.edit-banner code {
+		font-size: 0.85em;
+		padding: 0.1rem 0.35rem;
+		border-radius: 6px;
+		background: rgba(255, 255, 255, 0.65);
 	}
 
 	.container {

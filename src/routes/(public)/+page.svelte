@@ -25,8 +25,12 @@
 	<script type="application/ld+json">{localBusinessJsonLd}</script>
 </svelte:head>
 
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
+	import type { PageData } from './$types';
+	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+
+	let { data }: { data: PageData } = $props();
 
 	const trustHighlights = [
 		'Illawarra NSW specialists',
@@ -197,14 +201,18 @@
 			{/each}
 		</ul>
 	</div>
-	<div
-		class="image-placeholder hero-placeholder"
-		role="img"
-		aria-label="Image placeholder for a refrigeration technician working on a commercial system"
+	<SiteImageSlot
+		placeholderKey="home:hero"
+		ariaLabel="Image placeholder for a refrigeration technician working on a commercial system"
+		edit={data.edit}
+		imageUrl={data.imageMap['home:hero']}
+		wrapperClass="image-placeholder hero-placeholder"
 	>
-		<span>Hero Image Placeholder</span>
-		<small>Replace with technician, vehicle or completed refrigeration project photo</small>
-	</div>
+		{#snippet children()}
+			<span>Hero Image Placeholder</span>
+			<small>Replace with technician, vehicle or completed refrigeration project photo</small>
+		{/snippet}
+	</SiteImageSlot>
 </section>
 
 <section class="about">
@@ -222,14 +230,18 @@
 			comfort, protect stock and keep your equipment running efficiently.
 		</p>
 	</div>
-	<div
-		class="image-placeholder"
-		role="img"
-		aria-label="Image placeholder for the AllCare Refrigeration team or service vehicle"
+	<SiteImageSlot
+		placeholderKey="home:about"
+		ariaLabel="Image placeholder for the AllCare Refrigeration team or service vehicle"
+		edit={data.edit}
+		imageUrl={data.imageMap['home:about']}
+		wrapperClass="image-placeholder"
 	>
-		<span>About Image Placeholder</span>
-		<small>Replace with team, van or workshop photo</small>
-	</div>
+		{#snippet children()}
+			<span>About Image Placeholder</span>
+			<small>Replace with team, van or workshop photo</small>
+		{/snippet}
+	</SiteImageSlot>
 </section>
 
 <section class="services">
@@ -242,11 +254,19 @@
 		</p>
 	</div>
 	<div class="service-grid">
-		{#each services as service (service.title)}
+		{#each services as service, serviceIndex (service.title)}
 			<article>
-				<div class="image-placeholder card-placeholder" role="img" aria-label={service.label}>
-					<span>{service.title} Image</span>
-				</div>
+				<SiteImageSlot
+					placeholderKey={`home:service:${serviceIndex}`}
+					ariaLabel={service.label}
+					edit={data.edit}
+					imageUrl={data.imageMap[`home:service:${serviceIndex}`]}
+					wrapperClass="image-placeholder card-placeholder"
+				>
+					{#snippet children()}
+						<span>{service.title} Image</span>
+					{/snippet}
+				</SiteImageSlot>
 				<h3>{service.title}</h3>
 				<p>{service.text}</p>
 			</article>
@@ -280,14 +300,18 @@
 		</p>
 		<a href="tel:0411532233">Call 0411 532 233</a>
 	</div>
-	<div
-		class="image-placeholder emergency-placeholder"
-		role="img"
-		aria-label="Image placeholder for urgent refrigeration repair support"
+	<SiteImageSlot
+		placeholderKey="home:emergency"
+		ariaLabel="Image placeholder for urgent refrigeration repair support"
+		edit={data.edit}
+		imageUrl={data.imageMap['home:emergency']}
+		wrapperClass="image-placeholder emergency-placeholder"
 	>
-		<span>Emergency Image Placeholder</span>
-		<small>Replace with after-hours repair or response vehicle photo</small>
-	</div>
+		{#snippet children()}
+			<span>Emergency Image Placeholder</span>
+			<small>Replace with after-hours repair or response vehicle photo</small>
+		{/snippet}
+	</SiteImageSlot>
 </section>
 
 <section class="testimonials">
@@ -305,13 +329,17 @@
 			{/each}
 		</div>
 		<aside class="recent-work" aria-labelledby="recent-work-heading">
-			<div
-				class="image-placeholder recent-placeholder"
-				role="img"
-				aria-label="Image placeholder for a recent completed refrigeration project"
+			<SiteImageSlot
+				placeholderKey="home:recent-work"
+				ariaLabel="Image placeholder for a recent completed refrigeration project"
+				edit={data.edit}
+				imageUrl={data.imageMap['home:recent-work']}
+				wrapperClass="image-placeholder recent-placeholder"
 			>
-				<span>Recent Work Image Placeholder</span>
-			</div>
+				{#snippet children()}
+					<span>Recent Work Image Placeholder</span>
+				{/snippet}
+			</SiteImageSlot>
 			<h3 id="recent-work-heading">Recent work highlights</h3>
 			<ul>
 				{#each recentWork.slice(0, 4) as item (item)}
@@ -351,16 +379,20 @@
 		</p>
 	</div>
 	<div class="gallery-grid">
-		{#each recentWork as item (item)}
+		{#each recentWork as item, galleryIndex (item)}
 			<article>
-				<div
-					class="image-placeholder gallery-placeholder"
-					role="img"
-					aria-label={`Image placeholder for ${item.toLowerCase()}`}
+				<SiteImageSlot
+					placeholderKey={`home:gallery:${galleryIndex}`}
+					ariaLabel={`Image placeholder for ${item.toLowerCase()}`}
+					edit={data.edit}
+					imageUrl={data.imageMap[`home:gallery:${galleryIndex}`]}
+					wrapperClass="image-placeholder gallery-placeholder"
 				>
-					<span>{item}</span>
-					<small>Replace with project image</small>
-				</div>
+					{#snippet children()}
+						<span>{item}</span>
+						<small>Replace with project image</small>
+					{/snippet}
+				</SiteImageSlot>
 			</article>
 		{/each}
 	</div>
@@ -376,14 +408,18 @@
 				help you choose the next practical step.
 			</p>
 		</div>
-		<div
-			class="image-placeholder contact-placeholder"
-			role="img"
-			aria-label="Image placeholder for customer support or booking contact"
+		<SiteImageSlot
+			placeholderKey="home:contact"
+			ariaLabel="Image placeholder for customer support or booking contact"
+			edit={data.edit}
+			imageUrl={data.imageMap['home:contact']}
+			wrapperClass="image-placeholder contact-placeholder"
 		>
-			<span>Contact Image Placeholder</span>
-			<small>Replace with office, technician or phone support photo</small>
-		</div>
+			{#snippet children()}
+				<span>Contact Image Placeholder</span>
+				<small>Replace with office, technician or phone support photo</small>
+			{/snippet}
+		</SiteImageSlot>
 	</div>
 	<div class="contact-grid">
 		<div>
@@ -568,7 +604,7 @@
 		margin-bottom: 0;
 	}
 
-	.image-placeholder {
+	:global(.site-image-slot.image-placeholder) {
 		position: relative;
 		display: grid;
 		min-height: 240px;
@@ -589,21 +625,21 @@
 		text-align: center;
 	}
 
-	.image-placeholder::before,
-	.image-placeholder::after {
+	:global(.site-image-slot.image-placeholder)::before,
+	:global(.site-image-slot.image-placeholder)::after {
 		position: absolute;
 		content: '';
 		background: rgba(98, 172, 232, 0.24);
 	}
 
-	.image-placeholder::before {
+	:global(.site-image-slot.image-placeholder)::before {
 		inset: auto 1.5rem 1.5rem auto;
 		width: 34%;
 		height: 34%;
 		border-radius: 999px;
 	}
 
-	.image-placeholder::after {
+	:global(.site-image-slot.image-placeholder)::after {
 		inset: 1.5rem auto auto 1.5rem;
 		width: 38%;
 		height: 26%;
@@ -611,8 +647,8 @@
 		transform: rotate(-8deg);
 	}
 
-	.image-placeholder span,
-	.image-placeholder small {
+	:global(.site-image-slot.image-placeholder) :global(span),
+	:global(.site-image-slot.image-placeholder) :global(small) {
 		position: relative;
 		z-index: 1;
 		display: block;
@@ -620,16 +656,16 @@
 		padding-inline: 1rem;
 	}
 
-	.image-placeholder span {
+	:global(.site-image-slot.image-placeholder) :global(span) {
 		font-weight: 800;
 	}
 
-	.image-placeholder small {
+	:global(.site-image-slot.image-placeholder) :global(small) {
 		margin-top: 0.4rem;
 		color: #5d6676;
 	}
 
-	.hero-placeholder {
+	:global(.site-image-slot.hero-placeholder) {
 		min-height: 460px;
 		border-color: rgba(255, 255, 255, 0.4);
 		background:
@@ -669,7 +705,7 @@
 		gap: 1rem;
 	}
 
-	.card-placeholder {
+	:global(.site-image-slot.card-placeholder) {
 		min-height: 175px;
 		border-radius: 14px;
 	}
@@ -690,7 +726,7 @@
 		box-shadow: 0 12px 28px rgba(98, 172, 232, 0.28);
 	}
 
-	.emergency-placeholder {
+	:global(.site-image-slot.emergency-placeholder) {
 		min-height: 280px;
 	}
 
@@ -733,7 +769,7 @@
 		color: #353c4b;
 	}
 
-	.recent-placeholder {
+	:global(.site-image-slot.recent-placeholder) {
 		min-height: 210px;
 	}
 
@@ -785,7 +821,7 @@
 		min-width: 0;
 	}
 
-	.gallery-placeholder {
+	:global(.site-image-slot.gallery-placeholder) {
 		min-height: 220px;
 		border-radius: 18px;
 	}
@@ -817,7 +853,7 @@
 			grid-template-columns: 1fr;
 		}
 
-		.hero-placeholder {
+		:global(.site-image-slot.hero-placeholder) {
 			min-height: 340px;
 		}
 	}
@@ -843,7 +879,7 @@
 			text-align: center;
 		}
 
-		.image-placeholder {
+		:global(.site-image-slot.image-placeholder) {
 			min-height: 220px;
 		}
 	}
