@@ -142,9 +142,9 @@
 		'@graph': [
 			{
 				'@type': ['LocalBusiness', 'HVACBusiness'],
-				'@id': 'https://allcarerefrigeration.com.au/#business',
+				'@id': `${SITE_ORIGIN}/#business`,
 				name: 'AllCare Refrigeration',
-				url: 'https://allcarerefrigeration.com.au/',
+				url: `${SITE_ORIGIN}/`,
 				telephone: '+61411532233',
 				address: {
 					'@type': 'PostalAddress',

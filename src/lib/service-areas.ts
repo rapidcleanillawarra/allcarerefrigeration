@@ -14,8 +14,24 @@ export const serviceAreas = [
 
 export type ServiceArea = (typeof serviceAreas)[number];
 
-/** Canonical site origin — used in meta URLs and schema. */
-export const SITE_ORIGIN = 'https://allcarerefrigeration.com.au';
+/** Default production host (Vercel). Override with PUBLIC_SITE_URL when using a custom domain. */
+const DEFAULT_SITE_ORIGIN = 'https://allcarerefrigeration.vercel.app';
+
+function resolveSiteOrigin(): string {
+	const raw = import.meta.env.PUBLIC_SITE_URL;
+	if (typeof raw === 'string' && raw.trim() !== '') {
+		try {
+			return new URL(raw.trim().startsWith('http') ? raw.trim() : `https://${raw.trim()}`)
+				.origin;
+		} catch {
+			/* fallthrough */
+		}
+	}
+	return DEFAULT_SITE_ORIGIN;
+}
+
+/** Canonical origin (scheme + host) — robots, sitemap, meta URLs, schema. */
+export const SITE_ORIGIN = resolveSiteOrigin();
 
 /** Depot name (physical address locality). */
 export const DEPOT_LOCALITY = 'Albion Park';
