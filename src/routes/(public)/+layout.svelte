@@ -7,6 +7,9 @@
 	const VISIT_MAP_EMBED_SRC =
 		'https://www.google.com/maps/embed?origin=mfe&pb=!1m2!2m1!1s157+Church+St,+Albion+Park+NSW+2527,+Australia';
 
+	const COMPANY_LOGO_URL =
+		'https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png';
+
 	let scrollY = $state(0);
 	let mobileOpen = $state(false);
 
@@ -131,11 +134,14 @@
 		<div class="header-glass">
 			<div class="section-inner section-inner--wide nav-wrap">
 				<a class="brand" href={resolve('/')} aria-label="AllCare Refrigeration home">
-					<span class="brand-mark">AC</span>
-					<span class="brand-copy">
-						<span class="brand-name">AllCare Refrigeration</span>
-						<span class="brand-tagline">Rapid cooling support</span>
-					</span>
+					<img
+						class="brand-logo"
+						src={COMPANY_LOGO_URL}
+						alt="Allcare Refrigeration"
+						width="275"
+						height="90"
+						decoding="async"
+					/>
 				</a>
 
 				<nav class="primary-nav" aria-label="Public navigation">
@@ -202,12 +208,16 @@
 	<footer class="site-footer">
 		<div class="section-inner section-inner--wide site-footer__grid">
 			<div class="reveal reveal--up">
-				<div class="brand">
-					<span class="brand-mark">AC</span>
-					<span class="brand-copy">
-						<span class="brand-name">AllCare Refrigeration</span>
-						<span class="brand-tagline">Albion Park, NSW</span>
-					</span>
+				<div class="brand brand--stack">
+					<img
+						class="brand-logo brand-logo--footer"
+						src={COMPANY_LOGO_URL}
+						alt="Allcare Refrigeration"
+						width="275"
+						height="90"
+						decoding="async"
+					/>
+					<span class="brand-loc">Albion Park, NSW</span>
 				</div>
 				<p class="site-footer__lead">
 					Local refrigeration, air conditioning and HVAC service for homes and businesses across
@@ -409,7 +419,7 @@
 
 	.nav-wrap {
 		display: grid;
-		grid-template-columns: minmax(13rem, 1fr) auto auto auto;
+		grid-template-columns: minmax(16rem, 1fr) auto auto auto;
 		align-items: center;
 		gap: 1rem;
 		padding-block: 0.95rem;
@@ -424,46 +434,41 @@
 		text-decoration: none;
 	}
 
-	.brand-mark {
-		display: grid;
-		width: 2.6rem;
-		height: 2.6rem;
-		flex: 0 0 auto;
-		place-items: center;
-		border-radius: 0.85rem;
-		background: linear-gradient(135deg, #62ace8, #0f4c81);
-		color: #ffffff;
-		font-size: 0.95rem;
-		font-weight: 900;
-		letter-spacing: 0.04em;
-		box-shadow:
-			0 12px 28px -8px rgba(98, 172, 232, 0.55),
-			inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+	.brand--stack {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.55rem;
+	}
+
+	.brand-logo {
+		display: block;
+		height: 5rem;
+		width: auto;
+		max-width: min(280px, 52vw);
+		object-fit: contain;
 		transition: transform 240ms var(--ease-spring);
 	}
 
-	.brand:hover .brand-mark {
-		transform: rotate(-6deg) scale(1.04);
+	a.brand:hover .brand-logo,
+	a.brand:focus-visible .brand-logo {
+		transform: scale(1.02);
 	}
 
-	.brand-copy {
-		display: grid;
-		line-height: 1.1;
+	.brand-logo--footer {
+		height: 3.85rem;
+		max-width: min(310px, 90vw);
 	}
 
-	.brand-name {
-		font-size: clamp(1rem, 1.5vw, 1.12rem);
-		font-weight: 900;
-		letter-spacing: -0.02em;
-	}
-
-	.brand-tagline {
-		margin-top: 0.18rem;
-		color: var(--color-ink-soft);
+	.brand-loc {
 		font-size: 0.72rem;
 		font-weight: 700;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
+		color: #9dc4e6;
+	}
+
+	.site-header--condensed .brand-logo {
+		height: 4rem;
 	}
 
 	.primary-nav {
@@ -657,15 +662,6 @@
 		color: #ffffff;
 	}
 
-	.site-footer .brand-mark {
-		background: linear-gradient(135deg, #ffffff, #cfe6f8);
-		color: #0f4c81;
-	}
-
-	.site-footer .brand-tagline {
-		color: #9dc4e6;
-	}
-
 	.site-footer__grid {
 		display: grid;
 		grid-template-columns: minmax(16rem, 1.5fr) repeat(3, minmax(10rem, 1fr));
@@ -767,10 +763,17 @@
 	}
 
 	@media (max-width: 560px) {
-		.brand-mark {
-			width: 2.4rem;
-			height: 2.4rem;
-			font-size: 0.85rem;
+		.brand-logo {
+			height: 2.95rem;
+			max-width: min(260px, 58vw);
+		}
+
+		.site-header--condensed .brand-logo {
+			height: 2.65rem;
+		}
+
+		.brand-logo--footer {
+			height: 3.35rem;
 		}
 
 		.emergency-strip__row {
