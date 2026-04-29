@@ -20,7 +20,7 @@
 	<meta name="twitter:title" content="AllCare Refrigeration | HVAC Services Across Illawarra NSW" />
 	<meta
 		name="twitter:description"
-		content="Refrigeration, air conditioning and HVAC service from Albion Park for customers across Wollongong, Shellharbour and the Illawarra."
+		content="Refrigeration, air conditioning and HVAC service from Albion Park for customers across Wollongong, Shellharbour and Illawarra."
 	/>
 	<script type="application/ld+json">{localBusinessJsonLd}</script>
 </svelte:head>
@@ -244,7 +244,7 @@
 
 			<div class="hero-card hero-card--rating" aria-hidden="true">
 				<div class="hero-card__stars">★★★★★</div>
-				<small>Trusted across the Illawarra</small>
+				<small>Trusted across Illawarra</small>
 			</div>
 		</div>
 
