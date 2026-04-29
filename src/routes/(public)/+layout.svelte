@@ -3,6 +3,10 @@
 
 	let { children, data } = $props();
 
+	/** Embed URL from Maps share → resolves without an Maps Embed API key */
+	const VISIT_MAP_EMBED_SRC =
+		'https://www.google.com/maps/embed?origin=mfe&pb=!1m2!2m1!1s157+Church+St,+Albion+Park+NSW+2527,+Australia';
+
 	let scrollY = $state(0);
 	let mobileOpen = $state(false);
 
@@ -211,10 +215,20 @@
 				</p>
 			</div>
 
-			<div class="reveal reveal--up">
+			<div class="reveal reveal--up site-footer__visit">
 				<h4>Visit us</h4>
 				<p>157 Church St, Albion Park NSW 2527, Australia</p>
 				<p>Mon - Sat · 8:00am - 5:00pm</p>
+				<div class="site-footer__map-shell">
+					<iframe
+						class="site-footer__map"
+						src={VISIT_MAP_EMBED_SRC}
+						title="Google Map — AllCare Refrigeration, 157 Church St, Albion Park NSW"
+						loading="lazy"
+						referrerpolicy="no-referrer-when-downgrade"
+						allowfullscreen
+					></iframe>
+				</div>
 			</div>
 
 			<div class="reveal reveal--up">
@@ -692,6 +706,29 @@
 	.site-footer nav {
 		display: grid;
 		gap: 0.4rem;
+	}
+
+	.site-footer__visit .site-footer__map-shell {
+		margin-top: 0.85rem;
+		position: relative;
+		aspect-ratio: 16 / 10;
+		max-height: 14rem;
+		min-height: 10rem;
+		width: 100%;
+		border-radius: 12px;
+		overflow: hidden;
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
+		background: rgba(10, 46, 81, 0.35);
+	}
+
+	.site-footer__map {
+		position: absolute;
+		inset: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		border: 0;
 	}
 
 	.site-footer__base {
