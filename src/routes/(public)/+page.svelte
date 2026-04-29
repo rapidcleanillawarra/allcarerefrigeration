@@ -97,7 +97,7 @@
 		{
 			question: 'Do you service both refrigeration and air conditioning systems?',
 			answer:
-				'Yes. AllCare Refrigeration works on commercial refrigeration, cool rooms, freezers, condensers, evaporators, split systems and ducted air conditioning across the Illawarra.'
+				'Yes. AllCare Refrigeration works on commercial refrigeration, cool rooms, freezers, condensers, evaporators, split systems and ducted air conditioning across Illawarra Region.'
 		},
 		{
 			question: 'Which areas do you cover?',
@@ -244,7 +244,7 @@
 			<h1 id="hero-heading" class="reveal reveal--up">
 				Refrigeration and air conditioning service for
 				<span class="hero-highlight">Albion Park</span>
-				and the Illawarra.
+				and Illawarra Region.
 			</h1>
 			<p class="hero-lead reveal reveal--up">
 				AllCare Refrigeration helps local homes, shops, cafes, offices and commercial sites with
@@ -309,7 +309,7 @@
 			</p>
 			<p class="reveal reveal--up">
 				Whether you manage a commercial site in Wollongong, need dependable support at home in
-				Shellharbour or operate a business elsewhere in the Illawarra, our goal is simple: restore
+				Shellharbour or operate a business elsewhere in Illawarra Region, our goal is simple: restore
 				comfort, protect stock and keep your equipment running efficiently.
 			</p>
 		</div>
@@ -475,7 +475,7 @@
 		<header class="section-intro">
 			<p class="eyebrow reveal reveal--up">Testimonials & Recent Work</p>
 			<h2 id="testimonials-heading" class="reveal reveal--up">
-				Trusted by local homes and businesses across the Illawarra
+				Trusted by local homes and businesses across Illawarra Region
 			</h2>
 		</header>
 
