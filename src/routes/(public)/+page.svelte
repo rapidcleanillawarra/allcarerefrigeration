@@ -292,16 +292,16 @@
 					<li class="reveal reveal--up" style="--i: {i}">{highlight}</li>
 				{/each}
 			</ul>
-		</div>
-	</div>
 
-	<div class="hero-stats section-inner section-inner--wide" data-stagger>
-		{#each stats as stat, i (stat.label)}
-			<div class="hero-stat reveal reveal--up" style="--i: {i}">
-				<strong>{stat.value}</strong>
-				<span>{stat.label}</span>
+			<div class="hero-stats" data-stagger>
+				{#each stats as stat, i (stat.label)}
+					<div class="hero-stat reveal reveal--up" style="--i: {i}">
+						<strong>{stat.value}</strong>
+						<span>{stat.label}</span>
+					</div>
+				{/each}
 			</div>
-		{/each}
+		</div>
 	</div>
 </section>
 
@@ -768,7 +768,7 @@
 	.hero {
 		position: relative;
 		isolation: isolate;
-		padding-block: clamp(3rem, 7vw, 6rem) clamp(2.5rem, 5vw, 4rem);
+		padding-block: clamp(3rem, 7vw, 6rem) 0;
 		overflow: clip;
 		color: #ffffff;
 		background:
@@ -825,12 +825,13 @@
 		display: grid;
 		grid-template-columns: minmax(280px, 0.95fr) minmax(0, 1.08fr);
 		gap: clamp(2rem, 5vw, 4.5rem);
-		align-items: center;
+		align-items: end;
 		position: relative;
 	}
 
 	.hero-copy {
 		max-width: 38rem;
+		padding-bottom: clamp(2.5rem, 5vw, 4rem);
 	}
 
 	.hero-kicker {
@@ -961,13 +962,17 @@
 	/* Hero cutout + floating cards */
 	.hero-visual {
 		position: relative;
-		min-height: clamp(22rem, 38vw, 36rem);
-		align-self: end;
+		min-height: clamp(24rem, 44vw, 40rem);
+		align-self: stretch;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
 	}
 
 	.hero-cutout {
 		position: relative;
 		width: 100%;
+		flex: 1;
 		display: flex;
 		align-items: flex-end;
 		justify-content: flex-start;
@@ -1050,14 +1055,14 @@
 	}
 
 	.hero-stats {
-		margin-top: clamp(2.5rem, 5vw, 3.5rem);
+		margin-top: clamp(1.75rem, 3vw, 2.25rem);
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 1rem;
+		gap: 0.75rem;
 	}
 
 	.hero-stat {
-		padding: 1.1rem 1.35rem;
+		padding: 0.9rem 1rem;
 		border: 1px solid rgba(255, 255, 255, 0.22);
 		background: rgba(255, 255, 255, 0.08);
 		backdrop-filter: blur(8px);
@@ -1068,7 +1073,7 @@
 	}
 
 	.hero-stat strong {
-		font-size: clamp(1.65rem, 3vw, 2.4rem);
+		font-size: clamp(1.4rem, 2.4vw, 2rem);
 		font-weight: 900;
 		letter-spacing: -0.03em;
 		line-height: 1;
@@ -1077,7 +1082,7 @@
 	.hero-stat span {
 		color: rgba(255, 255, 255, 0.85);
 		font-weight: 600;
-		font-size: 0.9rem;
+		font-size: 0.82rem;
 	}
 
 	/* ============================================================
@@ -1821,7 +1826,7 @@
 		width: auto;
 		max-width: 100%;
 		height: auto;
-		max-height: min(72vh, 600px);
+		max-height: min(85vh, 100%);
 		min-height: 0;
 		object-fit: contain;
 		object-position: bottom left;
@@ -1832,7 +1837,6 @@
 	 *  Responsive
 	 * ============================================================ */
 	@media (max-width: 1100px) {
-		.hero-grid,
 		.about-grid,
 		.emergency-grid,
 		.contact-panel {
@@ -1842,6 +1846,41 @@
 		.proof-grid {
 			grid-template-columns: 1fr;
 		}
+	}
+
+	@media (max-width: 1100px) {
+		.hero-grid {
+			grid-template-columns: minmax(240px, 0.85fr) minmax(0, 1.15fr);
+			gap: clamp(1.5rem, 3vw, 2.5rem);
+		}
+
+		.hero-stats {
+			gap: 0.5rem;
+		}
+
+		.hero-stat {
+			padding: 0.75rem 0.85rem;
+		}
+
+		.hero-card--badge {
+			left: -0.5rem;
+		}
+
+		.hero-card--rating {
+			right: -0.5rem;
+		}
+	}
+
+	@media (max-width: 880px) {
+		.hero-grid {
+			grid-template-columns: 1fr;
+			align-items: stretch;
+		}
+
+		.hero-copy {
+			padding-bottom: 0;
+			order: 1;
+		}
 
 		.hero-visual {
 			min-height: 24rem;
@@ -1849,6 +1888,7 @@
 			margin-inline: auto;
 			width: 100%;
 			align-self: center;
+			order: 2;
 		}
 
 		.hero-cutout {
