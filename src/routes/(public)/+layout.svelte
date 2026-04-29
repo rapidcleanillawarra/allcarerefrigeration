@@ -16,9 +16,10 @@
 	const condensed = $derived(scrollY > 24);
 
 	function onScroll() {
-		scrollY = window.scrollY;
+		const y = window.scrollY;
+		scrollY = y;
 		if (typeof document !== 'undefined') {
-			document.documentElement.style.setProperty('--scroll-y', String(scrollY));
+			document.documentElement.style.setProperty('--scroll-y', String(y));
 		}
 	}
 
