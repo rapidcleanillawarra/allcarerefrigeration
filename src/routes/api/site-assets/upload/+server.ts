@@ -35,8 +35,16 @@ export const POST: RequestHandler = async ({ request }) => {
 	let admin;
 	try {
 		admin = getSupabaseAdmin();
-	} catch {
-		throw error(503, 'Upload is not configured');
+	} catch (e) {
+		const message = e instanceof Error ? e.message : 'Upload is not configured';
+		console.error('[api/site-assets/upload]', message);
+		return json(
+			{
+				message: 'Upload is not configured',
+				detail: import.meta.env.DEV ? message : undefined
+			},
+			{ status: 503 }
+		);
 	}
 
 	const form = await request.formData();

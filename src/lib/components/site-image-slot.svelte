@@ -43,7 +43,16 @@
 			const res = await fetch('/api/site-assets/upload', { method: 'POST', body: fd });
 			if (!res.ok) {
 				const text = await res.text();
-				throw new Error(text || res.statusText);
+				let m = res.statusText;
+				try {
+					const body = JSON.parse(text) as { message?: string; detail?: string };
+					if (import.meta.env.DEV && body.detail) m = body.detail;
+					else if (body.message) m = body.message;
+					else m = text.slice(0, 500) || m;
+				} catch {
+					m = text.slice(0, 500) || m;
+				}
+				throw new Error(m);
 			}
 			await invalidateAll();
 		} catch (e) {
