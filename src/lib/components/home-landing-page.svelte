@@ -4,18 +4,15 @@
 	<link rel="canonical" href={canonicalUrl} />
 	<meta name="robots" content="index, follow" />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content={ogTitle} />
-	<meta
-		property="og:description"
-		content="Local refrigeration, air conditioning and HVAC repairs, installations and maintenance for homes, businesses and commercial sites across Illawarra NSW."
-	/>
+	<meta property="og:title" content={pageTitle} />
+	<meta property="og:description" content={metaDescription} />
 	<meta property="og:url" content={canonicalUrl} />
-	<meta property="og:site_name" content="AllCare Refrigeration" />
+	<meta property="og:site_name" content="Allcare Refrigeration" />
 	<meta property="og:locale" content="en_AU" />
 	<meta name="theme-color" content="#0f57fb" />
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:title" content={pageTitle} />
-	<meta name="twitter:description" content={twitterDescription} />
+	<meta name="twitter:description" content={metaDescription} />
 	<script type="application/ld+json">{localBusinessJsonLd}</script>
 </svelte:head>
 
@@ -43,28 +40,13 @@
 		landing.pathname === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${landing.pathname}`
 	);
 
+	/** SEO title: service + location + brand (see marketing / SEO spec). */
 	const pageTitle = $derived(
-		landing.pathname === '/'
-			? 'AllCare Refrigeration | HVAC, Refrigeration & Air Conditioning Illawarra NSW'
-			: `AllCare Refrigeration | HVAC & Refrigeration in ${landing.name} | Illawarra NSW`
-	);
-
-	const ogTitle = $derived(
-		landing.pathname === '/'
-			? 'AllCare Refrigeration | HVAC Services Across Illawarra NSW'
-			: `AllCare Refrigeration | ${landing.name} HVAC & refrigeration`
+		`Commercial Refrigeration & Air Conditioning Services ${landing.name} | Allcare Refrigeration`
 	);
 
 	const metaDescription = $derived(
-		landing.pathname === '/'
-			? `AllCare Refrigeration provides refrigeration, air conditioning and HVAC repairs, installations and maintenance from ${DEPOT_LOCALITY} across Wollongong, Shellharbour and Illawarra Region NSW.`
-			: `AllCare Refrigeration provides refrigeration, air conditioning and HVAC repairs, installations and maintenance for homes and businesses in ${landing.name} and throughout Illawarra Region NSW, with responsive service coordinated from ${DEPOT_LOCALITY}.`
-	);
-
-	const twitterDescription = $derived(
-		landing.pathname === '/'
-			? `Refrigeration, air conditioning and HVAC service from ${DEPOT_LOCALITY} for customers across Wollongong, Shellharbour and Illawarra.`
-			: `HVAC and refrigeration specialists for ${landing.name} and neighbouring Illawarra suburbs — local team operating from ${DEPOT_LOCALITY}.`
+		`Commercial refrigeration and air conditioning in ${landing.name}: repairs, installations and maintenance for homes and businesses across Illawarra Region NSW. Local team — Allcare Refrigeration · 0411 532 233.`
 	);
 
 	const trustHighlights = [
