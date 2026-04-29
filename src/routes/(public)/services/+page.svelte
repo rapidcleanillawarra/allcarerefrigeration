@@ -102,273 +102,490 @@
 	];
 </script>
 
-<section class="hero">
-	<div class="hero-content">
-		<p class="kicker">Commercial Refrigeration & Air Conditioning Services</p>
-		<h1>Professional refrigeration and air conditioning services for reliable year-round performance.</h1>
-		<p class="hero-lead">
-			AllCare Refrigeration & Air Conditioning delivers professional service across Illawarra and
-			the Southern Highlands, from Helensburgh to Nowra and west to Bowral, Mittagong, Robertson
-			and Moss Vale.
-		</p>
-		<p>
-			We specialise in commercial refrigeration systems, condensers, evaporators and air
-			conditioning installations for businesses that rely on consistent temperature control and
-			system reliability.
-		</p>
-		<div class="hero-actions" aria-label="Services page actions">
-			<a class="primary-link" href="tel:0411532233">Call 041-1532-233</a>
-			<a class="secondary-link" href="#core-services">Explore services</a>
-		</div>
+<!-- HERO ------------------------------------------------------------- -->
+<section class="hero" aria-labelledby="services-heading">
+	<div class="hero-bg" aria-hidden="true">
+		<span class="hero-bg__layer hero-bg__layer--1" data-parallax="0.18"></span>
+		<span class="hero-bg__layer hero-bg__layer--2" data-parallax="0.32"></span>
+		<span class="hero-bg__grid"></span>
 	</div>
-	<div class="hero-panel" aria-label="Service highlights">
-		<p>Responsive support for commercial refrigeration and air conditioning</p>
-		<div class="hero-stat">
-			<strong>24/7</strong>
-			<span>Emergency breakdown service</span>
-		</div>
-		<div class="hero-stat">
-			<strong>9</strong>
-			<span>Key service area locations</span>
-		</div>
-	</div>
-</section>
 
-<section class="section-card services-section" id="core-services">
-	<p class="section-label">How can we help you?</p>
-	<h2>Core Services</h2>
-	<div class="service-grid">
-		{#each services as service (service.title)}
-			<article class="service-card">
-				<SiteImageSlot
-					placeholderKey={`services:card:${cardKey(service.accent)}`}
-					ariaLabel={`${service.accent} service image`}
-					edit={data.edit}
-					imageUrl={data.imageMap[`services:card:${cardKey(service.accent)}`]}
-					wrapperClass="service-image"
-				>
-					{#snippet children()}
-						<span>{service.accent}</span>
-					{/snippet}
-				</SiteImageSlot>
-				<div class="service-content">
-					<h3>{service.title}</h3>
-					<p>{service.summary}</p>
-					<ul>
-						{#each service.items as item (item)}
-							<li>{item}</li>
-						{/each}
-					</ul>
-					<p class="service-outcome">{service.outcome}</p>
-				</div>
-			</article>
-		{/each}
-	</div>
-</section>
-
-<section class="emergency section-card">
-	<div>
-		<p class="section-label">Emergency support</p>
-		<h2>24/7 Emergency Breakdown Service</h2>
-		<p>
-			Refrigeration failures can impact stock, safety and business operations. We provide
-			responsive emergency breakdown services across:
-		</p>
-		<ul class="locations" aria-label="Emergency service locations">
-			{#each serviceAreas as location (location)}
-				<li>{location}</li>
-			{/each}
-		</ul>
-	</div>
-	<a class="emergency-call" href="tel:0411532233">
-		<span>Call emergency support</span>
-		<strong>041-1532-233</strong>
-	</a>
-</section>
-
-<section class="contact section-card">
-	<div class="contact-intro">
-		<p class="section-label">Contact AllCare</p>
-		<h2>Need reliable refrigeration or air conditioning services?</h2>
-		<p>Contact us today.</p>
-	</div>
-	<div class="contact-grid">
-		{#each contactDetails as detail (detail.title)}
-			<div class="contact-item">
-				<h3>{detail.title}</h3>
-				<p>
-					{#if detail.title === 'Call Us'}
-						<a href="tel:0411532233">{detail.value}</a>
-					{:else}
-						{detail.value}
-					{/if}
-				</p>
+	<div class="section-inner section-inner--wide hero-grid">
+		<div class="hero-content">
+			<p class="eyebrow eyebrow--on-dark reveal reveal--up">
+				Commercial Refrigeration & Air Conditioning Services
+			</p>
+			<h1 id="services-heading" class="reveal reveal--up">
+				Professional service for
+				<span class="hero-highlight">reliable year-round performance.</span>
+			</h1>
+			<p class="hero-lead reveal reveal--up">
+				AllCare Refrigeration & Air Conditioning delivers professional service across Illawarra
+				and the Southern Highlands, from Helensburgh to Nowra and west to Bowral, Mittagong,
+				Robertson and Moss Vale.
+			</p>
+			<p class="reveal reveal--up">
+				We specialise in commercial refrigeration systems, condensers, evaporators and air
+				conditioning installations for businesses that rely on consistent temperature control and
+				system reliability.
+			</p>
+			<div class="hero-actions reveal reveal--up" aria-label="Services page actions">
+				<a class="btn-primary" href="tel:0411532233">
+					<svg
+						aria-hidden="true"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path
+							d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"
+						/>
+					</svg>
+					Call 041-1532-233
+				</a>
+				<a class="btn-ghost" href="#core-services">Explore services</a>
 			</div>
-		{/each}
+		</div>
+
+		<div
+			class="hero-panel reveal reveal--scale"
+			data-parallax="-0.05"
+			aria-label="Service highlights"
+		>
+			<p class="hero-panel__intro">
+				Responsive support for commercial refrigeration and air conditioning
+			</p>
+			<div class="hero-stat">
+				<strong>24/7</strong>
+				<span>Emergency breakdown service</span>
+			</div>
+			<div class="hero-stat">
+				<strong>{services.length}</strong>
+				<span>Core service categories</span>
+			</div>
+			<div class="hero-stat">
+				<strong>{serviceAreas.length}</strong>
+				<span>Key service area locations</span>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- SERVICES --------------------------------------------------------- -->
+<section class="services-section section-shell" id="core-services" aria-labelledby="core-heading">
+	<div class="section-inner section-inner--wide">
+		<header class="section-intro">
+			<p class="eyebrow reveal reveal--up">How can we help you?</p>
+			<h2 id="core-heading" class="reveal reveal--up">Core Services</h2>
+			<p class="reveal reveal--up">
+				Comprehensive refrigeration and air conditioning support tailored for commercial sites
+				across Illawarra and the Southern Highlands.
+			</p>
+		</header>
+
+		<div class="service-grid" data-stagger>
+			{#each services as service, i (service.title)}
+				<article class="service-card reveal reveal--up" style="--i: {i}">
+					<div class="service-card__media">
+						<SiteImageSlot
+							placeholderKey={`services:card:${cardKey(service.accent)}`}
+							ariaLabel={`${service.accent} service image`}
+							edit={data.edit}
+							imageUrl={data.imageMap[`services:card:${cardKey(service.accent)}`]}
+							wrapperClass="service-image"
+						>
+							{#snippet children()}
+								<span>{service.accent}</span>
+							{/snippet}
+						</SiteImageSlot>
+						<span class="service-card__num">0{i + 1}</span>
+					</div>
+					<div class="service-content">
+						<h3>{service.title}</h3>
+						<p>{service.summary}</p>
+						<ul>
+							{#each service.items as item (item)}
+								<li>
+									<svg
+										aria-hidden="true"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2.4"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									>
+										<path d="m5 12 5 5L20 7" />
+									</svg>
+									{item}
+								</li>
+							{/each}
+						</ul>
+						<p class="service-outcome">{service.outcome}</p>
+					</div>
+				</article>
+			{/each}
+		</div>
+	</div>
+</section>
+
+<!-- EMERGENCY -------------------------------------------------------- -->
+<section
+	class="emergency-section section-shell"
+	aria-labelledby="emergency-services-heading"
+>
+	<div class="section-inner section-inner--wide">
+		<div class="emergency-panel">
+			<div class="emergency-bg" aria-hidden="true">
+				<span data-parallax="0.12"></span>
+			</div>
+			<div class="emergency-copy reveal reveal--up">
+				<p class="eyebrow eyebrow--on-dark">Emergency support</p>
+				<h2 id="emergency-services-heading">24/7 Emergency Breakdown Service</h2>
+				<p>
+					Refrigeration failures can impact stock, safety and business operations. We provide
+					responsive emergency breakdown services across:
+				</p>
+				<ul class="locations" aria-label="Emergency service locations" data-stagger>
+					{#each serviceAreas as location, i (location)}
+						<li class="reveal reveal--up" style="--i: {i}">
+							<svg
+								aria-hidden="true"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z" />
+								<circle cx="12" cy="10" r="3" />
+							</svg>
+							{location}
+						</li>
+					{/each}
+				</ul>
+			</div>
+			<a class="emergency-call reveal reveal--scale" href="tel:0411532233">
+				<span class="emergency-call__pulse pulse-ring" aria-hidden="true"></span>
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path
+						d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"
+					/>
+				</svg>
+				<span>Call emergency support</span>
+				<strong>041-1532-233</strong>
+			</a>
+		</div>
+	</div>
+</section>
+
+<!-- CONTACT ---------------------------------------------------------- -->
+<section class="contact-section section-shell" aria-labelledby="contact-heading">
+	<div class="section-inner section-inner--wide">
+		<header class="section-intro">
+			<p class="eyebrow reveal reveal--up">Contact AllCare</p>
+			<h2 id="contact-heading" class="reveal reveal--up">
+				Need reliable refrigeration or air conditioning services?
+			</h2>
+			<p class="reveal reveal--up">Contact us today.</p>
+		</header>
+
+		<div class="contact-grid" data-stagger>
+			{#each contactDetails as detail, i (detail.title)}
+				<article class="contact-card reveal reveal--up" style="--i: {i}">
+					<span class="contact-card__icon">
+						{#if detail.title === 'Address'}
+							<svg
+								aria-hidden="true"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z" />
+								<circle cx="12" cy="10" r="3" />
+							</svg>
+						{:else if detail.title === 'Call Us'}
+							<svg
+								aria-hidden="true"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path
+									d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"
+								/>
+							</svg>
+						{:else}
+							<svg
+								aria-hidden="true"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<circle cx="12" cy="12" r="10" />
+								<polyline points="12 6 12 12 16 14" />
+							</svg>
+						{/if}
+					</span>
+					<h3>{detail.title}</h3>
+					<p>
+						{#if detail.title === 'Call Us'}
+							<a href="tel:0411532233">{detail.value}</a>
+						{:else}
+							{detail.value}
+						{/if}
+					</p>
+				</article>
+			{/each}
+		</div>
 	</div>
 </section>
 
 <style>
-	section + section {
-		margin-top: clamp(1.25rem, 3vw, 2.5rem);
-	}
-
-	.hero {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
-		gap: clamp(1.5rem, 4vw, 3rem);
-		align-items: stretch;
-		background:
-			radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.28), transparent 26rem),
-			linear-gradient(135deg, #1e5f95 0%, #4b96d4 52%, #62ace8 100%);
-		color: #ffffff;
-		border-radius: 24px;
-		padding: clamp(2rem, 5vw, 4rem);
-		box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
-		overflow: hidden;
-	}
-
-	.hero-content {
-		max-width: 780px;
-	}
-
-	.kicker {
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		font-weight: 700;
-		margin: 0;
-		color: #dff2ff;
-	}
-
 	h1,
 	h2,
 	h3 {
 		margin: 0;
-		color: #353c4b;
+		color: var(--color-ink);
 	}
 
-	.hero h1 {
-		color: #ffffff;
-		margin-top: 0.7rem;
-		font-size: clamp(2rem, 4.8vw, 4rem);
+	h1 {
+		font-size: clamp(2.1rem, 4.8vw, 4.1rem);
 		line-height: 1.05;
 		letter-spacing: -0.04em;
 	}
 
-	.hero p {
+	h2 {
+		font-size: clamp(1.65rem, 3.2vw, 2.6rem);
+		line-height: 1.1;
+		letter-spacing: -0.035em;
+	}
+
+	h3 {
+		font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+		font-weight: 800;
+	}
+
+	p {
+		line-height: 1.6;
+		color: var(--color-ink-soft);
+		margin: 0 0 1rem;
+	}
+
+	.section-intro {
+		max-width: 50rem;
+		margin: 0 auto clamp(1.5rem, 3vw, 2.5rem);
+		text-align: center;
+		display: grid;
+		gap: 0.5rem;
+		justify-items: center;
+	}
+
+	.section-intro p {
+		margin: 0;
+	}
+
+	/* HERO */
+	.hero {
+		position: relative;
+		isolation: isolate;
+		padding-block: clamp(3rem, 7vw, 5.5rem) clamp(2.5rem, 5vw, 4rem);
+		overflow: clip;
 		color: #ffffff;
-		max-width: 75ch;
+		background:
+			radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.28), transparent 26rem),
+			linear-gradient(135deg, #1e5f95 0%, #4b96d4 52%, #62ace8 100%);
+	}
+
+	.hero-bg {
+		position: absolute;
+		inset: -10%;
+		z-index: -1;
+		overflow: hidden;
+	}
+
+	.hero-bg__layer {
+		position: absolute;
+		border-radius: 50%;
+		filter: blur(60px);
+		opacity: 0.55;
+		transform: translate3d(0, var(--py, 0px), 0);
+	}
+
+	.hero-bg__layer--1 {
+		top: -10%;
+		right: -10%;
+		width: 32rem;
+		height: 32rem;
+		background: radial-gradient(circle, rgba(255, 255, 255, 0.55), transparent 65%);
+	}
+
+	.hero-bg__layer--2 {
+		bottom: -8rem;
+		left: -8rem;
+		width: 30rem;
+		height: 30rem;
+		background: radial-gradient(circle, rgba(143, 199, 240, 0.6), transparent 65%);
+	}
+
+	.hero-bg__grid {
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+		background-size: 60px 60px;
+		mask-image: radial-gradient(circle at 50% 35%, black, transparent 70%);
+		-webkit-mask-image: radial-gradient(circle at 50% 35%, black, transparent 70%);
+		opacity: 0.45;
+	}
+
+	.hero-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.65fr);
+		gap: clamp(2rem, 4vw, 4rem);
+		align-items: stretch;
+		position: relative;
+	}
+
+	.hero-content {
+		max-width: 44rem;
+	}
+
+	.hero-content h1 {
+		margin-top: 0.7rem;
+		color: #ffffff;
+	}
+
+	.hero-highlight {
+		display: inline-block;
+		background: linear-gradient(120deg, #ffffff, #cfe6f8 65%, #80c0eb);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.hero-content p {
+		color: rgba(255, 255, 255, 0.92);
+		max-width: 60ch;
 	}
 
 	.hero-lead {
-		font-size: clamp(1.05rem, 2vw, 1.25rem);
+		font-size: clamp(1.05rem, 1.7vw, 1.25rem);
 	}
 
 	.hero-actions {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.85rem;
-		margin-top: 1.6rem;
+		gap: 0.75rem;
+		margin-top: 1.4rem;
 	}
 
-	.primary-link,
-	.secondary-link,
-	.emergency-call {
+	.btn-primary,
+	.btn-ghost {
 		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		border-radius: 999px;
-		text-decoration: none;
+		gap: 0.5rem;
+		padding: 0.85rem 1.3rem;
 		font-weight: 800;
+		text-decoration: none;
+		border-radius: 999px;
 		transition:
-			transform 160ms ease,
-			box-shadow 160ms ease;
+			transform 220ms var(--ease-spring),
+			box-shadow 220ms var(--ease-spring),
+			filter 220ms var(--ease-spring);
 	}
 
-	.primary-link {
+	.btn-primary {
 		background: #ffffff;
-		color: #1e5f95;
-		padding: 0.85rem 1.25rem;
-		box-shadow: 0 14px 34px rgba(15, 23, 42, 0.18);
+		color: var(--color-brand-deep);
+		box-shadow: 0 14px 30px -10px rgba(15, 23, 42, 0.4);
 	}
 
-	.secondary-link {
-		border: 1px solid rgba(255, 255, 255, 0.58);
+	.btn-primary svg {
+		width: 1rem;
+		height: 1rem;
+	}
+
+	.btn-primary:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 18px 34px -10px rgba(15, 23, 42, 0.45);
+	}
+
+	.btn-ghost {
+		background: rgba(255, 255, 255, 0.1);
 		color: #ffffff;
-		padding: 0.82rem 1.2rem;
+		border: 1px solid rgba(255, 255, 255, 0.55);
+		backdrop-filter: blur(8px);
 	}
 
-	.primary-link:hover,
-	.secondary-link:hover,
-	.emergency-call:hover {
+	.btn-ghost:hover {
+		background: rgba(255, 255, 255, 0.18);
 		transform: translateY(-2px);
 	}
 
 	.hero-panel {
 		display: grid;
 		gap: 1rem;
-		align-content: end;
+		align-content: start;
 		border: 1px solid rgba(255, 255, 255, 0.34);
-		border-radius: 22px;
-		padding: clamp(1.2rem, 3vw, 1.6rem);
-		background: rgba(255, 255, 255, 0.14);
-		backdrop-filter: blur(10px);
+		border-radius: var(--radius-lg);
+		padding: clamp(1.4rem, 3vw, 1.9rem);
+		background: rgba(255, 255, 255, 0.12);
+		backdrop-filter: blur(14px);
+		box-shadow: 0 20px 40px -16px rgba(15, 23, 42, 0.4);
 	}
 
-	.hero-panel p {
+	.hero-panel__intro {
 		margin: 0;
 		font-weight: 700;
+		color: #ffffff;
 	}
 
 	.hero-stat {
 		display: grid;
-		gap: 0.25rem;
+		gap: 0.2rem;
 		border-top: 1px solid rgba(255, 255, 255, 0.26);
-		padding-top: 1rem;
+		padding-top: 0.85rem;
 	}
 
 	.hero-stat strong {
-		font-size: clamp(2rem, 4vw, 3.1rem);
+		color: #ffffff;
+		font-size: clamp(1.65rem, 3vw, 2.5rem);
+		font-weight: 900;
 		line-height: 1;
+		letter-spacing: -0.02em;
 	}
 
 	.hero-stat span {
-		color: #eef8ff;
+		color: rgba(238, 248, 255, 0.92);
 		font-weight: 700;
+		font-size: 0.92rem;
 	}
 
-	.section-card {
-		background: #ffffff;
-		border: 1px solid #e3edf7;
-		border-radius: 22px;
-		padding: clamp(1.4rem, 4vw, 2.5rem);
-		box-shadow: 0 18px 46px rgba(15, 23, 42, 0.07);
-	}
-
-	.section-label {
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		font-weight: 700;
-		margin: 0 0 0.35rem;
-		color: #62ace8;
-	}
-
-	.services-section h2,
-	.contact h2,
-	.emergency h2 {
-		font-size: clamp(1.55rem, 3vw, 2.3rem);
-		line-height: 1.15;
-	}
-
-	p {
-		line-height: 1.6;
-		color: #353c4b;
-	}
-
+	/* SERVICES */
 	.service-grid {
-		margin-top: clamp(1.2rem, 3vw, 2rem);
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: clamp(1rem, 2vw, 1.4rem);
@@ -378,167 +595,343 @@
 		display: grid;
 		grid-template-rows: auto 1fr;
 		overflow: hidden;
-		border: 1px solid #d9e7f4;
-		border-radius: 18px;
-		background: #ffffff;
-		box-shadow: 0 12px 30px rgba(53, 60, 75, 0.07);
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius-lg);
+		background: linear-gradient(180deg, #ffffff, #f8fbff);
+		box-shadow: var(--shadow-soft);
+		transition:
+			transform 320ms var(--ease-spring),
+			box-shadow 320ms var(--ease-spring),
+			border-color 320ms var(--ease-spring);
+	}
+
+	.service-card:hover {
+		transform: translateY(-6px);
+		box-shadow: 0 28px 60px -22px rgba(15, 76, 129, 0.32);
+		border-color: rgba(98, 172, 232, 0.45);
+	}
+
+	.service-card__media {
+		position: relative;
+		overflow: hidden;
 	}
 
 	:global(.site-image-slot.service-image) {
+		position: relative;
 		display: grid;
-		min-height: 165px;
+		min-height: 11rem;
 		place-items: center;
 		background:
-			linear-gradient(135deg, rgba(98, 172, 232, 0.9), rgba(30, 95, 149, 0.92)),
+			linear-gradient(135deg, rgba(98, 172, 232, 0.95), rgba(30, 95, 149, 0.95)),
 			repeating-linear-gradient(
 				-45deg,
 				rgba(255, 255, 255, 0.18) 0 8px,
 				rgba(255, 255, 255, 0.08) 8px 16px
 			);
 		color: #ffffff;
+		transition: transform 700ms var(--ease-spring);
+	}
+
+	.service-card:hover :global(.site-image-slot.service-image) {
+		transform: scale(1.04);
 	}
 
 	:global(.site-image-slot.service-image) :global(span) {
-		border: 1px solid rgba(255, 255, 255, 0.42);
+		border: 1px solid rgba(255, 255, 255, 0.45);
 		border-radius: 999px;
-		padding: 0.55rem 0.85rem;
-		background: rgba(255, 255, 255, 0.14);
+		padding: 0.55rem 0.95rem;
+		background: rgba(255, 255, 255, 0.16);
+		font-size: 0.78rem;
+		font-weight: 800;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		backdrop-filter: blur(4px);
+	}
+
+	.service-card__num {
+		position: absolute;
+		left: 1rem;
+		bottom: 1rem;
+		padding: 0.3rem 0.55rem;
+		background: rgba(15, 23, 42, 0.35);
+		color: #ffffff;
+		border-radius: 0.5rem;
 		font-size: 0.78rem;
 		font-weight: 800;
 		letter-spacing: 0.1em;
-		text-transform: uppercase;
+		backdrop-filter: blur(6px);
 	}
 
 	.service-content {
-		padding: clamp(1rem, 2.5vw, 1.35rem);
-	}
-
-	.service-card h3 {
-		font-size: clamp(1.08rem, 2vw, 1.3rem);
-		line-height: 1.25;
-		margin-bottom: 0.55rem;
-	}
-
-	ul {
-		margin: 0.75rem 0;
-		padding-left: 1.2rem;
+		padding: clamp(1.1rem, 2.5vw, 1.5rem);
 		display: grid;
-		gap: 0.35rem;
+		gap: 0.6rem;
 	}
 
-	li {
-		color: #353c4b;
-		line-height: 1.5;
+	.service-content ul {
+		display: grid;
+		gap: 0.45rem;
+		margin: 0.65rem 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.service-content li {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		color: var(--color-ink);
+		font-weight: 600;
+		line-height: 1.45;
+	}
+
+	.service-content li svg {
+		width: 0.95rem;
+		height: 0.95rem;
+		flex: 0 0 auto;
+		padding: 0.2rem;
+		border-radius: 999px;
+		background: rgba(98, 172, 232, 0.16);
+		color: var(--color-brand-deep);
 	}
 
 	.service-outcome {
 		margin-bottom: 0;
+		padding: 0.7rem 0.85rem;
+		border-radius: 0.7rem;
+		background: linear-gradient(135deg, rgba(98, 172, 232, 0.12), rgba(98, 172, 232, 0.04));
+		border: 1px solid rgba(98, 172, 232, 0.22);
 		font-weight: 700;
-		color: #2d647f;
+		color: var(--color-brand-deep);
 	}
 
-	.emergency {
+	/* EMERGENCY */
+	.emergency-section {
+		position: relative;
+	}
+
+	.emergency-panel {
+		position: relative;
+		isolation: isolate;
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) auto;
 		gap: clamp(1.2rem, 4vw, 2rem);
 		align-items: center;
+		overflow: hidden;
+		padding: clamp(1.8rem, 4vw, 3rem);
+		border-radius: var(--radius-xl);
 		background:
-			linear-gradient(135deg, rgba(30, 95, 149, 0.95), rgba(53, 60, 75, 0.96)),
-			#353c4b;
+			radial-gradient(ellipse at 90% 20%, rgba(143, 199, 240, 0.32), transparent 60%),
+			linear-gradient(135deg, rgba(30, 95, 149, 0.96), rgba(53, 60, 75, 0.97));
+		color: #ffffff;
+		box-shadow: 0 32px 80px -28px rgba(15, 23, 42, 0.45);
 	}
 
-	.emergency h2,
-	.emergency p,
-	.emergency .section-label {
+	.emergency-bg {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		overflow: hidden;
+		border-radius: inherit;
+	}
+
+	.emergency-bg span {
+		position: absolute;
+		inset: -10%;
+		background: repeating-linear-gradient(
+			45deg,
+			rgba(255, 255, 255, 0.05) 0 12px,
+			transparent 12px 24px
+		);
+		opacity: 0.7;
+		transform: translate3d(0, var(--py, 0px), 0);
+	}
+
+	.emergency-copy h2,
+	.emergency-copy p {
 		color: #ffffff;
+	}
+
+	.emergency-copy h2 {
+		margin-top: 0.6rem;
+	}
+
+	.emergency-copy p {
+		color: rgba(255, 255, 255, 0.85);
+		max-width: 56ch;
 	}
 
 	.locations {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.55rem;
-		margin: 1.1rem 0 0;
+		margin: 1.2rem 0 0;
 		padding: 0;
 		list-style: none;
 	}
 
 	.locations li {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
 		border: 1px solid rgba(255, 255, 255, 0.28);
 		border-radius: 999px;
-		padding: 0.4rem 0.7rem;
+		padding: 0.4rem 0.8rem;
 		background: rgba(255, 255, 255, 0.1);
 		color: #ffffff;
 		font-weight: 700;
+		font-size: 0.88rem;
+		transition:
+			background 220ms var(--ease-spring),
+			transform 220ms var(--ease-spring);
+	}
+
+	.locations li svg {
+		width: 0.85rem;
+		height: 0.85rem;
+		color: #cfe6f8;
+	}
+
+	.locations li:hover {
+		transform: translateY(-2px);
+		background: rgba(255, 255, 255, 0.18);
 	}
 
 	.emergency-call {
-		flex-direction: column;
-		gap: 0.15rem;
-		min-width: min(100%, 250px);
-		padding: 1rem 1.3rem;
-		background: #62ace8;
+		position: relative;
+		display: grid;
+		justify-items: start;
+		gap: 0.18rem;
+		min-width: min(100%, 280px);
+		padding: 1.1rem 1.4rem;
+		background: linear-gradient(135deg, #62ace8, #1e5f95);
 		color: #ffffff;
-		box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22);
+		text-decoration: none;
+		font-weight: 800;
+		border-radius: var(--radius-lg);
+		box-shadow: 0 22px 48px -18px rgba(98, 172, 232, 0.55);
+		transition:
+			transform 220ms var(--ease-spring),
+			box-shadow 220ms var(--ease-spring),
+			filter 220ms var(--ease-spring);
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	.emergency-call::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			120deg,
+			transparent 30%,
+			rgba(255, 255, 255, 0.4) 45%,
+			transparent 60%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 3.6s linear infinite;
+		pointer-events: none;
+	}
+
+	.emergency-call:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 26px 56px -18px rgba(98, 172, 232, 0.7);
+		filter: brightness(1.04);
+	}
+
+	.emergency-call svg {
+		width: 1.6rem;
+		height: 1.6rem;
+		padding: 0.35rem;
+		background: rgba(255, 255, 255, 0.18);
+		border-radius: 999px;
 	}
 
 	.emergency-call span {
 		font-size: 0.78rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.85);
 	}
 
 	.emergency-call strong {
-		font-size: 1.35rem;
+		font-size: 1.5rem;
+		letter-spacing: -0.02em;
 	}
 
-	.contact {
-		display: grid;
-		gap: clamp(1.2rem, 3vw, 2rem);
+	.emergency-call__pulse {
+		position: absolute;
+		right: 1.3rem;
+		top: 1.3rem;
+		width: 0.55rem;
+		height: 0.55rem;
+		border-radius: 999px;
+		background: #80efd1;
+		box-shadow: 0 0 0 0 rgba(128, 239, 209, 0.85);
 	}
 
-	.contact-intro {
-		max-width: 680px;
-	}
-
+	/* CONTACT */
 	.contact-grid {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 1rem;
 	}
 
-	.contact-item {
-		border: 1px solid #d9e7f4;
-		border-radius: 16px;
-		padding: 1rem;
-		background: #f7fbff;
+	.contact-card {
+		padding: 1.4rem;
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius-md);
+		background: #ffffff;
+		display: grid;
+		gap: 0.5rem;
+		box-shadow: var(--shadow-soft);
+		transition:
+			transform 220ms var(--ease-spring),
+			box-shadow 220ms var(--ease-spring);
 	}
 
-	.contact-item h3 {
-		font-size: 1rem;
+	.contact-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 22px 44px -22px rgba(15, 76, 129, 0.3);
 	}
 
-	.contact-item p {
-		margin-bottom: 0;
+	.contact-card__icon {
+		display: grid;
+		place-items: center;
+		width: 2.4rem;
+		height: 2.4rem;
+		border-radius: 0.75rem;
+		background: linear-gradient(135deg, rgba(98, 172, 232, 0.18), rgba(15, 76, 129, 0.18));
+		color: var(--color-brand-deep);
 	}
 
-	.contact a {
-		color: #62ace8;
+	.contact-card__icon svg {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	.contact-card p {
+		margin: 0;
+		color: var(--color-ink-soft);
+	}
+
+	.contact-card a {
+		color: var(--color-brand-deeper);
 		text-decoration: none;
-		font-weight: 700;
+		font-weight: 800;
 	}
 
-	.contact a:hover {
+	.contact-card a:hover {
 		text-decoration: underline;
 	}
 
-	@media (max-width: 920px) {
-		.hero,
-		.emergency {
+	@media (max-width: 1024px) {
+		.hero-grid,
+		.emergency-panel {
 			grid-template-columns: 1fr;
 		}
 
-		.service-grid,
-		.contact-grid {
+		.service-grid {
 			grid-template-columns: 1fr;
 		}
 
@@ -547,13 +940,17 @@
 		}
 	}
 
-	@media (max-width: 560px) {
+	@media (max-width: 720px) {
+		.contact-grid {
+			grid-template-columns: 1fr;
+		}
+
 		.hero-actions {
 			flex-direction: column;
 		}
 
-		.primary-link,
-		.secondary-link,
+		.btn-primary,
+		.btn-ghost,
 		.emergency-call {
 			width: 100%;
 		}

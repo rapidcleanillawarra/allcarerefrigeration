@@ -4,6 +4,12 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
+		<script>
+			// Mark <html> as JS-enabled before paint so reveal animations
+			// can hide their initial state. Without this, elements would
+			// render visible, then flash invisible at hydration.
+			document.documentElement.classList.add('js-ready');
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

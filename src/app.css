@@ -1,13 +1,431 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+/* ----------------------------------------------------------------
+ * Design tokens
+ * ---------------------------------------------------------------- */
 @theme {
+	/* Brand */
 	--color-brand: #62ace8;
-	--color-ink: #353c4b;
+	--color-brand-soft: #e6f3fc;
+	--color-brand-deep: #1e5f95;
+	--color-brand-deeper: #0f4c81;
+	--color-brand-shadow: rgba(98, 172, 232, 0.45);
+
+	/* Surfaces */
 	--color-base: #ffffff;
+	--color-mist: #f7fbff;
+	--color-frost: #eef7ff;
+	--color-surface-soft: #f8fbff;
+
+	/* Ink */
+	--color-ink: #1f2937;
+	--color-ink-soft: #475569;
+	--color-ink-subtle: #94a3b8;
+
+	/* Lines */
+	--color-line: rgba(15, 76, 129, 0.1);
+	--color-line-strong: rgba(15, 76, 129, 0.18);
+
+	/* Typography */
+	--font-sans:
+		'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+		'Helvetica Neue', sans-serif;
+	--font-display:
+		'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+	/* Radii */
+	--radius-sm: 0.75rem;
+	--radius-md: 1rem;
+	--radius-lg: 1.5rem;
+	--radius-xl: 2rem;
+
+	/* Shadows */
+	--shadow-soft: 0 8px 24px -12px rgba(15, 23, 42, 0.18);
+	--shadow-card: 0 18px 48px -16px rgba(15, 76, 129, 0.18);
+	--shadow-glow: 0 16px 40px -8px rgba(98, 172, 232, 0.42);
+	--shadow-deep: 0 32px 80px -28px rgba(15, 23, 42, 0.34);
+
+	/* Easing */
+	--ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+	--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+	--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* ----------------------------------------------------------------
+ * Base
+ * ---------------------------------------------------------------- */
 @layer base {
+	html {
+		scroll-behavior: smooth;
+		-webkit-text-size-adjust: 100%;
+	}
+
+	html,
 	body {
-		@apply bg-base text-ink;
+		margin: 0;
+		padding: 0;
+		min-height: 100%;
+	}
+
+	body {
+		font-family: var(--font-sans);
+		font-feature-settings: 'cv11', 'ss01', 'ss03';
+		background: var(--color-base);
+		color: var(--color-ink);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-rendering: optimizeLegibility;
+		overflow-x: clip;
+	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	/* Modern, subtle scrollbar */
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: rgba(98, 172, 232, 0.4) transparent;
+	}
+
+	*::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background: linear-gradient(180deg, rgba(98, 172, 232, 0.5), rgba(30, 95, 149, 0.55));
+		border-radius: 999px;
+		border: 2px solid transparent;
+		background-clip: padding-box;
+	}
+
+	*::-webkit-scrollbar-thumb:hover {
+		background: linear-gradient(180deg, rgba(98, 172, 232, 0.75), rgba(30, 95, 149, 0.85));
+		background-clip: padding-box;
+	}
+
+	::selection {
+		background: rgba(98, 172, 232, 0.32);
+		color: var(--color-brand-deeper);
+	}
+
+	a {
+		color: inherit;
+	}
+
+	img,
+	picture,
+	video,
+	canvas,
+	svg {
+		display: block;
+		max-width: 100%;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-family: var(--font-display);
+		letter-spacing: -0.02em;
+	}
+}
+
+/* ----------------------------------------------------------------
+ * Animations
+ * ---------------------------------------------------------------- */
+@keyframes float-slow {
+	0%,
+	100% {
+		transform: translate3d(0, 0, 0);
+	}
+	50% {
+		transform: translate3d(0, -14px, 0);
+	}
+}
+
+@keyframes float-slower {
+	0%,
+	100% {
+		transform: translate3d(0, 0, 0) rotate(0deg);
+	}
+	50% {
+		transform: translate3d(0, -8px, 0) rotate(2deg);
+	}
+}
+
+@keyframes aurora-drift {
+	0% {
+		transform: translate3d(0, 0, 0) scale(1);
+	}
+	33% {
+		transform: translate3d(3%, -2%, 0) scale(1.05);
+	}
+	66% {
+		transform: translate3d(-2%, 3%, 0) scale(0.97);
+	}
+	100% {
+		transform: translate3d(0, 0, 0) scale(1);
+	}
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
+}
+
+@keyframes pulse-glow {
+	0%,
+	100% {
+		box-shadow: 0 0 0 0 rgba(98, 172, 232, 0.55);
+	}
+	50% {
+		box-shadow: 0 0 0 14px rgba(98, 172, 232, 0);
+	}
+}
+
+@keyframes marquee {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+@keyframes ring-pulse {
+	0% {
+		transform: scale(0.95);
+		opacity: 0.85;
+	}
+	70% {
+		transform: scale(1.5);
+		opacity: 0;
+	}
+	100% {
+		transform: scale(1.5);
+		opacity: 0;
+	}
+}
+
+/* ----------------------------------------------------------------
+ * Reveal-on-scroll
+ *
+ * Mark an element with `class="reveal"` (and optionally a variant
+ * like `reveal--up`, `reveal--scale`, `reveal--left`). The public
+ * layout sets up an IntersectionObserver that toggles the
+ * `is-visible` class when the element enters the viewport.
+ *
+ * Without JS, elements stay visible (the html.js-ready selector
+ * gates the hidden state). A small inline script in app.html sets
+ * .js-ready synchronously before paint so there is no flash.
+ * ---------------------------------------------------------------- */
+@layer utilities {
+	html.js-ready .reveal {
+		opacity: 0;
+		transform: translate3d(0, 24px, 0);
+		transition:
+			opacity 800ms var(--ease-spring),
+			transform 800ms var(--ease-spring),
+			filter 800ms var(--ease-spring);
+		will-change: opacity, transform;
+	}
+
+	html.js-ready .reveal.is-visible {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+
+	html.js-ready .reveal--up {
+		transform: translate3d(0, 36px, 0);
+	}
+
+	html.js-ready .reveal--down {
+		transform: translate3d(0, -28px, 0);
+	}
+
+	html.js-ready .reveal--left {
+		transform: translate3d(-32px, 0, 0);
+	}
+
+	html.js-ready .reveal--right {
+		transform: translate3d(32px, 0, 0);
+	}
+
+	html.js-ready .reveal--scale {
+		transform: scale(0.96);
+	}
+
+	html.js-ready .reveal--blur {
+		filter: blur(8px);
+	}
+
+	html.js-ready .reveal.is-visible.reveal--scale,
+	html.js-ready .reveal.is-visible.reveal--left,
+	html.js-ready .reveal.is-visible.reveal--right,
+	html.js-ready .reveal.is-visible.reveal--up,
+	html.js-ready .reveal.is-visible.reveal--down {
+		transform: translate3d(0, 0, 0) scale(1);
+	}
+
+	html.js-ready .reveal.is-visible.reveal--blur {
+		filter: blur(0);
+	}
+
+	/* Stagger helpers: child .reveal items animate sequentially. */
+	html.js-ready [data-stagger] > .reveal {
+		transition-delay: calc(var(--stagger-base, 0ms) + var(--stagger-step, 80ms) * var(--i, 0));
+	}
+
+	/* Parallax: element moves with --py offset set by the layout. */
+	.parallax {
+		transform: translate3d(0, var(--py, 0px), 0);
+		will-change: transform;
+		transition: transform 200ms linear;
+	}
+
+	.parallax-soft {
+		transform: translate3d(0, var(--py, 0px), 0);
+		will-change: transform;
+	}
+
+	/* Atmospheric blobs */
+	.aurora-blob {
+		position: absolute;
+		border-radius: 999px;
+		filter: blur(60px);
+		opacity: 0.55;
+		pointer-events: none;
+		animation: aurora-drift 18s ease-in-out infinite;
+	}
+
+	.float-y {
+		animation: float-slow 6s var(--ease-in-out) infinite;
+	}
+
+	.float-y-slow {
+		animation: float-slower 9s var(--ease-in-out) infinite;
+	}
+
+	.shimmer {
+		background-image: linear-gradient(
+			110deg,
+			transparent 30%,
+			rgba(255, 255, 255, 0.55) 45%,
+			transparent 60%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 3.2s linear infinite;
+	}
+
+	.pulse-ring {
+		animation: pulse-glow 2.4s var(--ease-in-out) infinite;
+	}
+
+	/* Section primitives */
+	.section-shell {
+		position: relative;
+		width: 100%;
+	}
+
+	.section-inner {
+		width: 100%;
+		max-width: 84rem;
+		margin-inline: auto;
+		padding-inline: clamp(1rem, 4vw, 2.75rem);
+	}
+
+	.section-inner--wide {
+		max-width: 96rem;
+	}
+
+	.section-inner--narrow {
+		max-width: 72rem;
+	}
+
+	/* Pretty gradient text */
+	.text-gradient {
+		background: linear-gradient(120deg, var(--color-brand-deeper), var(--color-brand) 60%, #8fc7f0);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.eyebrow {
+		display: inline-block;
+		font-size: 0.78rem;
+		font-weight: 800;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--color-brand-deep);
+	}
+
+	.eyebrow--on-dark {
+		color: #cce8fb;
+	}
+
+	.glow-ring::after {
+		content: '';
+		position: absolute;
+		inset: -2px;
+		border-radius: inherit;
+		padding: 1px;
+		background: linear-gradient(140deg, rgba(98, 172, 232, 0.7), rgba(15, 76, 129, 0.1) 65%);
+		mask:
+			linear-gradient(#000 0 0) content-box,
+			linear-gradient(#000 0 0);
+		mask-composite: exclude;
+		pointer-events: none;
+	}
+}
+
+/* ----------------------------------------------------------------
+ * Reduced motion
+ * ---------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	html.js-ready .reveal,
+	html.js-ready .reveal--up,
+	html.js-ready .reveal--down,
+	html.js-ready .reveal--left,
+	html.js-ready .reveal--right,
+	html.js-ready .reveal--scale,
+	html.js-ready .reveal--blur {
+		opacity: 1 !important;
+		transform: none !important;
+		filter: none !important;
+		transition: none !important;
+	}
+
+	.aurora-blob,
+	.float-y,
+	.float-y-slow,
+	.shimmer,
+	.pulse-ring {
+		animation: none !important;
+	}
+
+	.parallax,
+	.parallax-soft {
+		transform: none !important;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+		scroll-behavior: auto !important;
 	}
 }
