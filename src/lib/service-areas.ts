@@ -14,7 +14,40 @@ export const serviceAreas = [
 
 export type ServiceArea = (typeof serviceAreas)[number];
 
+/** Canonical site origin — used in meta URLs and schema. */
+export const SITE_ORIGIN = 'https://allcarerefrigeration.com.au';
+
+/** Depot name (physical address locality). */
+export const DEPOT_LOCALITY = 'Albion Park';
+
 /** Fragment id for in-page anchors (e.g. #location-albion-park). */
 export function locationAnchorId(area: string): string {
 	return `location-${area.toLowerCase().replace(/\s+/g, '-')}`;
+}
+
+/** Kebab-case slug from a suburb name — must match `[slug]` route segments. */
+export function areaNameToSlug(name: string): string {
+	return name.toLowerCase().replace(/\s+/g, '-');
+}
+
+/** One row per suburb we expose at `/service-areas/[slug]`. Built from {@link serviceAreas}. */
+const serviceAreaLandingBySlug: Record<string, { name: (typeof serviceAreas)[number] }> =
+	Object.fromEntries(serviceAreas.map((name) => [areaNameToSlug(name), { name }] as const));
+
+export type ServiceAreaLanding = {
+	/** Highlight suburb for copy and hero (matches a {@link serviceAreas} entry). */
+	name: typeof serviceAreas[number];
+	/** Path-only URL: `/` for the main landing, `/service-areas/{slug}` for area pages. */
+	pathname: string;
+};
+
+export function getServiceAreaBySlug(slug: string): ServiceAreaLanding | undefined {
+	const row = serviceAreaLandingBySlug[slug];
+	if (!row) return undefined;
+	return { name: row.name, pathname: `/service-areas/${slug}` };
+}
+
+/** Default landing context for `/` — same emphasis suburb as the depot. */
+export function homeLandingDefaults(): ServiceAreaLanding {
+	return { name: DEPOT_LOCALITY, pathname: '/' };
 }

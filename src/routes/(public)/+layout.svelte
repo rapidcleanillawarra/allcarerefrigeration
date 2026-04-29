@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { locationAnchorId, serviceAreas } from '$lib/service-areas';
+	import { areaNameToSlug, serviceAreas } from '$lib/service-areas';
 
 	let { children, data } = $props();
 
@@ -171,7 +171,7 @@
 						<div class="nav-dropdown__panel" role="group" aria-label="Service locations">
 							{#each serviceAreas as area (area)}
 								<a
-									href={`${resolve('/')}#${locationAnchorId(area)}`}
+									href={resolve(`/service-areas/${areaNameToSlug(area)}`)}
 									onclick={() => (locationsMenuOpen = false)}
 								>
 									{area}
@@ -219,7 +219,7 @@
 						<div class="mobile-nav__sub" role="group" aria-label="Service locations">
 							{#each serviceAreas as area (area)}
 								<a
-									href={`${resolve('/')}#${locationAnchorId(area)}`}
+									href={resolve(`/service-areas/${areaNameToSlug(area)}`)}
 									onclick={() => (mobileOpen = false)}
 								>
 									{area}

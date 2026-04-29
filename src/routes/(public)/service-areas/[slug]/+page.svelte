@@ -1,11 +1,8 @@
 <script lang="ts">
 	import HomeLandingPage from '$lib/components/home-landing-page.svelte';
-	import { homeLandingDefaults } from '$lib/service-areas';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-
-	const landing = homeLandingDefaults();
 </script>
 
-<HomeLandingPage {data} {landing} />
+<HomeLandingPage {data} landing={data.landing} />
