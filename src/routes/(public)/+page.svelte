@@ -200,6 +200,54 @@
 	</div>
 
 	<div class="section-inner section-inner--wide hero-grid">
+		<div class="hero-visual reveal reveal--scale" data-parallax="-0.06">
+			<div class="hero-cutout float-y-slow">
+				<SiteImageSlot
+					placeholderKey="home:hero"
+					ariaLabel="Image placeholder for a refrigeration technician working on a commercial system"
+					edit={data.edit}
+					imageUrl={data.imageMap['home:hero']}
+					wrapperClass="image-placeholder hero-cutout-slot"
+				>
+					{#snippet children()}
+						<span>Hero Image Placeholder</span>
+						<small>Upload a cutout PNG of your technician (transparent background) for best results</small>
+					{/snippet}
+				</SiteImageSlot>
+			</div>
+
+			<div class="hero-card hero-card--badge float-y" aria-hidden="true">
+				<span class="hero-card__icon">
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M12 2v6" />
+						<path d="M12 16v6" />
+						<path d="m4.93 4.93 4.24 4.24" />
+						<path d="m14.83 14.83 4.24 4.24" />
+						<path d="M2 12h6" />
+						<path d="M16 12h6" />
+						<path d="m4.93 19.07 4.24-4.24" />
+						<path d="m14.83 9.17 4.24-4.24" />
+					</svg>
+				</span>
+				<div>
+					<strong>Rapid response</strong>
+					<small>Same-day diagnostics</small>
+				</div>
+			</div>
+
+			<div class="hero-card hero-card--rating" aria-hidden="true">
+				<div class="hero-card__stars">★★★★★</div>
+				<small>Trusted across the Illawarra</small>
+			</div>
+		</div>
+
 		<div class="hero-copy">
 			<p class="hero-kicker reveal reveal--up">
 				<span class="dot pulse-ring"></span>
@@ -207,7 +255,7 @@
 			</p>
 			<h1 id="hero-heading" class="reveal reveal--up">
 				Refrigeration and air conditioning service for
-				<span class="text-gradient hero-highlight">Albion Park</span>
+				<span class="hero-highlight">Albion Park</span>
 				and the Illawarra.
 			</h1>
 			<p class="hero-lead reveal reveal--up">
@@ -244,54 +292,6 @@
 					<li class="reveal reveal--up" style="--i: {i}">{highlight}</li>
 				{/each}
 			</ul>
-		</div>
-
-		<div class="hero-visual reveal reveal--scale" data-parallax="-0.06">
-			<div class="hero-card hero-card--main float-y-slow">
-				<SiteImageSlot
-					placeholderKey="home:hero"
-					ariaLabel="Image placeholder for a refrigeration technician working on a commercial system"
-					edit={data.edit}
-					imageUrl={data.imageMap['home:hero']}
-					wrapperClass="image-placeholder hero-placeholder"
-				>
-					{#snippet children()}
-						<span>Hero Image Placeholder</span>
-						<small>Replace with technician, vehicle or completed refrigeration project photo</small>
-					{/snippet}
-				</SiteImageSlot>
-			</div>
-
-			<div class="hero-card hero-card--badge float-y" aria-hidden="true">
-				<span class="hero-card__icon">
-					<svg
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					>
-						<path d="M12 2v6" />
-						<path d="M12 16v6" />
-						<path d="m4.93 4.93 4.24 4.24" />
-						<path d="m14.83 14.83 4.24 4.24" />
-						<path d="M2 12h6" />
-						<path d="M16 12h6" />
-						<path d="m4.93 19.07 4.24-4.24" />
-						<path d="m14.83 9.17 4.24-4.24" />
-					</svg>
-				</span>
-				<div>
-					<strong>Rapid response</strong>
-					<small>Same-day diagnostics</small>
-				</div>
-			</div>
-
-			<div class="hero-card hero-card--rating" aria-hidden="true">
-				<div class="hero-card__stars">★★★★★</div>
-				<small>Trusted across the Illawarra</small>
-			</div>
 		</div>
 	</div>
 
@@ -772,8 +772,9 @@
 		overflow: clip;
 		color: #ffffff;
 		background:
-			radial-gradient(circle at 84% 18%, rgba(255, 255, 255, 0.32), transparent 24rem),
-			linear-gradient(140deg, #62ace8, #2476b4 50%, #0f4c81 100%);
+			radial-gradient(ellipse 90% 70% at 12% 88%, rgba(28, 45, 120, 0.55), transparent 52%),
+			radial-gradient(circle at 88% 14%, rgba(255, 255, 255, 0.22), transparent 26%),
+			linear-gradient(115deg, #4d6fff 0%, #3b59ff 42%, #2848d8 100%);
 	}
 
 	.hero-bg {
@@ -797,7 +798,7 @@
 		left: -10%;
 		width: 36rem;
 		height: 36rem;
-		background: radial-gradient(circle, rgba(143, 199, 240, 0.7), transparent 70%);
+		background: radial-gradient(circle, rgba(120, 150, 255, 0.5), transparent 70%);
 	}
 
 	.hero-bg__layer--2 {
@@ -805,7 +806,7 @@
 		right: -12%;
 		width: 30rem;
 		height: 30rem;
-		background: radial-gradient(circle, rgba(255, 255, 255, 0.55), transparent 65%);
+		background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 65%);
 	}
 
 	.hero-bg__grid {
@@ -822,7 +823,7 @@
 
 	.hero-grid {
 		display: grid;
-		grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+		grid-template-columns: minmax(280px, 0.95fr) minmax(0, 1.08fr);
 		gap: clamp(2rem, 5vw, 4.5rem);
 		align-items: center;
 		position: relative;
@@ -862,11 +863,8 @@
 	}
 
 	.hero-highlight {
-		display: inline-block;
-		background: linear-gradient(120deg, #ffffff, #cfe6f8 65%, #80c0eb);
-		-webkit-background-clip: text;
-		background-clip: text;
-		color: transparent;
+		color: #e8edff;
+		font-weight: 900;
 	}
 
 	.hero-lead {
@@ -901,8 +899,9 @@
 
 	.btn-primary {
 		background: #ffffff;
-		color: var(--color-brand-deeper);
+		color: #2a3fd4;
 		box-shadow: 0 14px 30px -10px rgba(15, 23, 42, 0.4);
+		border-radius: 0.65rem;
 	}
 
 	.btn-primary svg {
@@ -959,23 +958,26 @@
 		box-shadow: 0 0 0 0.35rem rgba(255, 255, 255, 0.2);
 	}
 
-	/* Hero visual w/ floating cards */
+	/* Hero cutout + floating cards */
 	.hero-visual {
 		position: relative;
-		min-height: 30rem;
+		min-height: clamp(22rem, 38vw, 36rem);
+		align-self: end;
+	}
+
+	.hero-cutout {
+		position: relative;
+		width: 100%;
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-start;
+		min-height: clamp(18rem, 42vw, 34rem);
 	}
 
 	.hero-card {
 		position: absolute;
-		border-radius: var(--radius-lg);
-		overflow: hidden;
+		z-index: 2;
 		transition: transform 320ms var(--ease-spring);
-	}
-
-	.hero-card--main {
-		inset: 0;
-		box-shadow: 0 32px 80px -28px rgba(15, 23, 42, 0.55);
-		border: 1px solid rgba(255, 255, 255, 0.4);
 	}
 
 	.hero-card--badge {
@@ -1756,28 +1758,6 @@
 		text-align: center;
 	}
 
-	:global(.site-image-slot.image-placeholder)::before,
-	:global(.site-image-slot.image-placeholder)::after {
-		position: absolute;
-		content: '';
-		background: rgba(98, 172, 232, 0.24);
-	}
-
-	:global(.site-image-slot.image-placeholder)::before {
-		inset: auto 1.5rem 1.5rem auto;
-		width: 34%;
-		height: 34%;
-		border-radius: 999px;
-	}
-
-	:global(.site-image-slot.image-placeholder)::after {
-		inset: 1.5rem auto auto 1.5rem;
-		width: 38%;
-		height: 26%;
-		border-radius: 18px;
-		transform: rotate(-8deg);
-	}
-
 	:global(.site-image-slot.image-placeholder) :global(span),
 	:global(.site-image-slot.image-placeholder) :global(small) {
 		position: relative;
@@ -1796,18 +1776,56 @@
 		color: var(--color-ink-soft);
 	}
 
-	:global(.site-image-slot.hero-placeholder) {
-		min-height: 30rem;
-		border-color: rgba(255, 255, 255, 0.4);
-		border-radius: var(--radius-lg);
-		background:
-			linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(232, 245, 255, 0.7)),
-			repeating-linear-gradient(
-				-45deg,
-				rgba(255, 255, 255, 0.24) 0 14px,
-				rgba(53, 60, 75, 0.08) 14px 28px
-			);
-		box-shadow: var(--shadow-deep);
+	:global(.site-image-slot.hero-cutout-slot) {
+		position: relative;
+		width: 100%;
+		max-width: 36rem;
+		min-height: clamp(16rem, 40vw, 30rem);
+		margin-inline: 0 auto;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		padding: 0;
+		overflow: visible;
+		border: none;
+		border-radius: 0;
+		background: transparent !important;
+		box-shadow: none;
+	}
+
+	:global(.site-image-slot.hero-cutout-slot:not(.site-image-slot--has-image)) {
+		border: 2px dashed rgba(255, 255, 255, 0.38);
+		border-radius: 14px;
+		min-height: clamp(14rem, 36vw, 22rem);
+		color: #ffffff;
+		align-items: center;
+	}
+
+	:global(.site-image-slot.hero-cutout-slot.site-image-slot--has-image) {
+		border: none;
+		min-height: 0;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+	}
+
+	:global(.site-image-slot.hero-cutout-slot .site-image-slot__placeholder-inner) {
+		padding: 1.5rem 1rem;
+	}
+
+	:global(.site-image-slot.hero-cutout-slot:not(.site-image-slot--has-image) small) {
+		color: rgba(255, 255, 255, 0.85);
+	}
+
+	:global(.site-image-slot.hero-cutout-slot .site-image-slot__img) {
+		width: auto;
+		max-width: 100%;
+		height: auto;
+		max-height: min(72vh, 600px);
+		min-height: 0;
+		object-fit: contain;
+		object-position: bottom left;
+		display: block;
 	}
 
 	/* ============================================================
@@ -1840,8 +1858,10 @@
 			right: 0.5rem;
 		}
 
-		:global(.site-image-slot.hero-placeholder) {
-			min-height: 22rem;
+		:global(.site-image-slot.hero-cutout-slot) {
+			min-height: clamp(14rem, 50vw, 24rem);
+			max-width: 28rem;
+			margin-inline: auto;
 		}
 	}
 
@@ -1882,9 +1902,10 @@
 			min-height: auto;
 		}
 
-		.hero-card--main {
+		.hero-cutout {
 			position: relative;
 			inset: auto;
+			min-height: auto;
 		}
 	}
 </style>

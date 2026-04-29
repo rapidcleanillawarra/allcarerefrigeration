@@ -592,24 +592,6 @@
 		text-align: center;
 	}
 
-	:global(.site-image-slot.image-placeholder)::before {
-		position: absolute;
-		inset: 1rem;
-		content: '';
-		border: 1px dashed rgba(22, 70, 111, 0.25);
-		border-radius: 18px;
-	}
-
-	:global(.site-image-slot.image-placeholder)::after {
-		position: absolute;
-		width: 9rem;
-		height: 9rem;
-		content: '';
-		border-radius: 999px;
-		background: rgba(98, 172, 232, 0.18);
-		filter: blur(2px);
-	}
-
 	:global(.site-image-slot.image-placeholder) :global(span) {
 		position: relative;
 		z-index: 1;
