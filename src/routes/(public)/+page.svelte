@@ -200,8 +200,8 @@
 	</div>
 
 	<div class="section-inner section-inner--wide hero-grid">
-		<div class="hero-visual reveal reveal--scale" data-parallax="-0.06">
-			<div class="hero-cutout float-y-slow">
+		<div class="hero-visual">
+			<div class="hero-cutout">
 				<SiteImageSlot
 					placeholderKey="home:hero"
 					ariaLabel="Image placeholder for a refrigeration technician working on a commercial system"
@@ -216,7 +216,7 @@
 				</SiteImageSlot>
 			</div>
 
-			<div class="hero-card hero-card--badge float-y" aria-hidden="true">
+			<div class="hero-card hero-card--badge" aria-hidden="true">
 				<span class="hero-card__icon">
 					<svg
 						viewBox="0 0 24 24"
@@ -1848,6 +1848,11 @@
 			max-width: 36rem;
 			margin-inline: auto;
 			width: 100%;
+			align-self: center;
+		}
+
+		.hero-cutout {
+			justify-content: center;
 		}
 
 		.hero-card--badge {
@@ -1862,6 +1867,10 @@
 			min-height: clamp(14rem, 50vw, 24rem);
 			max-width: 28rem;
 			margin-inline: auto;
+		}
+
+		:global(.site-image-slot.hero-cutout-slot .site-image-slot__img) {
+			object-position: bottom center;
 		}
 	}
 
@@ -1900,12 +1909,18 @@
 
 		.hero-visual {
 			min-height: auto;
+			max-width: 100%;
 		}
 
 		.hero-cutout {
 			position: relative;
 			inset: auto;
 			min-height: auto;
+			justify-content: center;
+		}
+
+		:global(.site-image-slot.hero-cutout-slot) {
+			max-width: 100%;
 		}
 	}
 </style>
