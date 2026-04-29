@@ -1807,11 +1807,18 @@
 	}
 
 	:global(.site-image-slot.hero-cutout-slot.site-image-slot--has-image) {
-		border: none;
+		border: 0 solid transparent !important;
+		box-shadow: none !important;
+		background: transparent !important;
 		min-height: 0;
 		display: flex;
 		align-items: flex-end;
 		justify-content: center;
+	}
+
+	/* Edit mode uses <button>: ensure no UA / component border shows as a white frame */
+	:global(button.site-image-slot.hero-cutout-slot.site-image-slot--has-image) {
+		border-style: none !important;
 	}
 
 	:global(.site-image-slot.hero-cutout-slot .site-image-slot__placeholder-inner) {
@@ -1831,6 +1838,9 @@
 		object-fit: contain;
 		object-position: bottom left;
 		display: block;
+		border: 0;
+		box-shadow: none;
+		outline: none;
 	}
 
 	/* ============================================================

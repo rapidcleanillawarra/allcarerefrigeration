@@ -139,11 +139,17 @@
 		outline-offset: 4px;
 	}
 
+	:global(.site-image-slot.hero-cutout-slot.site-image-slot--has-image) {
+		border: none !important;
+		background: transparent !important;
+		box-shadow: none;
+	}
+
 	button.site-image-slot:focus-visible {
 		outline: 2px solid var(--color-brand);
 	}
 
-	.site-image-slot--has-image {
+	.site-image-slot--has-image:not(:global(.hero-cutout-slot)) {
 		padding: 0;
 		border-color: rgba(15, 87, 251, 0.35);
 		background: #0f172a;
