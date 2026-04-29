@@ -582,13 +582,7 @@
 	<div class="section-inner section-inner--wide">
 		<header class="section-intro">
 			<p class="eyebrow reveal reveal--up">Gallery & Work</p>
-			<h2 id="gallery-heading" class="reveal reveal--up">
-				Project examples ready for real photography
-			</h2>
-			<p class="reveal reveal--up">
-				Use these placeholders for finished installations, maintenance visits and before-and-after
-				project images when photos are available.
-			</p>
+			<h2 id="gallery-heading" class="reveal reveal--up">Recent Work</h2>
 		</header>
 
 		<div class="gallery-grid" data-stagger>
