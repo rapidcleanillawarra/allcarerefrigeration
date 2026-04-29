@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { locationAnchorId, serviceAreas } from '$lib/service-areas';
 
 	let { children, data } = $props();
+
+	let locationsMenuOpen = $state(false);
 
 	/** Embed URL from Maps share → resolves without an Maps Embed API key */
 	const VISIT_MAP_EMBED_SRC =
@@ -149,6 +152,33 @@
 					<a href={resolve('/')}>Home</a>
 					<a href={resolve('/about')}>About</a>
 					<a href={resolve('/services')}>Services</a>
+					<details class="nav-dropdown" bind:open={locationsMenuOpen}>
+						<summary class="nav-dropdown__summary">
+							Locations
+							<svg
+								class="nav-dropdown__chev"
+								aria-hidden="true"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2.2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="m6 9 6 6 6-6" />
+							</svg>
+						</summary>
+						<div class="nav-dropdown__panel" role="group" aria-label="Service locations">
+							{#each serviceAreas as area (area)}
+								<a
+									href={`${resolve('/')}#${locationAnchorId(area)}`}
+									onclick={() => (locationsMenuOpen = false)}
+								>
+									{area}
+								</a>
+							{/each}
+						</div>
+					</details>
 				</nav>
 
 				<a class="quote-btn" href={resolve('/#contact')}>
@@ -184,6 +214,19 @@
 					<a href={resolve('/')} onclick={() => (mobileOpen = false)}>Home</a>
 					<a href={resolve('/about')} onclick={() => (mobileOpen = false)}>About</a>
 					<a href={resolve('/services')} onclick={() => (mobileOpen = false)}>Services</a>
+					<details class="mobile-nav__dropdown">
+						<summary class="mobile-nav__summary">Locations</summary>
+						<div class="mobile-nav__sub" role="group" aria-label="Service locations">
+							{#each serviceAreas as area (area)}
+								<a
+									href={`${resolve('/')}#${locationAnchorId(area)}`}
+									onclick={() => (mobileOpen = false)}
+								>
+									{area}
+								</a>
+							{/each}
+						</div>
+					</details>
 					<a
 						class="mobile-nav__cta"
 						href={resolve('/#contact')}
@@ -519,6 +562,151 @@
 	.primary-nav a:hover::after,
 	.primary-nav a:focus-visible::after {
 		width: calc(100% - 1.6rem);
+	}
+
+	.nav-dropdown {
+		position: relative;
+		align-self: center;
+	}
+
+	.nav-dropdown__summary {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		list-style: none;
+		cursor: pointer;
+		color: #334155;
+		font-weight: 600;
+		padding: 0.6rem 0.95rem;
+		border-radius: 999px;
+		transition:
+			background 200ms ease,
+			color 200ms ease,
+			transform 200ms ease;
+	}
+
+	.nav-dropdown__summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.nav-dropdown__summary::after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		bottom: 0.35rem;
+		width: 0;
+		height: 2px;
+		background: linear-gradient(90deg, var(--color-brand-light), var(--color-brand-deeper));
+		border-radius: 2px;
+		transform: translateX(-50%);
+		transition: width 240ms var(--ease-spring);
+	}
+
+	.nav-dropdown__summary:hover,
+	.nav-dropdown__summary:focus-visible {
+		background: rgba(15, 87, 251, 0.12);
+		color: var(--color-brand-deeper);
+		outline: none;
+	}
+
+	.nav-dropdown__summary:hover::after,
+	.nav-dropdown[open] .nav-dropdown__summary::after,
+	.nav-dropdown__summary:focus-visible::after {
+		width: calc(100% - 1.6rem);
+	}
+
+	.nav-dropdown__chev {
+		width: 1rem;
+		height: 1rem;
+		flex-shrink: 0;
+		opacity: 0.7;
+		transition: transform 200ms var(--ease-spring);
+	}
+
+	.nav-dropdown[open] .nav-dropdown__chev {
+		transform: rotate(180deg);
+	}
+
+	.nav-dropdown__panel {
+		position: absolute;
+		top: calc(100% + 0.35rem);
+		left: 50%;
+		transform: translateX(-50%);
+		min-width: 12.5rem;
+		max-height: min(70vh, 22rem);
+		overflow-y: auto;
+		padding: 0.35rem;
+		background: rgba(255, 255, 255, 0.98);
+		border: 1px solid var(--color-line);
+		border-radius: 0.85rem;
+		box-shadow: 0 18px 48px -12px rgba(15, 51, 100, 0.25);
+		z-index: 50;
+	}
+
+	.nav-dropdown__panel a {
+		display: block;
+		padding: 0.55rem 0.85rem;
+		border-radius: 0.6rem;
+		color: #334155;
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 0.95rem;
+		transition:
+			background 200ms ease,
+			color 200ms ease;
+	}
+
+	.nav-dropdown__panel a::after {
+		display: none;
+	}
+
+	.nav-dropdown__panel a:hover,
+	.nav-dropdown__panel a:focus-visible {
+		background: rgba(15, 87, 251, 0.1);
+		color: var(--color-brand-deeper);
+		outline: none;
+	}
+
+	.mobile-nav__dropdown {
+		border-radius: 0.7rem;
+	}
+
+	.mobile-nav__summary {
+		list-style: none;
+		padding: 0.7rem 0.85rem;
+		cursor: pointer;
+		font-weight: 700;
+		color: var(--color-ink);
+		border-radius: 0.7rem;
+	}
+
+	.mobile-nav__summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.mobile-nav__dropdown[open] .mobile-nav__summary {
+		background: rgba(15, 87, 251, 0.08);
+	}
+
+	.mobile-nav__sub {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		padding: 0.15rem 0 0.35rem 0.5rem;
+	}
+
+	.mobile-nav__sub a {
+		padding: 0.55rem 0.75rem;
+		font-weight: 600;
+		font-size: 0.92rem;
+		color: #475569;
+		text-decoration: none;
+		border-radius: 0.55rem;
+	}
+
+	.mobile-nav__sub a:hover {
+		background: rgba(15, 87, 251, 0.12);
 	}
 
 	.quote-btn {

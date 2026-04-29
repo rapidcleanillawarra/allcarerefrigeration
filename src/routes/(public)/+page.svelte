@@ -29,6 +29,7 @@
 	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+	import { locationAnchorId, serviceAreas } from '$lib/service-areas';
 
 	let { data }: { data: PageData } = $props();
 
@@ -42,19 +43,6 @@
 		{ value: '15+', label: 'Years on Illawarra sites' },
 		{ value: '24/7', label: 'Emergency response' },
 		{ value: '100%', label: 'Honest, local team' }
-	];
-
-	const serviceAreas = [
-		'Albion Park',
-		'Wollongong',
-		'Shellharbour',
-		'Kiama',
-		'Warrawong',
-		'Dapto',
-		'Oak Flats',
-		'Port Kembla',
-		'Unanderra',
-		'Corrimal'
 	];
 
 	const services = [
@@ -384,7 +372,11 @@
 </section>
 
 <!-- SERVICE AREAS ---------------------------------------------------- -->
-<section class="areas-section section-shell" aria-labelledby="service-areas-heading">
+<section
+	class="areas-section section-shell"
+	id="locations"
+	aria-labelledby="service-areas-heading"
+>
 	<div class="section-inner section-inner--wide">
 		<header class="section-intro">
 			<p class="eyebrow reveal reveal--up">Service Areas</p>
@@ -400,7 +392,11 @@
 
 		<ul class="area-grid reveal reveal--up" aria-label="Illawarra service areas" data-stagger>
 			{#each serviceAreas as area, i (area)}
-				<li class="area-pill reveal reveal--up" style="--i: {i}">
+				<li
+					class="area-pill reveal reveal--up"
+					id={locationAnchorId(area)}
+					style="--i: {i}"
+				>
 					<svg
 						aria-hidden="true"
 						viewBox="0 0 24 24"
