@@ -110,33 +110,6 @@
 		}
 	];
 
-	const faqs = $derived.by(() => {
-		const list: { question: string; answer: string }[] = [
-			{
-				question: 'Do you service both refrigeration and air conditioning systems?',
-				answer:
-					'Yes. AllCare Refrigeration works on commercial refrigeration, cool rooms, freezers, condensers, evaporators, split systems and ducted air conditioning across Illawarra Region.'
-			},
-			{
-				question: 'Which areas do you cover?',
-				answer:
-					'We are based in Albion Park NSW 2527 and support customers across the Illawarra, Shoalhaven and Southern Highlands — including Wollongong, Shellharbour, Kiama, Nowra, Bowral, Mittagong, Thirroul, Bulli and surrounding NSW suburbs.'
-			}
-		];
-		if (landing.pathname !== '/') {
-			list.push({
-				question: `Do you service properties in ${landing.name}?`,
-				answer: `Yes. From our ${DEPOT_LOCALITY} depot we attend jobs in ${landing.name}, nearby suburbs and the wider Illawarra Region NSW.`
-			});
-		}
-		list.push({
-			question: 'Can you help with urgent breakdowns?',
-			answer:
-				'Call 0411 532 233 if a refrigeration or air conditioning fault is affecting comfort, stock or trade. We will talk through the issue and help with the next practical step.'
-		});
-		return list;
-	});
-
 	const localBusinessJsonLd = $derived(
 	JSON.stringify({
 		'@context': 'https://schema.org',
@@ -189,18 +162,6 @@
 						}
 					}))
 				}
-			},
-			{
-				'@type': 'FAQPage',
-				'@id': `${canonicalUrl}#faq`,
-				mainEntity: faqs.map((faq) => ({
-					'@type': 'Question',
-					name: faq.question,
-					acceptedAnswer: {
-						'@type': 'Answer',
-						text: faq.answer
-					}
-				}))
 			}
 		]
 	})
@@ -581,34 +542,6 @@
 					</ul>
 				</div>
 			</aside>
-		</div>
-	</div>
-</section>
-
-<!-- FAQ -------------------------------------------------------------- -->
-<section class="faq-section section-shell" aria-labelledby="faq-heading">
-	<div class="section-inner section-inner--narrow">
-		<header class="section-intro">
-			<p class="eyebrow reveal reveal--up">Frequently Asked Questions</p>
-			<h2 id="faq-heading" class="reveal reveal--up">
-				Common questions about our refrigeration and HVAC services
-			</h2>
-			<p class="reveal reveal--up">
-				Planning a service visit or dealing with a breakdown? These answers cover the basics for
-				local customers across {landing.name} and Illawarra NSW.
-			</p>
-		</header>
-
-		<div class="faq-grid" data-stagger>
-			{#each faqs as faq, i (faq.question)}
-				<details class="faq-item reveal reveal--up" style="--i: {i}">
-					<summary>
-						<span>{faq.question}</span>
-						<span class="faq-item__icon" aria-hidden="true"></span>
-					</summary>
-					<p>{faq.answer}</p>
-				</details>
-			{/each}
 		</div>
 	</div>
 </section>
@@ -1497,88 +1430,6 @@
 		background: rgba(15, 87, 251, 0.16);
 		border-radius: 999px;
 		color: var(--color-brand-deep);
-	}
-
-	/* ============================================================
-	 *  FAQ
-	 * ============================================================ */
-	.faq-grid {
-		display: grid;
-		gap: 0.8rem;
-	}
-
-	.faq-item {
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-md);
-		background: #ffffff;
-		padding: 1.1rem 1.25rem;
-		box-shadow: 0 4px 16px -10px rgba(4, 45, 122, 0.18);
-		transition:
-			border-color 220ms var(--ease-spring),
-			box-shadow 220ms var(--ease-spring);
-	}
-
-	.faq-item[open] {
-		border-color: rgba(15, 87, 251, 0.45);
-		box-shadow: 0 14px 30px -16px rgba(4, 45, 122, 0.28);
-	}
-
-	.faq-item summary {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		list-style: none;
-		cursor: pointer;
-		color: var(--color-ink);
-		font-weight: 800;
-	}
-
-	.faq-item summary::-webkit-details-marker {
-		display: none;
-	}
-
-	.faq-item__icon {
-		position: relative;
-		flex: 0 0 auto;
-		width: 1.4rem;
-		height: 1.4rem;
-		border-radius: 999px;
-		background: rgba(15, 87, 251, 0.16);
-		transition: transform 280ms var(--ease-spring);
-	}
-
-	.faq-item__icon::before,
-	.faq-item__icon::after {
-		content: '';
-		position: absolute;
-		background: var(--color-brand-deep);
-		border-radius: 2px;
-		transition: transform 280ms var(--ease-spring);
-	}
-
-	.faq-item__icon::before {
-		inset: 50% 25% auto;
-		height: 2px;
-		transform: translateY(-50%);
-	}
-
-	.faq-item__icon::after {
-		inset: 25% 50% auto;
-		width: 2px;
-		transform: translateX(-50%);
-	}
-
-	.faq-item[open] .faq-item__icon {
-		transform: rotate(180deg);
-	}
-
-	.faq-item[open] .faq-item__icon::after {
-		transform: translateX(-50%) scaleY(0);
-	}
-
-	.faq-item p {
-		margin: 0.8rem 0 0;
 	}
 
 	/* ============================================================
