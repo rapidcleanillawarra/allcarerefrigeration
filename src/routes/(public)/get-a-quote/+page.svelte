@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { resolve } from '$app/paths';
+	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+	import type { PageProps } from './$types';
 
 	type QuoteFormValues = {
 		fullName?: string;
@@ -21,7 +23,7 @@
 		contactMethods?: string[];
 	};
 
-	let { form } = $props();
+	let { form, data }: PageProps = $props();
 
 	const serviceOptions = [
 		{ value: 'commercial-refrigeration-repair', label: 'Commercial refrigeration repair' },
@@ -115,6 +117,23 @@
 				Complete the form below with as much detail as you can. The more we know about your
 				equipment and site, the faster we can provide an accurate quote.
 			</p>
+		</div>
+
+		<div class="hero-visual reveal reveal--scale" data-parallax="-0.05">
+			<div class="hero-cutout">
+				<SiteImageSlot
+					placeholderKey="quote:hero"
+					ariaLabel="Hero image: refrigeration or air conditioning equipment for quote requests"
+					edit={data.edit}
+					imageUrl={data.imageMap['quote:hero']}
+					wrapperClass="image-placeholder hero-cutout-slot"
+				>
+					{#snippet children()}
+						<span>Hero image placeholder</span>
+						<small>Upload a PNG with a transparent background for best results</small>
+					{/snippet}
+				</SiteImageSlot>
+			</div>
 		</div>
 	</div>
 </section>
@@ -528,7 +547,7 @@
 	.hero {
 		position: relative;
 		isolation: isolate;
-		padding-block: clamp(3rem, 7vw, 5rem) clamp(2rem, 4vw, 3rem);
+		padding-block: clamp(3rem, 7vw, 5rem) 0;
 		overflow: clip;
 		color: #ffffff;
 		background:
@@ -581,6 +600,101 @@
 			linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
 		background-size: 48px 48px;
 		mask-image: radial-gradient(circle at 50% 40%, black, transparent 75%);
+	}
+
+	.hero-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.05fr) minmax(260px, 0.95fr);
+		gap: clamp(2rem, 4vw, 4rem);
+		align-items: end;
+		position: relative;
+	}
+
+	.hero-copy {
+		padding-bottom: clamp(2rem, 4vw, 3rem);
+	}
+
+	.hero-visual {
+		position: relative;
+		align-self: stretch;
+		min-height: clamp(22rem, 42vw, 36rem);
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		margin-bottom: 0;
+	}
+
+	.hero-cutout {
+		position: relative;
+		width: 100%;
+		flex: 1;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		min-height: 0;
+		margin-bottom: 0;
+	}
+
+	:global(.site-image-slot.hero-cutout-slot) {
+		position: relative;
+		width: 100%;
+		max-width: 36rem;
+		height: 100%;
+		min-height: clamp(14rem, 34vw, 26rem);
+		margin-inline: 0 auto;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		padding: 0;
+		overflow: visible;
+		border: none;
+		border-radius: 0;
+		background: transparent !important;
+		box-shadow: none;
+	}
+
+	:global(.site-image-slot.hero-cutout-slot:not(.site-image-slot--has-image)) {
+		border: 2px dashed rgba(255, 255, 255, 0.38);
+		border-radius: 14px;
+		min-height: clamp(12rem, 32vw, 20rem);
+		color: #ffffff;
+		align-items: center;
+	}
+
+	:global(.site-image-slot.hero-cutout-slot.site-image-slot--has-image) {
+		border: 0 solid transparent !important;
+		box-shadow: none !important;
+		background: transparent !important;
+		min-height: 0;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+	}
+
+	:global(button.site-image-slot.hero-cutout-slot.site-image-slot--has-image) {
+		border-style: none !important;
+	}
+
+	:global(.site-image-slot.hero-cutout-slot .site-image-slot__placeholder-inner) {
+		padding: 1.5rem 1rem;
+	}
+
+	:global(.site-image-slot.hero-cutout-slot:not(.site-image-slot--has-image) small) {
+		color: rgba(255, 255, 255, 0.85);
+	}
+
+	:global(.site-image-slot.hero-cutout-slot .site-image-slot__img) {
+		width: auto;
+		max-width: 100%;
+		height: auto;
+		max-height: 100%;
+		min-height: 0;
+		object-fit: contain;
+		object-position: bottom center;
+		display: block;
+		border: 0;
+		box-shadow: none;
+		outline: none;
 	}
 
 	.hero-copy .eyebrow {
@@ -992,6 +1106,20 @@
 		font-weight: 700;
 	}
 
+	@media (max-width: 1024px) {
+		.hero-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.hero-visual {
+			align-self: auto;
+			min-height: clamp(18rem, 50vw, 28rem);
+			max-width: 32rem;
+			margin-inline: auto;
+			width: 100%;
+		}
+	}
+
 	@media (max-width: 720px) {
 		.field-grid {
 			grid-template-columns: 1fr;
@@ -999,6 +1127,11 @@
 
 		.check-grid {
 			grid-template-columns: 1fr;
+		}
+
+		:global(.site-image-slot.hero-cutout-slot) {
+			min-height: clamp(12rem, 48vw, 20rem);
+			max-width: 100%;
 		}
 	}
 </style>
