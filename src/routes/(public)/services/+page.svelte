@@ -75,15 +75,20 @@
 	];
 
 	const serviceAreas = [
-		'Helensburgh',
-		'Wollongong',
-		'Shellharbour',
-		'Kiama',
-		'Nowra',
 		'Bowral',
+		'Bulli',
+		'Helensburgh',
+		'Huskisson',
+		'Jervis Bay',
+		'Kiama',
 		'Mittagong',
+		'Moss Vale',
+		'Nowra',
 		'Robertson',
-		'Moss Vale'
+		'Shellharbour',
+		'South Nowra',
+		'Thirroul',
+		'Wollongong'
 	];
 
 	const contactDetails = [

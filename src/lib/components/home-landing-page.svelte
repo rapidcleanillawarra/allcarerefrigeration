@@ -56,7 +56,7 @@
 	];
 
 	const stats = [
-		{ value: '15+', label: 'Years on Illawarra sites' },
+		{ value: '30+', label: 'Years on Illawarra sites' },
 		{ value: '24/7', label: 'Emergency response' },
 		{ value: '100%', label: 'Honest, local team' }
 	];
@@ -119,7 +119,7 @@
 			{
 				question: 'Which areas do you cover?',
 				answer:
-					'We are based at 157 Church St, Albion Park NSW 2527 and support customers across Albion Park, Wollongong, Shellharbour, Kiama, Dapto and surrounding Illawarra NSW suburbs.'
+					'We are based in Albion Park NSW 2527 and support customers across the Illawarra, Shoalhaven and Southern Highlands — including Wollongong, Shellharbour, Kiama, Nowra, Bowral, Mittagong, Thirroul, Bulli and surrounding NSW suburbs.'
 			}
 		];
 		if (landing.pathname !== '/') {
@@ -266,7 +266,7 @@
 		<div class="hero-copy">
 			<p class="hero-kicker reveal reveal--up">
 				<span class="dot pulse-ring"></span>
-				Local refrigeration, HVAC & air conditioning · Illawarra NSW
+				Local refrigeration, Air conditioning · Illawarra NSW
 			</p>
 			<h1 id="hero-heading" class="reveal reveal--up">
 				Refrigeration and air conditioning service for
@@ -274,9 +274,8 @@
 				and Illawarra Region.
 			</h1>
 			<p class="hero-lead reveal reveal--up">
-				AllCare Refrigeration helps local homes, shops, cafes, offices and commercial sites with
-				HVAC repairs, refrigeration installations, preventative servicing and urgent breakdown
-				support delivered with clear communication and no hidden surprises.
+				AllCare Refrigeration helps local businesses and commercial sites with refrigeration repairs & installations, 
+				preventative servicing and urgent breakdown support delivered with clear communication and no hidden surprises.
 			</p>
 
 			<div class="hero-actions reveal reveal--up" aria-label="Primary actions">
@@ -708,7 +707,7 @@
 					</svg>
 				</span>
 				<h3>Address</h3>
-				<p>157 Church St, Albion Park NSW 2527, Australia</p>
+				<p>Albion Park NSW 2527, Australia</p>
 			</div>
 			<div class="contact-card reveal reveal--up">
 				<span class="contact-card__icon">

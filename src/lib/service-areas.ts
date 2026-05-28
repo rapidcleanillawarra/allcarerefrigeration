@@ -1,15 +1,24 @@
 /** Illawarra service areas shown on the home page — shared with nav and JSON-LD. */
 export const serviceAreas = [
 	'Albion Park',
-	'Wollongong',
-	'Shellharbour',
-	'Kiama',
-	'Warrawong',
+	'Bowral',
+	'Bulli',
+	'Corrimal',
 	'Dapto',
+	'Huskisson',
+	'Jervis Bay',
+	'Kiama',
+	'Mittagong',
+	'Moss Vale',
+	'Nowra',
 	'Oak Flats',
 	'Port Kembla',
+	'Shellharbour',
+	'South Nowra',
+	'Thirroul',
 	'Unanderra',
-	'Corrimal'
+	'Warrawong',
+	'Wollongong'
 ] as const;
 
 export type ServiceArea = (typeof serviceAreas)[number];
