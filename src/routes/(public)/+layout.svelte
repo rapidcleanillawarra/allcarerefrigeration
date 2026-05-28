@@ -182,7 +182,7 @@
 					</details>
 				</nav>
 
-				<a class="quote-btn" href={resolve('/#contact')}>
+				<a class="quote-btn" href={resolve('/get-a-quote')}>
 					<span>Get a Quote</span>
 					<svg
 						aria-hidden="true"
@@ -231,7 +231,7 @@
 					</details>
 					<a
 						class="mobile-nav__cta"
-						href={resolve('/#contact')}
+						href={resolve('/get-a-quote')}
 						onclick={() => (mobileOpen = false)}>Get a Quote</a
 					>
 				</div>

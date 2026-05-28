@@ -438,7 +438,7 @@
 						</svg>
 						Call 0411 532 233
 					</a>
-					<a class="btn-ghost" href={resolve('/#contact')}>Request a quote</a>
+					<a class="btn-ghost" href={resolve('/get-a-quote')}>Request a quote</a>
 				</div>
 			</div>
 		</div>
