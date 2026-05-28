@@ -8,7 +8,6 @@ const SERVICE_OPTIONS = [
 	'air-conditioning-installation',
 	'new-refrigeration-installation',
 	'preventative-maintenance',
-	'emergency-breakdown',
 	'other-service'
 ] as const;
 

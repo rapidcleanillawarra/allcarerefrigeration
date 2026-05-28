@@ -30,7 +30,6 @@
 		{ value: 'air-conditioning-installation', label: 'Air conditioning installation' },
 		{ value: 'new-refrigeration-installation', label: 'New refrigeration installation' },
 		{ value: 'preventative-maintenance', label: 'Preventative maintenance' },
-		{ value: 'emergency-breakdown', label: 'Emergency breakdown' },
 		{ value: 'other-service', label: 'Other' }
 	];
 
@@ -116,14 +115,20 @@
 				Complete the form below with as much detail as you can. The more we know about your
 				equipment and site, the faster we can provide an accurate quote.
 			</p>
-			<p class="reveal reveal--up">
-				Need urgent help? Call
-				<a class="hero-phone" href="tel:0411532233">0411 532 233</a>
-				for emergency breakdown support.
-			</p>
 		</div>
 	</div>
 </section>
+
+{#if !submitted}
+	<a
+		class="emergency-bubble reveal reveal--scale"
+		href="tel:0411532233"
+		aria-label="Emergency? Call us now at 0411 532 233"
+	>
+		<span class="emergency-bubble__dot pulse-ring" aria-hidden="true"></span>
+		Emergency? Call us now!
+	</a>
+{/if}
 
 <!-- FORM ------------------------------------------------------------- -->
 <section class="quote-section section-shell" aria-labelledby="quote-form-heading">
@@ -137,8 +142,7 @@
 				</div>
 				<h2 id="quote-form-heading">Thanks — your quote request has been received.</h2>
 				<p>
-					Our team will review your details and contact you using your preferred method. For urgent
-					breakdowns, call us on <a href="tel:0411532233">0411 532 233</a>.
+					Our team will review your details and contact you using your preferred method.
 				</p>
 				<a class="btn-secondary" href={resolve('/')}>Back to home</a>
 			</div>
@@ -579,6 +583,10 @@
 		mask-image: radial-gradient(circle at 50% 40%, black, transparent 75%);
 	}
 
+	.hero-copy .eyebrow {
+		color: #ffffff;
+	}
+
 	.hero-copy h1 {
 		color: #ffffff;
 		max-width: 18ch;
@@ -601,11 +609,59 @@
 		margin-bottom: 0;
 	}
 
-	.hero-phone {
+	.emergency-bubble {
+		position: fixed;
+		right: clamp(1rem, 3vw, 1.75rem);
+		bottom: clamp(1rem, 3vw, 1.75rem);
+		z-index: 40;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.75rem 1.1rem;
+		border-radius: 999px;
+		background: linear-gradient(
+			135deg,
+			var(--color-brand-deeper),
+			var(--color-brand) 55%,
+			var(--color-brand-light)
+		);
 		color: #ffffff;
+		font-size: 0.92rem;
 		font-weight: 800;
-		text-decoration: underline;
-		text-underline-offset: 0.15em;
+		text-decoration: none;
+		box-shadow: var(--shadow-glow);
+		transition:
+			transform 220ms var(--ease-spring),
+			box-shadow 220ms var(--ease-spring),
+			filter 220ms var(--ease-spring);
+	}
+
+	.emergency-bubble::after {
+		content: '';
+		position: absolute;
+		right: 1.35rem;
+		bottom: -0.45rem;
+		width: 0.85rem;
+		height: 0.85rem;
+		background: var(--color-brand);
+		transform: rotate(45deg);
+		border-radius: 0 0 0.2rem 0;
+		box-shadow: 2px 2px 4px rgba(4, 45, 122, 0.15);
+	}
+
+	.emergency-bubble:hover,
+	.emergency-bubble:focus-visible {
+		transform: translateY(-2px);
+		filter: brightness(1.05);
+	}
+
+	.emergency-bubble__dot {
+		width: 0.55rem;
+		height: 0.55rem;
+		border-radius: 999px;
+		background: #80efd1;
+		box-shadow: 0 0 0 0 rgba(128, 239, 209, 0.85);
+		flex: 0 0 auto;
 	}
 
 	/* FORM */
