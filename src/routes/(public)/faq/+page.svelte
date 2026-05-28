@@ -127,7 +127,7 @@
 				{
 					question: 'Do you provide free quotes?',
 					answer:
-						'We provide quotes for installations and larger works. Diagnostic call-out fees may apply for breakdown inspections.'
+						'We provide quotes for installations and larger works. Diagnostic call-out fees will apply for breakdown inspections.'
 				},
 				{
 					question: 'What affects the cost of refrigeration repairs?',
