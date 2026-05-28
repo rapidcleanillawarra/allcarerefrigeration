@@ -1,8 +1,14 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { applyAction, deserialize, enhance } from '$app/forms';
 	import { resolve } from '$app/paths';
+	import { env } from '$env/dynamic/public';
 	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+	import { executeRecaptcha, loadRecaptcha } from '$lib/recaptcha';
+	import { onMount } from 'svelte';
 	import type { PageProps } from './$types';
+
+	const RECAPTCHA_ACTION = 'quote_submit';
+	const recaptchaSiteKey = env.PUBLIC_RECAPTCHA_SITE_KEY ?? '';
 
 	type QuoteFormValues = {
 		fullName?: string;
@@ -78,11 +84,20 @@
 	];
 
 	let submitting = $state(false);
+	let recaptchaError = $state('');
 	let selectedPhotoNames = $state<string[]>([]);
 
 	const values = $derived.by(() => (form?.values ?? {}) as QuoteFormValues);
 	const errors = $derived.by(() => (form?.errors ?? {}) as Record<string, string>);
 	const submitted = $derived(form?.success === true);
+
+	onMount(() => {
+		if (recaptchaSiteKey) {
+			loadRecaptcha(recaptchaSiteKey).catch(() => {
+				// Script load errors are handled again at submit time.
+			});
+		}
+	});
 
 	function onPhotosChange(event: Event) {
 		const input = event.currentTarget as HTMLInputElement;
@@ -175,11 +190,31 @@
 				class="quote-form reveal reveal--up"
 				method="POST"
 				enctype="multipart/form-data"
-				use:enhance={() => {
+				use:enhance={({ formData, action, cancel }) => {
+					cancel();
 					submitting = true;
-					return async ({ update }) => {
-						await update();
-						submitting = false;
+					recaptchaError = '';
+
+					return async () => {
+						try {
+							if (recaptchaSiteKey) {
+								const token = await executeRecaptcha(recaptchaSiteKey, RECAPTCHA_ACTION);
+								formData.set('recaptchaToken', token);
+							}
+
+							const response = await fetch(action, {
+								method: 'POST',
+								body: formData
+							});
+
+							const result = deserialize(await response.text());
+							await applyAction(result);
+						} catch {
+							recaptchaError =
+								'Security verification failed. Please refresh the page and try again.';
+						} finally {
+							submitting = false;
+						}
 					};
 				}}
 			>
@@ -489,12 +524,31 @@
 				</fieldset>
 
 				<div class="form-actions">
+					{#if errors.form}
+						<p class="field-error form-error" role="alert">{errors.form}</p>
+					{/if}
+					{#if recaptchaError}
+						<p class="field-error form-error" role="alert">{recaptchaError}</p>
+					{/if}
 					<button type="submit" class="btn-primary" disabled={submitting}>
 						{submitting ? 'Submitting…' : 'Submit quote request'}
 					</button>
 					<p class="form-note">
 						By submitting this form you agree to be contacted about your quote request.
 					</p>
+					{#if recaptchaSiteKey}
+						<p class="recaptcha-note">
+							This site is protected by reCAPTCHA and the Google
+							<a href="https://policies.google.com/privacy" rel="noopener noreferrer" target="_blank"
+								>Privacy Policy</a
+							>
+							and
+							<a href="https://policies.google.com/terms" rel="noopener noreferrer" target="_blank"
+								>Terms of Service</a
+							>
+							apply.
+						</p>
+					{/if}
 				</div>
 			</form>
 		{/if}
@@ -1065,6 +1119,21 @@
 		margin: 0;
 		font-size: 0.88rem;
 		color: var(--color-ink-subtle);
+	}
+
+	.form-error {
+		margin: 0;
+	}
+
+	.recaptcha-note {
+		margin: 0;
+		font-size: 0.78rem;
+		line-height: 1.5;
+		color: var(--color-ink-subtle);
+	}
+
+	.recaptcha-note a {
+		color: inherit;
 	}
 
 	.success-panel {

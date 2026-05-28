@@ -1,5 +1,8 @@
 import { fail } from '@sveltejs/kit';
+import { verifyRecaptchaToken } from '$lib/server/recaptcha';
 import type { Actions } from './$types';
+
+const RECAPTCHA_ACTION = 'quote_submit';
 
 const SERVICE_OPTIONS = [
 	'commercial-refrigeration-repair',
@@ -134,6 +137,16 @@ export const actions = {
 
 		if (Object.keys(errors).length > 0) {
 			return fail(400, { errors, values, success: false as const });
+		}
+
+		const recaptchaToken = readText(form, 'recaptchaToken');
+		const recaptcha = await verifyRecaptchaToken(recaptchaToken, RECAPTCHA_ACTION);
+		if (!recaptcha.ok) {
+			return fail(400, {
+				errors: { form: recaptcha.message },
+				values,
+				success: false as const
+			});
 		}
 
 		// Submission handling can be wired to email, CRM, or Supabase later.
