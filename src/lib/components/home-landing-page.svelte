@@ -55,6 +55,9 @@
 		'Clear advice before work begins'
 	];
 
+	const arctickLogoUrl = 'https://arctick.org/images/ARCtick_Logo.jpg';
+	const arctickLicense = 'AU53597';
+
 	const stats = [
 		{ value: '30+', label: 'Years on Illawarra sites' },
 		{ value: '24/7', label: 'Emergency response' },
@@ -257,9 +260,25 @@
 				</div>
 			</div>
 
-			<div class="hero-card hero-card--rating" aria-hidden="true">
-				<div class="hero-card__stars">★★★★★</div>
-				<small>Trusted across Illawarra</small>
+			<div class="hero-card hero-card--rating">
+				<p class="hero-card__license-heading">
+					<span class="hero-card__license-check" aria-hidden="true">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M20 6 9 17l-5-5" />
+						</svg>
+					</span>
+					Licensed
+				</p>
+				<img
+					class="hero-card__arctick-logo"
+					src={arctickLogoUrl}
+					alt="ARCtick — Australian Refrigeration Council licensed technician"
+					width="132"
+					height="48"
+					loading="lazy"
+					decoding="async"
+				/>
+				<small>{arctickLicense}</small>
 			</div>
 		</div>
 
@@ -1066,7 +1085,7 @@
 	.hero-card--rating {
 		right: -1rem;
 		top: 1.5rem;
-		padding: 0.85rem 1rem;
+		padding: 0.85rem 1rem 0.95rem;
 		background: rgba(255, 255, 255, 0.96);
 		color: var(--color-brand-deeper);
 		border-radius: 1rem;
@@ -1074,10 +1093,42 @@
 		text-align: center;
 	}
 
-	.hero-card__stars {
-		color: #f5b400;
-		font-size: 1.05rem;
+	.hero-card__license-heading {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4rem;
+		margin: 0 0 0.55rem;
+		color: var(--color-brand-deeper);
+		font-size: 0.72rem;
+		font-weight: 800;
+		text-transform: uppercase;
 		letter-spacing: 0.1em;
+		line-height: 1;
+	}
+
+	.hero-card__license-check {
+		display: grid;
+		place-items: center;
+		flex-shrink: 0;
+		width: 1.35rem;
+		height: 1.35rem;
+		border-radius: 999px;
+		background: linear-gradient(135deg, #34d399, #059669);
+		color: #ffffff;
+		box-shadow: 0 6px 14px -6px rgba(5, 150, 105, 0.65);
+	}
+
+	.hero-card__license-check svg {
+		width: 0.72rem;
+		height: 0.72rem;
+	}
+
+	.hero-card__arctick-logo {
+		display: block;
+		width: min(8.25rem, 100%);
+		height: auto;
+		margin-inline: auto;
 	}
 
 	.hero-card--rating small {
@@ -1085,9 +1136,8 @@
 		color: var(--color-ink-soft);
 		font-size: 0.72rem;
 		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		margin-top: 0.25rem;
+		letter-spacing: 0.04em;
+		margin-top: 0.35rem;
 	}
 
 	.hero-stats {
