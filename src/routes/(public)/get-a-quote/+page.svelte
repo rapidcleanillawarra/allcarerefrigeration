@@ -19,7 +19,6 @@
 		services?: string[];
 		equipment?: string[];
 		issueDescription?: string;
-		urgency?: string;
 		preferredDateTime?: string;
 		brandModel?: string;
 		equipmentAge?: string;
@@ -51,12 +50,6 @@
 		{ value: 'split-system-ac', label: 'Split system air conditioner' },
 		{ value: 'ducted-ac', label: 'Ducted air conditioning' },
 		{ value: 'other-equipment', label: 'Other' }
-	];
-
-	const urgencyOptions = [
-		{ value: 'urgent', label: 'Yes, this is urgent' },
-		{ value: 'not-urgent', label: 'No, this is not urgent' },
-		{ value: 'not-sure', label: "I'm not sure" }
 	];
 
 	const accessOptions = [
@@ -389,30 +382,12 @@
 					</ul>
 				</fieldset>
 
-				<!-- 5. Urgency -->
+				<!-- 5. Preferred attendance -->
 				<fieldset class="form-section">
-					<legend>5. Is the job urgent?</legend>
+					<legend>5. Preferred attendance date/time</legend>
 
-					<div class="radio-stack" role="radiogroup" aria-describedby={errors.urgency ? 'urgency-error' : undefined}>
-						{#each urgencyOptions as option (option.value)}
-							<label class="radio-card">
-								<input
-									type="radio"
-									name="urgency"
-									value={option.value}
-									required
-									checked={values.urgency === option.value}
-								/>
-								<span>{option.label}</span>
-							</label>
-						{/each}
-					</div>
-					{#if errors.urgency}
-						<p class="field-error" id="urgency-error">{errors.urgency}</p>
-					{/if}
-
-					<div class="field field--spaced">
-						<label for="preferredDateTime">Preferred attendance date/time</label>
+					<div class="field">
+						<label class="sr-only" for="preferredDateTime">Preferred attendance date/time</label>
 						<input
 							id="preferredDateTime"
 							name="preferredDateTime"
@@ -991,8 +966,7 @@
 		max-width: 28rem;
 	}
 
-	.check-card,
-	.radio-card {
+	.check-card {
 		display: flex;
 		align-items: flex-start;
 		gap: 0.65rem;
@@ -1007,36 +981,27 @@
 			box-shadow 200ms ease;
 	}
 
-	.check-card:hover,
-	.radio-card:hover {
+	.check-card:hover {
 		border-color: rgba(15, 87, 251, 0.35);
 		background: #ffffff;
 	}
 
-	.check-card input,
-	.radio-card input {
+	.check-card input {
 		margin-top: 0.15rem;
 		accent-color: var(--color-brand);
 		flex-shrink: 0;
 	}
 
-	.check-card span,
-	.radio-card span {
+	.check-card span {
 		color: var(--color-ink);
 		font-size: 0.94rem;
 		line-height: 1.45;
 	}
 
-	.check-card:has(input:checked),
-	.radio-card:has(input:checked) {
+	.check-card:has(input:checked) {
 		border-color: rgba(15, 87, 251, 0.45);
 		background: var(--color-brand-soft);
 		box-shadow: inset 0 0 0 1px rgba(15, 87, 251, 0.12);
-	}
-
-	.radio-stack {
-		display: grid;
-		gap: 0.65rem;
 	}
 
 	.prompt-list {

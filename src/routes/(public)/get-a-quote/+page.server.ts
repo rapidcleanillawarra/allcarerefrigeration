@@ -26,8 +26,6 @@ const EQUIPMENT_OPTIONS = [
 	'other-equipment'
 ] as const;
 
-const URGENCY_OPTIONS = ['urgent', 'not-urgent', 'not-sure'] as const;
-
 const ACCESS_OPTIONS = [
 	'easy-access',
 	'restricted-access',
@@ -70,7 +68,6 @@ export const actions = {
 		const services = readSelections(form, 'services', SERVICE_OPTIONS);
 		const equipment = readSelections(form, 'equipment', EQUIPMENT_OPTIONS);
 		const issueDescription = readText(form, 'issueDescription');
-		const urgency = readText(form, 'urgency');
 		const preferredDateTime = readText(form, 'preferredDateTime');
 		const brandModel = readText(form, 'brandModel');
 		const equipmentAge = readText(form, 'equipmentAge');
@@ -88,7 +85,6 @@ export const actions = {
 			services,
 			equipment,
 			issueDescription,
-			urgency,
 			preferredDateTime,
 			brandModel,
 			equipmentAge,
@@ -110,9 +106,6 @@ export const actions = {
 		if (!siteAddress) errors.siteAddress = 'Site address is required.';
 		if (services.length === 0) errors.services = 'Select at least one service.';
 		if (!issueDescription) errors.issueDescription = 'Please describe the issue or request.';
-		if (!URGENCY_OPTIONS.includes(urgency as (typeof URGENCY_OPTIONS)[number])) {
-			errors.urgency = 'Please select how urgent the job is.';
-		}
 		if (contactMethods.length === 0) {
 			errors.contactMethods = 'Select at least one preferred contact method.';
 		}
