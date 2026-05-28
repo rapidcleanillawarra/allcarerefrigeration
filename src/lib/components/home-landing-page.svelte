@@ -18,6 +18,7 @@
 
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import ArctickLicenseBadge from '$lib/components/arctick-license-badge.svelte';
 	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
 	import {
 		areaNameToSlug,
@@ -54,9 +55,6 @@
 		'Residential and commercial support',
 		'Clear advice before work begins'
 	];
-
-	const arctickLogoUrl = 'https://arctick.org/images/ARCtick_Logo.jpg';
-	const arctickLicense = 'AU53597';
 
 	const stats = [
 		{ value: '30+', label: 'Years on Illawarra sites' },
@@ -261,24 +259,7 @@
 			</div>
 
 			<div class="hero-card hero-card--rating">
-				<p class="hero-card__license-heading">
-					<span class="hero-card__license-check" aria-hidden="true">
-						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M20 6 9 17l-5-5" />
-						</svg>
-					</span>
-					Licensed
-				</p>
-				<img
-					class="hero-card__arctick-logo"
-					src={arctickLogoUrl}
-					alt="ARCtick — Australian Refrigeration Council licensed technician"
-					width="132"
-					height="48"
-					loading="lazy"
-					decoding="async"
-				/>
-				<small>{arctickLicense}</small>
+				<ArctickLicenseBadge />
 			</div>
 		</div>
 
@@ -1085,59 +1066,16 @@
 	.hero-card--rating {
 		right: -1rem;
 		top: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 		padding: 0.85rem 1rem 0.95rem;
 		background: rgba(255, 255, 255, 0.96);
 		color: var(--color-brand-deeper);
 		border-radius: 1rem;
 		box-shadow: 0 22px 40px -18px rgba(15, 23, 42, 0.35);
 		text-align: center;
-	}
-
-	.hero-card__license-heading {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.4rem;
-		margin: 0 0 0.55rem;
-		color: var(--color-brand-deeper);
-		font-size: 0.72rem;
-		font-weight: 800;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		line-height: 1;
-	}
-
-	.hero-card__license-check {
-		display: grid;
-		place-items: center;
-		flex-shrink: 0;
-		width: 1.35rem;
-		height: 1.35rem;
-		border-radius: 999px;
-		background: linear-gradient(135deg, #34d399, #059669);
-		color: #ffffff;
-		box-shadow: 0 6px 14px -6px rgba(5, 150, 105, 0.65);
-	}
-
-	.hero-card__license-check svg {
-		width: 0.72rem;
-		height: 0.72rem;
-	}
-
-	.hero-card__arctick-logo {
-		display: block;
-		width: min(8.25rem, 100%);
-		height: auto;
-		margin-inline: auto;
-	}
-
-	.hero-card--rating small {
-		display: block;
-		color: var(--color-ink-soft);
-		font-size: 0.72rem;
-		font-weight: 700;
-		letter-spacing: 0.04em;
-		margin-top: 0.35rem;
 	}
 
 	.hero-stats {
@@ -2036,12 +1974,19 @@
 			justify-content: center;
 		}
 
-		.hero-card--badge,
-		.hero-card--rating {
+		.hero-card--badge {
 			position: static;
 			margin-top: 0.6rem;
 			width: 100%;
 			justify-content: flex-start;
+		}
+
+		.hero-card--rating {
+			position: static;
+			margin-top: 0.6rem;
+			width: 100%;
+			align-items: center;
+			justify-content: center;
 		}
 
 		.hero-visual {

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import ArctickLicenseBadge from '$lib/components/arctick-license-badge.svelte';
 	import { areaNameToSlug, serviceAreas } from '$lib/service-areas';
 
 	let { children, data } = $props();
@@ -269,6 +270,7 @@
 					Local refrigeration, air conditioning and HVAC service for homes and businesses across
 					the Illawarra.
 				</p>
+				<ArctickLicenseBadge variant="inline" />
 			</div>
 
 			<div class="reveal reveal--up site-footer__visit">
