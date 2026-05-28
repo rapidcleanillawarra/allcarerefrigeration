@@ -85,17 +85,31 @@
 
 	let submitting = $state(false);
 	let recaptchaError = $state('');
+	let recaptchaStatus = $state<'unconfigured' | 'loading' | 'ready' | 'error'>(
+		recaptchaSiteKey ? 'loading' : 'unconfigured'
+	);
 	let selectedPhotoNames = $state<string[]>([]);
 
 	const values = $derived.by(() => (form?.values ?? {}) as QuoteFormValues);
 	const errors = $derived.by(() => (form?.errors ?? {}) as Record<string, string>);
 	const submitted = $derived(form?.success === true);
+	const recaptchaReady = $derived(recaptchaStatus === 'ready');
+	const showRecaptchaStatus = $derived(Boolean(recaptchaSiteKey) || import.meta.env.DEV);
 
-	onMount(() => {
-		if (recaptchaSiteKey) {
-			loadRecaptcha(recaptchaSiteKey).catch(() => {
-				// Script load errors are handled again at submit time.
-			});
+	onMount(async () => {
+		if (!recaptchaSiteKey) {
+			recaptchaStatus = 'unconfigured';
+			return;
+		}
+
+		recaptchaStatus = 'loading';
+
+		try {
+			await loadRecaptcha(recaptchaSiteKey);
+			await executeRecaptcha(recaptchaSiteKey, RECAPTCHA_ACTION);
+			recaptchaStatus = 'ready';
+		} catch {
+			recaptchaStatus = 'error';
 		}
 	});
 
@@ -210,6 +224,7 @@
 							const result = deserialize(await response.text());
 							await applyAction(result);
 						} catch {
+							recaptchaStatus = 'error';
 							recaptchaError =
 								'Security verification failed. Please refresh the page and try again.';
 						} finally {
@@ -524,13 +539,37 @@
 				</fieldset>
 
 				<div class="form-actions">
+					{#if showRecaptchaStatus}
+						<div
+							class="recaptcha-status recaptcha-status--{recaptchaStatus}"
+							role="status"
+							aria-live="polite"
+						>
+							<span class="recaptcha-status__dot" aria-hidden="true"></span>
+							<span class="recaptcha-status__label">
+								{#if recaptchaStatus === 'loading'}
+									Checking spam protection…
+								{:else if recaptchaStatus === 'ready'}
+									Spam protection active
+								{:else if recaptchaStatus === 'error'}
+									Spam protection unavailable
+								{:else}
+									Spam protection not configured
+								{/if}
+							</span>
+						</div>
+					{/if}
 					{#if errors.form}
 						<p class="field-error form-error" role="alert">{errors.form}</p>
 					{/if}
 					{#if recaptchaError}
 						<p class="field-error form-error" role="alert">{recaptchaError}</p>
 					{/if}
-					<button type="submit" class="btn-primary" disabled={submitting}>
+					<button
+						type="submit"
+						class="btn-primary"
+						disabled={submitting || (Boolean(recaptchaSiteKey) && !recaptchaReady)}
+					>
 						{submitting ? 'Submitting…' : 'Submit quote request'}
 					</button>
 					<p class="form-note">
@@ -1123,6 +1162,77 @@
 
 	.form-error {
 		margin: 0;
+	}
+
+	.recaptcha-status {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		width: fit-content;
+		padding: 0.45rem 0.75rem;
+		border-radius: 999px;
+		border: 1px solid var(--color-line);
+		background: #ffffff;
+		font-size: 0.82rem;
+		color: var(--color-ink-soft);
+	}
+
+	.recaptcha-status__dot {
+		width: 0.55rem;
+		height: 0.55rem;
+		border-radius: 50%;
+		background: currentColor;
+		flex-shrink: 0;
+	}
+
+	.recaptcha-status--loading {
+		color: var(--color-ink-subtle);
+	}
+
+	.recaptcha-status--loading .recaptcha-status__dot {
+		animation: recaptcha-pulse 1.2s ease-in-out infinite;
+	}
+
+	.recaptcha-status--ready {
+		color: #166534;
+		border-color: rgba(22, 101, 52, 0.22);
+		background: rgba(22, 101, 52, 0.06);
+	}
+
+	.recaptcha-status--ready .recaptcha-status__dot {
+		background: #16a34a;
+	}
+
+	.recaptcha-status--error {
+		color: #991b1b;
+		border-color: rgba(153, 27, 27, 0.22);
+		background: rgba(153, 27, 27, 0.06);
+	}
+
+	.recaptcha-status--error .recaptcha-status__dot {
+		background: #dc2626;
+	}
+
+	.recaptcha-status--unconfigured {
+		color: var(--color-ink-subtle);
+		border-style: dashed;
+	}
+
+	.recaptcha-status--unconfigured .recaptcha-status__dot {
+		background: #94a3b8;
+	}
+
+	@keyframes recaptcha-pulse {
+		0%,
+		100% {
+			opacity: 0.35;
+			transform: scale(0.92);
+		}
+
+		50% {
+			opacity: 1;
+			transform: scale(1);
+		}
 	}
 
 	.recaptcha-note {
