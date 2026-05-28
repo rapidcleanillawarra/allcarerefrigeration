@@ -188,6 +188,31 @@
 
 	const allFaqs = faqSections.flatMap((section) => section.items);
 
+	let searchQuery = $state('');
+
+	const normalizedQuery = $derived(searchQuery.trim().toLowerCase());
+
+	function itemMatchesQuery(item: FaqItem, query: string): boolean {
+		if (!query) return true;
+		const haystack = [item.question, item.answer, ...(item.bullets ?? [])].join(' ').toLowerCase();
+		return haystack.includes(query);
+	}
+
+	const filteredSections = $derived(
+		normalizedQuery
+			? faqSections
+					.map((section) => ({
+						...section,
+						items: section.items.filter((item) => itemMatchesQuery(item, normalizedQuery))
+					}))
+					.filter((section) => section.items.length > 0)
+			: faqSections
+	);
+
+	const totalVisibleItems = $derived(
+		filteredSections.reduce((count, section) => count + section.items.length, 0)
+	);
+
 	const faqJsonLd = JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'FAQPage',
@@ -244,17 +269,94 @@
 
 <!-- SECTION NAV ------------------------------------------------------ -->
 <section class="section-nav section-shell" aria-label="FAQ categories">
-	<div class="section-inner section-inner--wide">
-		<nav class="section-nav__links reveal reveal--up" aria-label="Jump to FAQ section">
-			{#each faqSections as section (section.id)}
-				<a href="#{section.id}">{section.title}</a>
-			{/each}
-		</nav>
+	<div class="section-inner section-inner--wide section-nav__inner">
+		<div class="section-nav__search reveal reveal--up">
+			<label class="section-nav__search-label" for="faq-search">Search FAQs</label>
+			<div class="section-nav__search-field">
+				<svg
+					class="section-nav__search-icon"
+					aria-hidden="true"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<circle cx="11" cy="11" r="7" />
+					<path d="m20 20-3.5-3.5" />
+				</svg>
+				<input
+					id="faq-search"
+					type="search"
+					class="section-nav__search-input"
+					placeholder="Search questions, topics, or keywords…"
+					bind:value={searchQuery}
+					autocomplete="off"
+					spellcheck="false"
+				/>
+				{#if searchQuery.trim()}
+					<button
+						type="button"
+						class="section-nav__search-clear"
+						aria-label="Clear search"
+						onclick={() => (searchQuery = '')}
+					>
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M18 6 6 18" />
+							<path d="m6 6 12 12" />
+						</svg>
+					</button>
+				{/if}
+			</div>
+			{#if normalizedQuery}
+				<p class="section-nav__search-status" aria-live="polite">
+					{#if totalVisibleItems === 0}
+						No matching questions found.
+					{:else}
+						Showing {totalVisibleItems} matching question{totalVisibleItems === 1 ? '' : 's'}.
+					{/if}
+				</p>
+			{/if}
+		</div>
+
+		{#if !normalizedQuery}
+			<nav class="section-nav__links reveal reveal--up" aria-label="Jump to FAQ section">
+				{#each faqSections as section (section.id)}
+					<a href="#{section.id}">{section.title}</a>
+				{/each}
+			</nav>
+		{:else if filteredSections.length > 0}
+			<nav class="section-nav__links reveal reveal--up" aria-label="Matching FAQ sections">
+				{#each filteredSections as section (section.id)}
+					<a href="#{section.id}">{section.title}</a>
+				{/each}
+			</nav>
+		{/if}
 	</div>
 </section>
 
 <!-- FAQ SECTIONS ----------------------------------------------------- -->
-{#each faqSections as section, sectionIndex (section.id)}
+{#if normalizedQuery && filteredSections.length === 0}
+	<section class="faq-empty section-shell" aria-live="polite">
+		<div class="section-inner section-inner--narrow">
+			<div class="faq-empty__panel reveal reveal--up">
+				<p>No FAQs match “{searchQuery.trim()}”. Try different keywords or call us for help.</p>
+				<a class="btn-call btn-call--compact" href="tel:0411532233">Call 0411 532 233</a>
+			</div>
+		</div>
+	</section>
+{/if}
+
+{#each filteredSections as section, sectionIndex (section.id)}
 	<section
 		id={section.id}
 		class="faq-section section-shell"
@@ -268,7 +370,11 @@
 
 			<div class="faq-list" data-stagger>
 				{#each section.items as item, itemIndex (item.question)}
-					<details class="faq-item reveal reveal--up" style="--i: {itemIndex}">
+					<details
+						class="faq-item reveal reveal--up"
+						style="--i: {itemIndex}"
+						open={normalizedQuery !== ''}
+					>
 						<summary class="faq-item__question">
 							<span>{item.question}</span>
 							<svg
@@ -468,10 +574,117 @@
 		padding-block: 0.5rem 0;
 	}
 
+	.section-nav__inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.section-nav__search {
+		width: 100%;
+		max-width: 32rem;
+	}
+
+	.section-nav__search-label {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	.section-nav__search-field {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.section-nav__search-icon {
+		position: absolute;
+		left: 1rem;
+		width: 1.1rem;
+		height: 1.1rem;
+		color: var(--color-brand-deep);
+		pointer-events: none;
+	}
+
+	.section-nav__search-input {
+		width: 100%;
+		padding: 0.85rem 2.75rem 0.85rem 2.75rem;
+		border: 1px solid rgba(15, 87, 251, 0.28);
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.96);
+		color: var(--color-ink);
+		font: inherit;
+		font-size: 0.95rem;
+		font-weight: 600;
+		box-shadow: var(--shadow-soft);
+		transition:
+			border-color 200ms ease,
+			box-shadow 200ms ease;
+	}
+
+	.section-nav__search-input::placeholder {
+		color: #94a3b8;
+		font-weight: 500;
+	}
+
+	.section-nav__search-input:hover {
+		border-color: rgba(15, 87, 251, 0.4);
+	}
+
+	.section-nav__search-input:focus-visible {
+		outline: none;
+		border-color: rgba(15, 87, 251, 0.55);
+		box-shadow: 0 0 0 3px rgba(15, 87, 251, 0.16);
+	}
+
+	.section-nav__search-clear {
+		position: absolute;
+		right: 0.55rem;
+		display: grid;
+		place-items: center;
+		width: 2rem;
+		height: 2rem;
+		padding: 0;
+		border: 0;
+		border-radius: 999px;
+		background: rgba(15, 87, 251, 0.1);
+		color: var(--color-brand-deeper);
+		cursor: pointer;
+		transition: background 200ms ease;
+	}
+
+	.section-nav__search-clear svg {
+		width: 0.95rem;
+		height: 0.95rem;
+	}
+
+	.section-nav__search-clear:hover,
+	.section-nav__search-clear:focus-visible {
+		background: rgba(15, 87, 251, 0.18);
+		outline: none;
+	}
+
+	.section-nav__search-status {
+		margin: 0.55rem 0 0;
+		text-align: center;
+		font-size: 0.88rem;
+		font-weight: 700;
+		color: var(--color-brand-deeper);
+	}
+
 	.section-nav__links {
 		display: flex;
 		flex-wrap: wrap;
+		justify-content: center;
 		gap: 0.55rem;
+		width: 100%;
 	}
 
 	.section-nav__links a {
@@ -586,6 +799,41 @@
 		margin-top: 0.35rem;
 	}
 
+	.faq-empty {
+		padding-block: 0.5rem 1rem;
+	}
+
+	.faq-empty__panel {
+		padding: 1.5rem;
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius-md);
+		background: #ffffff;
+		box-shadow: var(--shadow-soft);
+		text-align: center;
+	}
+
+	.faq-empty__panel p {
+		margin: 0 0 1rem;
+	}
+
+	.btn-call--compact {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.75rem 1.2rem;
+		background: linear-gradient(135deg, var(--color-brand-light), var(--color-brand));
+		color: #ffffff;
+		text-decoration: none;
+		font-weight: 800;
+		border-radius: 999px;
+		box-shadow: 0 14px 32px -12px rgba(15, 87, 251, 0.45);
+		transition: transform 220ms var(--ease-spring);
+	}
+
+	.btn-call--compact:hover {
+		transform: translateY(-2px);
+	}
+
 	/* CTA */
 	.cta-section {
 		padding-block: clamp(1rem, 3vw, 2rem) clamp(2rem, 4vw, 3rem);
@@ -696,6 +944,11 @@
 	}
 
 	@media (max-width: 720px) {
+		.section-nav__search-input {
+			font-size: 0.9rem;
+			padding-inline: 2.5rem;
+		}
+
 		.section-nav__links a {
 			font-size: 0.82rem;
 			padding: 0.5rem 0.8rem;
