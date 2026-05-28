@@ -819,7 +819,7 @@
 	.emergency-bubble {
 		position: fixed;
 		right: clamp(1rem, 3vw, 1.75rem);
-		bottom: clamp(1rem, 3vw, 1.75rem);
+		bottom: calc(clamp(1rem, 3vw, 1.75rem) + 50px);
 		z-index: 40;
 		display: inline-flex;
 		align-items: center;
