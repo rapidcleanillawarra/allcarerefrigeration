@@ -1,7 +1,7 @@
 import { areaNameToSlug, SITE_ORIGIN, serviceAreas } from '$lib/service-areas';
 import type { RequestHandler } from './$types';
 
-const PATHS = ['/', '/about', '/services'] as const;
+const PATHS = ['/', '/about', '/services', '/faq'] as const;
 
 function absoluteUrl(path: string): string {
 	return path === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${path}`;

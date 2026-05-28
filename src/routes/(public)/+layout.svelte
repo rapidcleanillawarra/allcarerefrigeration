@@ -152,6 +152,7 @@
 					<a href={resolve('/')}>Home</a>
 					<a href={resolve('/about')}>About</a>
 					<a href={resolve('/services')}>Services</a>
+					<a href={resolve('/faq')}>FAQs</a>
 					<details class="nav-dropdown" bind:open={locationsMenuOpen}>
 						<summary class="nav-dropdown__summary">
 							Locations
@@ -214,6 +215,7 @@
 					<a href={resolve('/')} onclick={() => (mobileOpen = false)}>Home</a>
 					<a href={resolve('/about')} onclick={() => (mobileOpen = false)}>About</a>
 					<a href={resolve('/services')} onclick={() => (mobileOpen = false)}>Services</a>
+					<a href={resolve('/faq')} onclick={() => (mobileOpen = false)}>FAQs</a>
 					<details class="mobile-nav__dropdown">
 						<summary class="mobile-nav__summary">Locations</summary>
 						<div class="mobile-nav__sub" role="group" aria-label="Service locations">
@@ -299,6 +301,7 @@
 					<a href={resolve('/')}>Home</a>
 					<a href={resolve('/about')}>About</a>
 					<a href={resolve('/services')}>Services</a>
+					<a href={resolve('/faq')}>FAQs</a>
 				</nav>
 			</div>
 		</div>
