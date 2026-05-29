@@ -44,6 +44,16 @@ function photoObjectPath(quoteRequestId: string, ext: string): string {
 	return `quote-requests/${quoteRequestId}/${crypto.randomUUID()}.${ext}`;
 }
 
+function describePhotoFile(photo: File, index?: number) {
+	return {
+		index,
+		name: photo.name,
+		size: photo.size,
+		type: photo.type || 'application/octet-stream',
+		lastModified: photo.lastModified
+	};
+}
+
 function parsePreferredDateTime(value: string): string | null {
 	if (!value) return null;
 
@@ -69,6 +79,11 @@ export async function saveQuoteRequest(
 	recaptchaScore?: number
 ): Promise<{ id: string }> {
 	const admin = getSupabaseAdmin();
+
+	console.info('[quote-requests][photos] saveQuoteRequest called', {
+		photoCount: photos.length,
+		photos: photos.map((photo, index) => describePhotoFile(photo, index))
+	});
 
 	const { data: requestRow, error: insertError } = await admin
 		.from('allcare_quote_requests')
@@ -104,6 +119,11 @@ export async function saveQuoteRequest(
 	const quoteRequestId = requestRow.id;
 	const uploadedPaths: string[] = [];
 
+	console.info('[quote-requests][photos] quote request row created', {
+		quoteRequestId,
+		bucket: BUCKET
+	});
+
 	try {
 		const photoRows: {
 			quote_request_id: string;
@@ -121,15 +141,37 @@ export async function saveQuoteRequest(
 			const storagePath = photoObjectPath(quoteRequestId, ext);
 			const body = new Uint8Array(await photo.arrayBuffer());
 
-			const { error: uploadError } = await admin.storage.from(BUCKET).upload(storagePath, body, {
+			console.info('[quote-requests][photos] uploading to storage', {
+				quoteRequestId,
+				index,
+				bucket: BUCKET,
+				storagePath,
+				...describePhotoFile(photo, index),
+				bodyBytes: body.byteLength
+			});
+
+			const { data: uploadData, error: uploadError } = await admin.storage.from(BUCKET).upload(storagePath, body, {
 				contentType: mime,
 				upsert: false
 			});
 
 			if (uploadError) {
-				console.error('[quote-requests] photo upload failed', uploadError);
+				console.error('[quote-requests][photos] storage upload failed', {
+					quoteRequestId,
+					index,
+					storagePath,
+					...describePhotoFile(photo, index),
+					uploadError
+				});
 				throw new Error('Could not upload photos');
 			}
+
+			console.info('[quote-requests][photos] storage upload succeeded', {
+				quoteRequestId,
+				index,
+				storagePath,
+				uploadData
+			});
 
 			uploadedPaths.push(storagePath);
 
@@ -149,18 +191,50 @@ export async function saveQuoteRequest(
 		}
 
 		if (photoRows.length > 0) {
-			const { error: photoInsertError } = await admin
+			console.info('[quote-requests][photos] inserting photo metadata rows', {
+				quoteRequestId,
+				rowCount: photoRows.length,
+				rows: photoRows.map(({ storage_path, original_name, mime_type, size_bytes, sort_order }) => ({
+					storage_path,
+					original_name,
+					mime_type,
+					size_bytes,
+					sort_order
+				}))
+			});
+
+			const { data: insertedPhotoRows, error: photoInsertError } = await admin
 				.from('allcare_quote_request_photos')
-				.insert(photoRows);
+				.insert(photoRows)
+				.select('id, storage_path, original_name');
 
 			if (photoInsertError) {
-				console.error('[quote-requests] photo metadata insert failed', photoInsertError);
+				console.error('[quote-requests][photos] photo metadata insert failed', {
+					quoteRequestId,
+					photoInsertError
+				});
 				throw new Error('Could not save photo details');
 			}
+
+			console.info('[quote-requests][photos] photo metadata insert succeeded', {
+				quoteRequestId,
+				insertedPhotoRows
+			});
+		} else {
+			console.info('[quote-requests][photos] no photos to upload for quote request', {
+				quoteRequestId
+			});
 		}
 
 		return { id: quoteRequestId };
 	} catch (error) {
+		console.error('[quote-requests][photos] saveQuoteRequest photo pipeline failed', {
+			quoteRequestId,
+			uploadedPathCount: uploadedPaths.length,
+			uploadedPaths,
+			error
+		});
+
 		if (uploadedPaths.length > 0) {
 			await admin.storage.from(BUCKET).remove(uploadedPaths);
 		}

@@ -199,14 +199,39 @@
 		}
 	});
 
+	function describePhotoFile(file: File, index?: number) {
+		return {
+			index,
+			name: file.name,
+			size: file.size,
+			type: file.type || 'application/octet-stream',
+			lastModified: file.lastModified
+		};
+	}
+
+	function logSelectedPhotos(context: string) {
+		console.info(`[get-a-quote][photos] ${context}`, {
+			selectedCount: selectedPhotos.length,
+			inputFileCount: photosInput?.files?.length ?? 0,
+			selectedPhotos: selectedPhotos.map((photo, index) => describePhotoFile(photo.file, index)),
+			inputFiles: photosInput?.files
+				? Array.from(photosInput.files).map((file, index) => describePhotoFile(file, index))
+				: []
+		});
+	}
+
 	function syncPhotosInput() {
-		if (!photosInput) return;
+		if (!photosInput) {
+			console.warn('[get-a-quote][photos] syncPhotosInput skipped: photos input not bound yet');
+			return;
+		}
 
 		const transfer = new DataTransfer();
 		for (const photo of selectedPhotos) {
 			transfer.items.add(photo.file);
 		}
 		photosInput.files = transfer.files;
+		logSelectedPhotos('synced photos to file input');
 	}
 
 	function isDuplicatePhoto(file: File, photos: SelectedPhoto[]) {
@@ -245,6 +270,7 @@
 		selectedPhotos = nextPhotos;
 		syncPhotosInput();
 		input.value = '';
+		logSelectedPhotos('photos added from file picker');
 	}
 
 	function removePhoto(id: string) {
@@ -254,6 +280,7 @@
 		selectedPhotos = selectedPhotos.filter((entry) => entry.id !== id);
 		photoLimitMessage = '';
 		syncPhotosInput();
+		logSelectedPhotos(`removed photo ${photo?.file.name ?? id}`);
 	}
 </script>
 
@@ -345,6 +372,22 @@
 				use:enhance={async ({ formData, cancel }) => {
 					submitting = true;
 					recaptchaError = '';
+
+					syncPhotosInput();
+
+					const formPhotoEntries = formData.getAll('photos');
+					console.info('[get-a-quote][photos] form submit payload', {
+						selectedCount: selectedPhotos.length,
+						formPhotoEntryCount: formPhotoEntries.length,
+						formPhotoEntries: formPhotoEntries.map((entry, index) => ({
+							index,
+							type: Object.prototype.toString.call(entry),
+							isFile: entry instanceof File,
+							size: entry instanceof File ? entry.size : null,
+							name: entry instanceof File ? entry.name : String(entry)
+						}))
+					});
+					logSelectedPhotos('submitting form');
 
 					try {
 						if (recaptchaSiteKey) {

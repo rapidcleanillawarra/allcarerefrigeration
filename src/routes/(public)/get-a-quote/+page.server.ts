@@ -61,6 +61,16 @@ function isValidEmail(value: string): boolean {
 	return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+function describeIncomingPhoto(photo: File, index: number) {
+	return {
+		index,
+		name: photo.name,
+		size: photo.size,
+		type: photo.type || 'application/octet-stream',
+		lastModified: photo.lastModified
+	};
+}
+
 export const actions = {
 	default: async ({ request }) => {
 		const form = await request.formData();
@@ -131,6 +141,20 @@ export const actions = {
 		}
 
 		const photos = form.getAll('photos').filter((entry): entry is File => entry instanceof File && entry.size > 0);
+		const rawPhotoEntries = form.getAll('photos');
+
+		console.info('[get-a-quote][photos] received form photo entries', {
+			rawEntryCount: rawPhotoEntries.length,
+			rawEntries: rawPhotoEntries.map((entry, index) => ({
+				index,
+				type: Object.prototype.toString.call(entry),
+				isFile: entry instanceof File,
+				size: entry instanceof File ? entry.size : null,
+				name: entry instanceof File ? entry.name : String(entry)
+			})),
+			validPhotoCount: photos.length,
+			validPhotos: photos.map(describeIncomingPhoto)
+		});
 
 		if (photos.length > MAX_PHOTOS) {
 			errors.photos = `You can upload up to ${MAX_PHOTOS} photos.`;
@@ -164,9 +188,10 @@ export const actions = {
 
 		try {
 			const saved = await saveQuoteRequest(values, photos, recaptcha.score);
-			console.info('[get-a-quote] Quote request saved', {
+			console.info('[get-a-quote][photos] quote request saved', {
 				id: saved.id,
-				photoCount: photos.length
+				photoCount: photos.length,
+				photos: photos.map(describeIncomingPhoto)
 			});
 		} catch (error) {
 			console.error('[get-a-quote] Failed to save quote request', error);
