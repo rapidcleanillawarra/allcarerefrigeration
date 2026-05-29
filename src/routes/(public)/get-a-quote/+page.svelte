@@ -3,6 +3,12 @@
 	import { resolve } from '$app/paths';
 	import { env } from '$env/dynamic/public';
 	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+	import {
+		clearQuoteFormDraft,
+		loadQuoteFormDraft,
+		readQuoteFormValues,
+		saveQuoteFormDraft
+	} from '$lib/quote-form-draft';
 	import { getPopulatedQuoteValues, type QuoteFormValues } from '$lib/quote-form-sample-data';
 	import {
 		formatPhotoSize,
@@ -119,6 +125,10 @@
 		preferredDateTimeValue = values.preferredDateTime ?? '';
 	});
 
+	$effect(() => {
+		if (submitted) clearQuoteFormDraft();
+	});
+
 	const preferredDateTimeDisplay = $derived(formatPreferredDateTime(preferredDateTimeValue));
 	const selectedPhotoTotalBytes = $derived(totalPhotoBytes(selectedPhotos.map((photo) => photo.file)));
 	const selectedPhotoTotalLabel = $derived(formatPhotoSize(selectedPhotoTotalBytes));
@@ -186,10 +196,26 @@
 		};
 	});
 
+	function persistQuoteFormDraft(formElement: HTMLFormElement) {
+		const next = readQuoteFormValues(formElement);
+		saveQuoteFormDraft(next);
+
+		if (!form?.values) {
+			draftValues = next;
+		}
+	}
+
+	function onFormFocusOut(event: FocusEvent & { currentTarget: HTMLFormElement }) {
+		persistQuoteFormDraft(event.currentTarget);
+	}
+
 	onMount(async () => {
 		if (data.populate) {
 			draftValues = await getPopulatedQuoteValues();
 			console.log('[get-a-quote] populated form:', JSON.stringify(draftValues, null, 2));
+		} else if (!form?.values) {
+			const savedDraft = loadQuoteFormDraft();
+			if (savedDraft) draftValues = savedDraft;
 		}
 
 		if (!recaptchaSiteKey) {
@@ -383,6 +409,7 @@
 				class="quote-form reveal reveal--up"
 				method="POST"
 				enctype="multipart/form-data"
+				onfocusout={onFormFocusOut}
 				use:enhance={async ({ formData, cancel }) => {
 					submitting = true;
 					recaptchaError = '';
