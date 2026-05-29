@@ -1,4 +1,5 @@
 import { getSupabaseAdmin } from '$lib/server/supabase-admin';
+import { sendQuoteRequestWebhook } from '$lib/server/quote-request-webhook';
 
 const BUCKET = 'allcare';
 
@@ -312,6 +313,14 @@ export async function saveQuoteRequest(
 			'[quote-requests] saved quote request payload:',
 			JSON.stringify(savedPayload, null, 2)
 		);
+
+		const webhookResult = await sendQuoteRequestWebhook(savedPayload);
+		if (!webhookResult.ok) {
+			console.error('[quote-requests] Power Automate webhook failed', {
+				quoteRequestId,
+				error: webhookResult.error
+			});
+		}
 
 		return savedPayload;
 	} catch (error) {
