@@ -490,7 +490,17 @@
 					}
 
 					return async ({ result }) => {
-						console.log('[get-a-quote] submission JSON:', JSON.stringify(result, null, 2));
+						if (
+							result.type === 'success' &&
+							result.data?.success === true &&
+							result.data.savedPayload
+						) {
+							console.log(
+								'[get-a-quote] saved quote request payload:',
+								JSON.stringify(result.data.savedPayload, null, 2)
+							);
+						}
+
 						await applyAction(result);
 						submitting = false;
 					};

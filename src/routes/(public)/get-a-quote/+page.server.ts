@@ -190,13 +190,14 @@ export const actions = {
 			});
 		}
 
+		let savedPayload;
+
 		try {
-			const saved = await saveQuoteRequest(values, photos, recaptcha.score);
-			console.info('[get-a-quote][photos] quote request saved', {
-				id: saved.id,
-				photoCount: photos.length,
-				photos: photos.map(describeIncomingPhoto)
-			});
+			savedPayload = await saveQuoteRequest(values, photos, recaptcha.score);
+			console.log(
+				'[get-a-quote] saved quote request payload:',
+				JSON.stringify(savedPayload, null, 2)
+			);
 		} catch (error) {
 			console.error('[get-a-quote] Failed to save quote request', error);
 			return fail(500, {
@@ -210,7 +211,8 @@ export const actions = {
 
 		return {
 			success: true as const,
-			values
+			values,
+			savedPayload
 		};
 	}
 } satisfies Actions;

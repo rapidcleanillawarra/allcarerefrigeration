@@ -2,6 +2,24 @@ import { getSupabaseAdmin } from '$lib/server/supabase-admin';
 
 const BUCKET = 'allcare';
 
+export type SavedQuoteRequestPhoto = {
+	id: string;
+	quoteRequestId: string;
+	storagePath: string;
+	publicUrl: string;
+	originalName: string;
+	mimeType: string;
+	sizeBytes: number;
+	sortOrder: number;
+};
+
+export type SavedQuoteRequestPayload = {
+	quoteRequestId: string;
+	recaptchaScore: number | null;
+	form: QuoteRequestInput;
+	photos: SavedQuoteRequestPhoto[];
+};
+
 export type QuoteRequestInput = {
 	fullName: string;
 	businessName: string;
@@ -73,11 +91,43 @@ function parsePreferredDateTime(value: string): string | null {
 	return date.toISOString();
 }
 
+function buildSavedQuoteRequestPayload(
+	quoteRequestId: string,
+	input: QuoteRequestInput,
+	recaptchaScore: number | null | undefined,
+	savedPhotos: {
+		id: string;
+		quote_request_id: string;
+		storage_path: string;
+		public_url: string;
+		original_name: string;
+		mime_type: string;
+		size_bytes: number;
+		sort_order: number;
+	}[]
+): SavedQuoteRequestPayload {
+	return {
+		quoteRequestId,
+		recaptchaScore: recaptchaScore ?? null,
+		form: input,
+		photos: savedPhotos.map((photo) => ({
+			id: photo.id,
+			quoteRequestId: photo.quote_request_id,
+			storagePath: photo.storage_path,
+			publicUrl: photo.public_url,
+			originalName: photo.original_name,
+			mimeType: photo.mime_type,
+			sizeBytes: photo.size_bytes,
+			sortOrder: photo.sort_order
+		}))
+	};
+}
+
 export async function saveQuoteRequest(
 	input: QuoteRequestInput,
 	photos: File[],
 	recaptchaScore?: number
-): Promise<{ id: string }> {
+): Promise<SavedQuoteRequestPayload> {
 	const admin = getSupabaseAdmin();
 
 	console.info('[quote-requests][photos] saveQuoteRequest called', {
@@ -251,22 +301,19 @@ export async function saveQuoteRequest(
 			});
 		}
 
-		console.log('[quote-requests] saved quote request payload for external api', {
+		const savedPayload = buildSavedQuoteRequestPayload(
 			quoteRequestId,
-			recaptchaScore: recaptchaScore ?? null,
-			form: input,
-			photos: savedPhotos.map((photo) => ({
-				id: photo.id,
-				storagePath: photo.storage_path,
-				publicUrl: photo.public_url,
-				originalName: photo.original_name,
-				mimeType: photo.mime_type,
-				sizeBytes: photo.size_bytes,
-				sortOrder: photo.sort_order
-			}))
-		});
+			input,
+			recaptchaScore,
+			savedPhotos
+		);
 
-		return { id: quoteRequestId };
+		console.log(
+			'[quote-requests] saved quote request payload:',
+			JSON.stringify(savedPayload, null, 2)
+		);
+
+		return savedPayload;
 	} catch (error) {
 		console.error('[quote-requests][photos] saveQuoteRequest photo pipeline failed', {
 			quoteRequestId,
