@@ -1,4 +1,5 @@
 import { fail } from '@sveltejs/kit';
+import { saveQuoteRequest } from '$lib/server/quote-requests';
 import { verifyRecaptchaToken } from '$lib/server/recaptcha';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -161,11 +162,22 @@ export const actions = {
 			});
 		}
 
-		// Submission handling can be wired to email, CRM, or Supabase later.
-		console.info('[get-a-quote] New quote request', {
-			...values,
-			photoCount: photos.length
-		});
+		try {
+			const saved = await saveQuoteRequest(values, photos, recaptcha.score);
+			console.info('[get-a-quote] Quote request saved', {
+				id: saved.id,
+				photoCount: photos.length
+			});
+		} catch (error) {
+			console.error('[get-a-quote] Failed to save quote request', error);
+			return fail(500, {
+				errors: {
+					form: 'We could not submit your quote request. Please try again or contact us directly.'
+				},
+				values,
+				success: false as const
+			});
+		}
 
 		return {
 			success: true as const,
