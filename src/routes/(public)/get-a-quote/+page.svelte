@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { applyAction, deserialize, enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import { resolve } from '$app/paths';
 	import { env } from '$env/dynamic/public';
 	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
@@ -236,33 +236,28 @@
 				class="quote-form reveal reveal--up"
 				method="POST"
 				enctype="multipart/form-data"
-				use:enhance={({ formData, action, cancel }) => {
-					cancel();
+				use:enhance={async ({ formData, cancel }) => {
 					submitting = true;
 					recaptchaError = '';
 
-					return async () => {
-						try {
-							if (recaptchaSiteKey) {
-								const token = await executeRecaptcha(recaptchaSiteKey, RECAPTCHA_ACTION);
-								formData.set('recaptchaToken', token);
-							}
-
-							const response = await fetch(action, {
-								method: 'POST',
-								body: formData
-							});
-
-							const result = deserialize(await response.text());
-							console.log('[get-a-quote] submission JSON:', JSON.stringify(result, null, 2));
-							await applyAction(result);
-						} catch {
-							recaptchaStatus = 'error';
-							recaptchaError =
-								'Security verification failed. Please refresh the page and try again.';
-						} finally {
-							submitting = false;
+					try {
+						if (recaptchaSiteKey) {
+							const token = await executeRecaptcha(recaptchaSiteKey, RECAPTCHA_ACTION);
+							formData.set('recaptchaToken', token);
 						}
+					} catch {
+						recaptchaStatus = 'error';
+						recaptchaError =
+							'Security verification failed. Please refresh the page and try again.';
+						cancel();
+						submitting = false;
+						return;
+					}
+
+					return async ({ result }) => {
+						console.log('[get-a-quote] submission JSON:', JSON.stringify(result, null, 2));
+						await applyAction(result);
+						submitting = false;
 					};
 				}}
 			>
