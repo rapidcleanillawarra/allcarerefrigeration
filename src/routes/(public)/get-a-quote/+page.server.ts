@@ -70,6 +70,7 @@ export const actions = {
 		const email = readText(form, 'email');
 		const siteAddress = readText(form, 'siteAddress');
 		const services = readSelections(form, 'services', SERVICE_OPTIONS);
+		const otherService = readText(form, 'otherService');
 		const equipment = readSelections(form, 'equipment', EQUIPMENT_OPTIONS);
 		const issueDescription = readText(form, 'issueDescription');
 		const preferredDateTime = readText(form, 'preferredDateTime');
@@ -87,6 +88,7 @@ export const actions = {
 			email,
 			siteAddress,
 			services,
+			otherService,
 			equipment,
 			issueDescription,
 			preferredDateTime,
@@ -109,6 +111,9 @@ export const actions = {
 		}
 		if (!siteAddress) errors.siteAddress = 'Site address is required.';
 		if (services.length === 0) errors.services = 'Select at least one service.';
+		if (services.includes('other-service') && !otherService) {
+			errors.otherService = 'Please specify the other service.';
+		}
 		if (!issueDescription) errors.issueDescription = 'Please describe the issue or request.';
 		if (contactMethods.length === 0) {
 			errors.contactMethods = 'Select at least one preferred contact method.';

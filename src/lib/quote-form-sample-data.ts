@@ -7,6 +7,7 @@ export type QuoteFormValues = {
 	email?: string;
 	siteAddress?: string;
 	services?: string[];
+	otherService?: string;
 	equipment?: string[];
 	issueDescription?: string;
 	preferredDateTime?: string;
@@ -65,6 +66,7 @@ function toDatetimeLocalValue(date: Date): string {
 
 export function buildPopulatedQuoteValues(faker: Faker): QuoteFormValues {
 	const preferred = faker.date.soon({ days: 14 });
+	const services = pickSome(faker, SERVICE_VALUES);
 
 	return {
 		fullName: faker.person.fullName(),
@@ -72,7 +74,10 @@ export function buildPopulatedQuoteValues(faker: Faker): QuoteFormValues {
 		phone: faker.phone.number({ style: 'national' }),
 		email: faker.internet.email(),
 		siteAddress: faker.location.streetAddress({ useFullAddress: true }),
-		services: pickSome(faker, SERVICE_VALUES),
+		services,
+		otherService: services.includes('other-service')
+			? faker.commerce.productName()
+			: undefined,
 		equipment: pickSome(faker, EQUIPMENT_VALUES),
 		issueDescription: faker.lorem.paragraph(),
 		preferredDateTime: toDatetimeLocalValue(preferred),

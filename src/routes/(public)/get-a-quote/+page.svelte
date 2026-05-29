@@ -67,6 +67,11 @@
 		recaptchaSiteKey ? 'loading' : 'unconfigured'
 	);
 	let selectedPhotoNames = $state<string[]>([]);
+	let selectedServices = $state<string[]>([]);
+	let preferredDateTimeValue = $state('');
+
+	const OTHER_SERVICE = 'other-service';
+	const showOtherService = $derived(selectedServices.includes(OTHER_SERVICE));
 
 	const values = $derived.by(() => {
 		if (form?.values) return form.values as QuoteFormValues;
@@ -76,6 +81,47 @@
 	const submitted = $derived(form?.success === true);
 	const recaptchaReady = $derived(recaptchaStatus === 'ready');
 	const showRecaptchaStatus = $derived(Boolean(recaptchaSiteKey) || import.meta.env.DEV);
+
+	$effect(() => {
+		selectedServices = [...(values.services ?? [])];
+	});
+
+	$effect(() => {
+		preferredDateTimeValue = values.preferredDateTime ?? '';
+	});
+
+	const preferredDateTimeDisplay = $derived(formatPreferredDateTime(preferredDateTimeValue));
+
+	function formatPreferredDateTime(value: string): string {
+		if (!value) return '';
+
+		const [datePart, timePart] = value.split('T');
+		if (!datePart || !timePart) return '';
+
+		const [year, month, day] = datePart.split('-').map(Number);
+		const [hour, minute] = timePart.split(':').map(Number);
+		const date = new Date(year, month - 1, day, hour, minute);
+
+		if (Number.isNaN(date.getTime())) return '';
+
+		const monthName = date.toLocaleString('en-US', { month: 'long' });
+		const time = date.toLocaleString('en-US', {
+			hour: '2-digit',
+			minute: '2-digit',
+			hour12: true
+		});
+
+		return `${monthName} ${date.getDate()}, ${date.getFullYear()} ${time}`;
+	}
+
+	function onServiceChange(value: string, checked: boolean) {
+		if (checked) {
+			selectedServices = [...selectedServices, value];
+			return;
+		}
+
+		selectedServices = selectedServices.filter((service) => service !== value);
+	}
 
 	onMount(async () => {
 		if (data.populate) {
@@ -318,12 +364,33 @@
 									type="checkbox"
 									name="services"
 									value={option.value}
-									checked={values.services?.includes(option.value)}
+									checked={selectedServices.includes(option.value)}
+									onchange={(event) =>
+										onServiceChange(option.value, event.currentTarget.checked)}
 								/>
 								<span>{option.label}</span>
 							</label>
 						{/each}
 					</div>
+					{#if showOtherService}
+						<div class="field field--spaced">
+							<label for="otherService">
+								Please specify the service <span class="required-mark">*</span>
+							</label>
+							<input
+								id="otherService"
+								name="otherService"
+								type="text"
+								required
+								value={values.otherService ?? ''}
+								aria-invalid={errors.otherService ? 'true' : undefined}
+								aria-describedby={errors.otherService ? 'otherService-error' : undefined}
+							/>
+							{#if errors.otherService}
+								<p class="field-error" id="otherService-error">{errors.otherService}</p>
+							{/if}
+						</div>
+					{/if}
 					{#if errors.services}
 						<p class="field-error" id="services-error">{errors.services}</p>
 					{/if}
@@ -382,12 +449,22 @@
 
 					<div class="field">
 						<label class="sr-only" for="preferredDateTime">Preferred attendance date/time</label>
-						<input
-							id="preferredDateTime"
-							name="preferredDateTime"
-							type="datetime-local"
-							value={values.preferredDateTime ?? ''}
-						/>
+						<div
+							class="datetime-field"
+							class:datetime-field--empty={!preferredDateTimeValue}
+						>
+							<span class="datetime-field__display" aria-hidden="true">
+								{preferredDateTimeDisplay || 'Select date and time'}
+							</span>
+							<input
+								id="preferredDateTime"
+								name="preferredDateTime"
+								type="datetime-local"
+								class="datetime-field__input"
+								bind:value={preferredDateTimeValue}
+								aria-label="Preferred attendance date and time"
+							/>
+						</div>
 					</div>
 				</fieldset>
 
@@ -909,7 +986,6 @@
 	input[type='text'],
 	input[type='tel'],
 	input[type='email'],
-	input[type='datetime-local'],
 	textarea {
 		width: 100%;
 		padding: 0.85rem 0.95rem;
@@ -927,6 +1003,51 @@
 	textarea {
 		resize: vertical;
 		min-height: 8rem;
+	}
+
+	.datetime-field {
+		position: relative;
+		display: flex;
+		align-items: center;
+		min-height: 3.1rem;
+		border: 1px solid var(--color-line-strong);
+		border-radius: var(--radius-sm);
+		background: #fbfdff;
+		transition:
+			border-color 200ms ease,
+			box-shadow 200ms ease,
+			background 200ms ease;
+	}
+
+	.datetime-field:focus-within {
+		border-color: var(--color-brand);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand) 18%, transparent);
+		background: #fff;
+	}
+
+	.datetime-field__display {
+		width: 100%;
+		padding: 0.85rem 0.95rem;
+		color: var(--color-ink);
+		font: inherit;
+		pointer-events: none;
+	}
+
+	.datetime-field--empty .datetime-field__display {
+		color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+	}
+
+	.datetime-field__input {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		opacity: 0;
+		cursor: pointer;
+		background: transparent;
 	}
 
 	input:focus,
