@@ -129,6 +129,17 @@
 		if (submitted) clearQuoteFormDraft();
 	});
 
+	$effect(() => {
+		if (!submitting) return;
+
+		const previousOverflow = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
+
+		return () => {
+			document.body.style.overflow = previousOverflow;
+		};
+	});
+
 	const preferredDateTimeDisplay = $derived(formatPreferredDateTime(preferredDateTimeValue));
 	const selectedPhotoTotalBytes = $derived(totalPhotoBytes(selectedPhotos.map((photo) => photo.file)));
 	const selectedPhotoTotalLabel = $derived(formatPhotoSize(selectedPhotoTotalBytes));
@@ -331,6 +342,35 @@
 		content="Request a refrigeration or air conditioning quote from AllCare Refrigeration. Tell us about your equipment, issue, and site details for a fast, accurate response."
 	/>
 </svelte:head>
+
+<svelte:window
+	onbeforeunload={(event) => {
+		if (!submitting) return;
+
+		event.preventDefault();
+		event.returnValue = '';
+	}}
+/>
+
+{#if submitting}
+	<div
+		class="submit-overlay"
+		role="alertdialog"
+		aria-modal="true"
+		aria-busy="true"
+		aria-labelledby="submit-overlay-title"
+		aria-describedby="submit-overlay-description"
+	>
+		<div class="submit-overlay__panel">
+			<div class="submit-overlay__spinner" aria-hidden="true"></div>
+			<h2 id="submit-overlay-title">Submitting your quote request</h2>
+			<p id="submit-overlay-description">
+				Please keep this window open while we upload your details and photos. Closing or
+				leaving now may interrupt your submission.
+			</p>
+		</div>
+	</div>
+{/if}
 
 <!-- HERO ------------------------------------------------------------- -->
 <section class="hero" aria-labelledby="quote-heading">
@@ -1684,6 +1724,56 @@
 
 	.recaptcha-note a {
 		color: inherit;
+	}
+
+	.submit-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 100;
+		display: grid;
+		place-items: center;
+		padding: 1.5rem;
+		background: rgba(4, 24, 64, 0.72);
+		backdrop-filter: blur(4px);
+	}
+
+	.submit-overlay__panel {
+		width: min(100%, 28rem);
+		padding: clamp(1.5rem, 4vw, 2rem);
+		border-radius: var(--radius-lg);
+		border: 1px solid rgba(15, 87, 251, 0.18);
+		background: linear-gradient(180deg, #ffffff, var(--color-brand-soft));
+		box-shadow: var(--shadow-card);
+		text-align: center;
+	}
+
+	.submit-overlay__spinner {
+		width: 2.75rem;
+		height: 2.75rem;
+		margin: 0 auto 1rem;
+		border: 3px solid rgba(15, 87, 251, 0.18);
+		border-top-color: var(--color-brand);
+		border-radius: 50%;
+		animation: submit-overlay-spin 0.85s linear infinite;
+	}
+
+	.submit-overlay__panel h2 {
+		margin: 0 0 0.75rem;
+		font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+		color: var(--color-brand-deeper);
+	}
+
+	.submit-overlay__panel p {
+		margin: 0;
+		color: var(--color-ink-soft);
+		font-size: 0.95rem;
+		line-height: 1.6;
+	}
+
+	@keyframes submit-overlay-spin {
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	.success-panel {
