@@ -116,10 +116,20 @@ export async function saveQuoteRequest(
 		throw new Error('Could not save quote request');
 	}
 
-	const quoteRequestId = requestRow.id;
-	const uploadedPaths: string[] = [];
+		const quoteRequestId = requestRow.id;
+		const uploadedPaths: string[] = [];
+		let savedPhotos: {
+			id: string;
+			quote_request_id: string;
+			storage_path: string;
+			public_url: string;
+			original_name: string;
+			mime_type: string;
+			size_bytes: number;
+			sort_order: number;
+		}[] = [];
 
-	console.info('[quote-requests][photos] quote request row created', {
+		console.info('[quote-requests][photos] quote request row created', {
 		quoteRequestId,
 		bucket: BUCKET
 	});
@@ -143,7 +153,6 @@ export async function saveQuoteRequest(
 
 			console.info('[quote-requests][photos] uploading to storage', {
 				quoteRequestId,
-				index,
 				bucket: BUCKET,
 				storagePath,
 				...describePhotoFile(photo, index),
@@ -158,7 +167,6 @@ export async function saveQuoteRequest(
 			if (uploadError) {
 				console.error('[quote-requests][photos] storage upload failed', {
 					quoteRequestId,
-					index,
 					storagePath,
 					...describePhotoFile(photo, index),
 					uploadError
@@ -168,9 +176,9 @@ export async function saveQuoteRequest(
 
 			console.info('[quote-requests][photos] storage upload succeeded', {
 				quoteRequestId,
-				index,
 				storagePath,
-				uploadData
+				uploadData,
+				...describePhotoFile(photo, index)
 			});
 
 			uploadedPaths.push(storagePath);
@@ -206,7 +214,9 @@ export async function saveQuoteRequest(
 			const { data: insertedPhotoRows, error: photoInsertError } = await admin
 				.from('allcare_quote_request_photos')
 				.insert(photoRows)
-				.select('id, storage_path, original_name');
+				.select(
+					'id, quote_request_id, storage_path, public_url, original_name, mime_type, size_bytes, sort_order'
+				);
 
 			if (photoInsertError) {
 				console.error('[quote-requests][photos] photo metadata insert failed', {
@@ -216,15 +226,45 @@ export async function saveQuoteRequest(
 				throw new Error('Could not save photo details');
 			}
 
+			savedPhotos = insertedPhotoRows ?? [];
+
 			console.info('[quote-requests][photos] photo metadata insert succeeded', {
 				quoteRequestId,
-				insertedPhotoRows
+				insertedPhotoRows: savedPhotos
 			});
+
+			for (const photo of savedPhotos) {
+				console.log('[quote-requests][photos] saved photo record', {
+					id: photo.id,
+					quoteRequestId: photo.quote_request_id,
+					storagePath: photo.storage_path,
+					publicUrl: photo.public_url,
+					originalName: photo.original_name,
+					mimeType: photo.mime_type,
+					sizeBytes: photo.size_bytes,
+					sortOrder: photo.sort_order
+				});
+			}
 		} else {
 			console.info('[quote-requests][photos] no photos to upload for quote request', {
 				quoteRequestId
 			});
 		}
+
+		console.log('[quote-requests] saved quote request payload for external api', {
+			quoteRequestId,
+			recaptchaScore: recaptchaScore ?? null,
+			form: input,
+			photos: savedPhotos.map((photo) => ({
+				id: photo.id,
+				storagePath: photo.storage_path,
+				publicUrl: photo.public_url,
+				originalName: photo.original_name,
+				mimeType: photo.mime_type,
+				sizeBytes: photo.size_bytes,
+				sortOrder: photo.sort_order
+			}))
+		});
 
 		return { id: quoteRequestId };
 	} catch (error) {
