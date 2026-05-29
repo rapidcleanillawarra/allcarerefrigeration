@@ -375,6 +375,11 @@
 
 					syncPhotosInput();
 
+					formData.delete('photos');
+					for (const photo of selectedPhotos) {
+						formData.append('photos', photo.file);
+					}
+
 					const formPhotoEntries = formData.getAll('photos');
 					console.info('[get-a-quote][photos] form submit payload', {
 						selectedCount: selectedPhotos.length,
