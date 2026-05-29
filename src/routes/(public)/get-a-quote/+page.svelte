@@ -68,10 +68,16 @@
 	);
 	let selectedPhotoNames = $state<string[]>([]);
 	let selectedServices = $state<string[]>([]);
+	let selectedEquipment = $state<string[]>([]);
+	let selectedSiteAccess = $state<string[]>([]);
 	let preferredDateTimeValue = $state('');
 
 	const OTHER_SERVICE = 'other-service';
+	const OTHER_EQUIPMENT = 'other-equipment';
+	const OTHER_ACCESS = 'other-access';
 	const showOtherService = $derived(selectedServices.includes(OTHER_SERVICE));
+	const showOtherEquipment = $derived(selectedEquipment.includes(OTHER_EQUIPMENT));
+	const showOtherAccess = $derived(selectedSiteAccess.includes(OTHER_ACCESS));
 
 	const values = $derived.by(() => {
 		if (form?.values) return form.values as QuoteFormValues;
@@ -84,6 +90,14 @@
 
 	$effect(() => {
 		selectedServices = [...(values.services ?? [])];
+	});
+
+	$effect(() => {
+		selectedEquipment = [...(values.equipment ?? [])];
+	});
+
+	$effect(() => {
+		selectedSiteAccess = [...(values.siteAccess ?? [])];
 	});
 
 	$effect(() => {
@@ -114,13 +128,36 @@
 		return `${monthName} ${date.getDate()}, ${date.getFullYear()} ${time}`;
 	}
 
-	function onServiceChange(value: string, checked: boolean) {
+	function onSelectionChange(
+		current: string[],
+		value: string,
+		checked: boolean,
+		setter: (next: string[]) => void
+	) {
 		if (checked) {
-			selectedServices = [...selectedServices, value];
+			setter([...current, value]);
 			return;
 		}
 
-		selectedServices = selectedServices.filter((service) => service !== value);
+		setter(current.filter((item) => item !== value));
+	}
+
+	function onServiceChange(value: string, checked: boolean) {
+		onSelectionChange(selectedServices, value, checked, (next) => {
+			selectedServices = next;
+		});
+	}
+
+	function onEquipmentChange(value: string, checked: boolean) {
+		onSelectionChange(selectedEquipment, value, checked, (next) => {
+			selectedEquipment = next;
+		});
+	}
+
+	function onSiteAccessChange(value: string, checked: boolean) {
+		onSelectionChange(selectedSiteAccess, value, checked, (next) => {
+			selectedSiteAccess = next;
+		});
 	}
 
 	onMount(async () => {
@@ -402,12 +439,33 @@
 									type="checkbox"
 									name="equipment"
 									value={option.value}
-									checked={values.equipment?.includes(option.value)}
+									checked={selectedEquipment.includes(option.value)}
+									onchange={(event) =>
+										onEquipmentChange(option.value, event.currentTarget.checked)}
 								/>
 								<span>{option.label}</span>
 							</label>
 						{/each}
 					</div>
+					{#if showOtherEquipment}
+						<div class="field field--spaced">
+							<label for="otherEquipment">
+								Please specify the equipment <span class="required-mark">*</span>
+							</label>
+							<input
+								id="otherEquipment"
+								name="otherEquipment"
+								type="text"
+								required
+								value={values.otherEquipment ?? ''}
+								aria-invalid={errors.otherEquipment ? 'true' : undefined}
+								aria-describedby={errors.otherEquipment ? 'otherEquipment-error' : undefined}
+							/>
+							{#if errors.otherEquipment}
+								<p class="field-error" id="otherEquipment-error">{errors.otherEquipment}</p>
+							{/if}
+						</div>
+					{/if}
 				</fieldset>
 
 				<!-- 4. Issue description -->
@@ -540,12 +598,33 @@
 									type="checkbox"
 									name="siteAccess"
 									value={option.value}
-									checked={values.siteAccess?.includes(option.value)}
+									checked={selectedSiteAccess.includes(option.value)}
+									onchange={(event) =>
+										onSiteAccessChange(option.value, event.currentTarget.checked)}
 								/>
 								<span>{option.label}</span>
 							</label>
 						{/each}
 					</div>
+					{#if showOtherAccess}
+						<div class="field field--spaced">
+							<label for="otherAccess">
+								Please specify the access requirement <span class="required-mark">*</span>
+							</label>
+							<input
+								id="otherAccess"
+								name="otherAccess"
+								type="text"
+								required
+								value={values.otherAccess ?? ''}
+								aria-invalid={errors.otherAccess ? 'true' : undefined}
+								aria-describedby={errors.otherAccess ? 'otherAccess-error' : undefined}
+							/>
+							{#if errors.otherAccess}
+								<p class="field-error" id="otherAccess-error">{errors.otherAccess}</p>
+							{/if}
+						</div>
+					{/if}
 
 					<div class="field field--spaced">
 						<label for="accessNotes">Additional access notes</label>

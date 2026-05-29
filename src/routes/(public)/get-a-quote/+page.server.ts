@@ -72,12 +72,14 @@ export const actions = {
 		const services = readSelections(form, 'services', SERVICE_OPTIONS);
 		const otherService = readText(form, 'otherService');
 		const equipment = readSelections(form, 'equipment', EQUIPMENT_OPTIONS);
+		const otherEquipment = readText(form, 'otherEquipment');
 		const issueDescription = readText(form, 'issueDescription');
 		const preferredDateTime = readText(form, 'preferredDateTime');
 		const brandModel = readText(form, 'brandModel');
 		const equipmentAge = readText(form, 'equipmentAge');
 		const serialNumber = readText(form, 'serialNumber');
 		const siteAccess = readSelections(form, 'siteAccess', ACCESS_OPTIONS);
+		const otherAccess = readText(form, 'otherAccess');
 		const accessNotes = readText(form, 'accessNotes');
 		const contactMethods = readSelections(form, 'contactMethods', CONTACT_OPTIONS);
 
@@ -90,12 +92,14 @@ export const actions = {
 			services,
 			otherService,
 			equipment,
+			otherEquipment,
 			issueDescription,
 			preferredDateTime,
 			brandModel,
 			equipmentAge,
 			serialNumber,
 			siteAccess,
+			otherAccess,
 			accessNotes,
 			contactMethods
 		};
@@ -113,6 +117,12 @@ export const actions = {
 		if (services.length === 0) errors.services = 'Select at least one service.';
 		if (services.includes('other-service') && !otherService) {
 			errors.otherService = 'Please specify the other service.';
+		}
+		if (equipment.includes('other-equipment') && !otherEquipment) {
+			errors.otherEquipment = 'Please specify the other equipment.';
+		}
+		if (siteAccess.includes('other-access') && !otherAccess) {
+			errors.otherAccess = 'Please specify the other access requirement.';
 		}
 		if (!issueDescription) errors.issueDescription = 'Please describe the issue or request.';
 		if (contactMethods.length === 0) {
