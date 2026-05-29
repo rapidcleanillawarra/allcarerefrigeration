@@ -9,7 +9,14 @@
 	import type { PageProps } from './$types';
 
 	const RECAPTCHA_ACTION = 'quote_submit';
+	const MAX_PHOTOS = 8;
 	const recaptchaSiteKey = env.PUBLIC_RECAPTCHA_SITE_KEY ?? '';
+
+	type SelectedPhoto = {
+		id: string;
+		file: File;
+		previewUrl: string;
+	};
 
 	let { form, data }: PageProps = $props();
 
@@ -66,7 +73,9 @@
 	let recaptchaStatus = $state<'unconfigured' | 'loading' | 'ready' | 'error'>(
 		recaptchaSiteKey ? 'loading' : 'unconfigured'
 	);
-	let selectedPhotoNames = $state<string[]>([]);
+	let selectedPhotos = $state<SelectedPhoto[]>([]);
+	let photosInput = $state<HTMLInputElement | null>(null);
+	let photoLimitMessage = $state('');
 	let selectedServices = $state<string[]>([]);
 	let selectedEquipment = $state<string[]>([]);
 	let selectedSiteAccess = $state<string[]>([]);
@@ -160,6 +169,14 @@
 		});
 	}
 
+	onMount(() => {
+		return () => {
+			for (const photo of selectedPhotos) {
+				URL.revokeObjectURL(photo.previewUrl);
+			}
+		};
+	});
+
 	onMount(async () => {
 		if (data.populate) {
 			draftValues = await getPopulatedQuoteValues();
@@ -182,9 +199,61 @@
 		}
 	});
 
+	function syncPhotosInput() {
+		if (!photosInput) return;
+
+		const transfer = new DataTransfer();
+		for (const photo of selectedPhotos) {
+			transfer.items.add(photo.file);
+		}
+		photosInput.files = transfer.files;
+	}
+
+	function isDuplicatePhoto(file: File, photos: SelectedPhoto[]) {
+		return photos.some(
+			(photo) =>
+				photo.file.name === file.name &&
+				photo.file.size === file.size &&
+				photo.file.lastModified === file.lastModified
+		);
+	}
+
 	function onPhotosChange(event: Event) {
 		const input = event.currentTarget as HTMLInputElement;
-		selectedPhotoNames = input.files ? Array.from(input.files).map((file) => file.name) : [];
+		const picked = input.files ? Array.from(input.files) : [];
+		if (picked.length === 0) return;
+
+		photoLimitMessage = '';
+		const remaining = MAX_PHOTOS - selectedPhotos.length;
+		const nextPhotos = [...selectedPhotos];
+
+		for (const file of picked) {
+			if (nextPhotos.length >= MAX_PHOTOS) {
+				photoLimitMessage = `You can upload up to ${MAX_PHOTOS} photos.`;
+				break;
+			}
+
+			if (isDuplicatePhoto(file, nextPhotos)) continue;
+
+			nextPhotos.push({
+				id: crypto.randomUUID(),
+				file,
+				previewUrl: URL.createObjectURL(file)
+			});
+		}
+
+		selectedPhotos = nextPhotos;
+		syncPhotosInput();
+		input.value = '';
+	}
+
+	function removePhoto(id: string) {
+		const photo = selectedPhotos.find((entry) => entry.id === id);
+		if (photo) URL.revokeObjectURL(photo.previewUrl);
+
+		selectedPhotos = selectedPhotos.filter((entry) => entry.id !== id);
+		photoLimitMessage = '';
+		syncPhotosInput();
 	}
 </script>
 
@@ -557,9 +626,10 @@
 								<polyline points="17 8 12 3 7 8" stroke-linecap="round" stroke-linejoin="round" />
 								<line x1="12" x2="12" y1="3" y2="15" stroke-linecap="round" stroke-linejoin="round" />
 							</svg>
-							<span>Choose photos</span>
+							<span>{selectedPhotos.length > 0 ? 'Add more photos' : 'Choose photos'}</span>
 						</label>
 						<input
+							bind:this={photosInput}
 							id="photos"
 							name="photos"
 							type="file"
@@ -568,12 +638,43 @@
 							class="sr-only"
 							onchange={onPhotosChange}
 						/>
-						{#if selectedPhotoNames.length > 0}
-							<ul class="upload-list" aria-live="polite">
-								{#each selectedPhotoNames as name (name)}
-									<li>{name}</li>
+
+						{#if selectedPhotos.length > 0}
+							<p class="upload-count" aria-live="polite">
+								{selectedPhotos.length} of {MAX_PHOTOS} photos selected
+							</p>
+							<ul class="photo-grid" aria-label="Selected photos">
+								{#each selectedPhotos as photo (photo.id)}
+									<li class="photo-card">
+										<img
+											class="photo-card__img"
+											src={photo.previewUrl}
+											alt={photo.file.name}
+											loading="lazy"
+											decoding="async"
+										/>
+										<div class="photo-card__meta">
+											<span class="photo-card__name" title={photo.file.name}>{photo.file.name}</span>
+											<button
+												type="button"
+												class="photo-card__remove"
+												aria-label={`Remove ${photo.file.name}`}
+												onclick={() => removePhoto(photo.id)}
+											>
+												<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+													<line x1="18" x2="6" y1="6" y2="18" stroke-linecap="round" />
+													<line x1="6" x2="18" y1="6" y2="18" stroke-linecap="round" />
+												</svg>
+												Remove
+											</button>
+										</div>
+									</li>
 								{/each}
 							</ul>
+						{/if}
+
+						{#if photoLimitMessage}
+							<p class="field-error">{photoLimitMessage}</p>
 						{/if}
 					</div>
 
@@ -1243,11 +1344,83 @@
 		border-color: var(--color-brand);
 	}
 
-	.upload-list {
+	.upload-count {
 		margin: 0;
-		padding-left: 1.1rem;
 		color: var(--color-ink-soft);
-		font-size: 0.9rem;
+		font-size: 0.88rem;
+		font-weight: 600;
+	}
+
+	.photo-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+		gap: 0.75rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.photo-card {
+		display: grid;
+		gap: 0.45rem;
+		padding: 0.45rem;
+		border-radius: 0.85rem;
+		border: 1px solid rgba(15, 87, 251, 0.14);
+		background: #fff;
+		box-shadow: 0 8px 20px rgba(15, 87, 251, 0.06);
+	}
+
+	.photo-card__img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 1;
+		object-fit: cover;
+		border-radius: 0.65rem;
+		background: var(--color-frost);
+	}
+
+	.photo-card__meta {
+		display: grid;
+		gap: 0.35rem;
+	}
+
+	.photo-card__name {
+		overflow: hidden;
+		color: var(--color-ink-soft);
+		font-size: 0.78rem;
+		font-weight: 600;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.photo-card__remove {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.3rem;
+		width: 100%;
+		padding: 0.35rem 0.5rem;
+		border: 1px solid rgba(220, 38, 38, 0.18);
+		border-radius: 999px;
+		background: #fff5f5;
+		color: #b91c1c;
+		font: inherit;
+		font-size: 0.76rem;
+		font-weight: 700;
+		cursor: pointer;
+		transition:
+			background 200ms ease,
+			border-color 200ms ease;
+	}
+
+	.photo-card__remove svg {
+		width: 0.85rem;
+		height: 0.85rem;
+	}
+
+	.photo-card__remove:hover {
+		background: #fee2e2;
+		border-color: rgba(220, 38, 38, 0.35);
 	}
 
 	.upload-note {
