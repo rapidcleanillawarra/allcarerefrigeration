@@ -4,12 +4,18 @@
 	import { env } from '$env/dynamic/public';
 	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
 	import { getPopulatedQuoteValues, type QuoteFormValues } from '$lib/quote-form-sample-data';
+	import {
+		formatPhotoSize,
+		MAX_QUOTE_PHOTOS,
+		MAX_QUOTE_PHOTO_TOTAL_BYTES,
+		MAX_QUOTE_PHOTO_TOTAL_MB,
+		totalPhotoBytes
+	} from '$lib/quote-photo-limits';
 	import { executeRecaptcha, loadRecaptcha } from '$lib/recaptcha';
 	import { onMount } from 'svelte';
 	import type { PageProps } from './$types';
 
 	const RECAPTCHA_ACTION = 'quote_submit';
-	const MAX_PHOTOS = 8;
 	const recaptchaSiteKey = env.PUBLIC_RECAPTCHA_SITE_KEY ?? '';
 
 	type SelectedPhoto = {
@@ -114,6 +120,9 @@
 	});
 
 	const preferredDateTimeDisplay = $derived(formatPreferredDateTime(preferredDateTimeValue));
+	const selectedPhotoTotalBytes = $derived(totalPhotoBytes(selectedPhotos.map((photo) => photo.file)));
+	const selectedPhotoTotalLabel = $derived(formatPhotoSize(selectedPhotoTotalBytes));
+	const photoSizeLimitReached = $derived(selectedPhotoTotalBytes >= MAX_QUOTE_PHOTO_TOTAL_BYTES);
 
 	function formatPreferredDateTime(value: string): string {
 		if (!value) return '';
@@ -249,16 +258,21 @@
 		if (picked.length === 0) return;
 
 		photoLimitMessage = '';
-		const remaining = MAX_PHOTOS - selectedPhotos.length;
 		const nextPhotos = [...selectedPhotos];
 
 		for (const file of picked) {
-			if (nextPhotos.length >= MAX_PHOTOS) {
-				photoLimitMessage = `You can upload up to ${MAX_PHOTOS} photos.`;
+			if (nextPhotos.length >= MAX_QUOTE_PHOTOS) {
+				photoLimitMessage = `You can upload up to ${MAX_QUOTE_PHOTOS} photos.`;
 				break;
 			}
 
 			if (isDuplicatePhoto(file, nextPhotos)) continue;
+
+			const nextTotalBytes = totalPhotoBytes([...nextPhotos.map((photo) => photo.file), file]);
+			if (nextTotalBytes > MAX_QUOTE_PHOTO_TOTAL_BYTES) {
+				photoLimitMessage = `Total photo size must be ${MAX_QUOTE_PHOTO_TOTAL_MB} MB or smaller. "${file.name}" is too large to add.`;
+				continue;
+			}
 
 			nextPhotos.push({
 				id: crypto.randomUUID(),
@@ -666,6 +680,10 @@
 					<p class="fieldset-help">
 						Upload photos of the equipment, compliance plate, fault, or site area
 					</p>
+					<p class="upload-warning" role="note">
+						Keep total photo size under {MAX_QUOTE_PHOTO_TOTAL_MB} MB so your quote can be submitted
+						successfully. Use fewer photos or compress larger images if needed.
+					</p>
 
 					<div class="upload-shell">
 						<label class="upload-btn" for="photos">
@@ -688,8 +706,13 @@
 						/>
 
 						{#if selectedPhotos.length > 0}
-							<p class="upload-count" aria-live="polite">
-								{selectedPhotos.length} of {MAX_PHOTOS} photos selected
+							<p
+								class="upload-count"
+								class:upload-count--limit={photoSizeLimitReached}
+								aria-live="polite"
+							>
+								{selectedPhotos.length} of {MAX_QUOTE_PHOTOS} photos selected
+								· {selectedPhotoTotalLabel} of {MAX_QUOTE_PHOTO_TOTAL_MB} MB used
 							</p>
 							<ul class="photo-grid" aria-label="Selected photos">
 								{#each selectedPhotos as photo (photo.id)}
@@ -1392,11 +1415,26 @@
 		border-color: var(--color-brand);
 	}
 
+	.upload-warning {
+		margin: 0.65rem 0 0;
+		padding: 0.75rem 0.9rem;
+		border-radius: 0.85rem;
+		border: 1px solid rgba(180, 83, 9, 0.22);
+		background: #fff7ed;
+		color: #9a3412;
+		font-size: 0.9rem;
+		line-height: 1.45;
+	}
+
 	.upload-count {
 		margin: 0;
 		color: var(--color-ink-soft);
 		font-size: 0.88rem;
 		font-weight: 600;
+	}
+
+	.upload-count--limit {
+		color: #b45309;
 	}
 
 	.photo-grid {

@@ -1,4 +1,10 @@
 import { fail } from '@sveltejs/kit';
+import {
+	MAX_QUOTE_PHOTOS,
+	MAX_QUOTE_PHOTO_TOTAL_BYTES,
+	MAX_QUOTE_PHOTO_TOTAL_MB,
+	totalPhotoBytes
+} from '$lib/quote-photo-limits';
 import { saveQuoteRequest } from '$lib/server/quote-requests';
 import { verifyRecaptchaToken } from '$lib/server/recaptcha';
 import type { Actions, PageServerLoad } from './$types';
@@ -42,8 +48,6 @@ const ACCESS_OPTIONS = [
 
 const CONTACT_OPTIONS = ['phone', 'email', 'sms'] as const;
 
-const MAX_PHOTOS = 8;
-const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
 const ALLOWED_PHOTO_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']);
 
 function readText(form: FormData, key: string): string {
@@ -156,15 +160,15 @@ export const actions = {
 			validPhotos: photos.map(describeIncomingPhoto)
 		});
 
-		if (photos.length > MAX_PHOTOS) {
-			errors.photos = `You can upload up to ${MAX_PHOTOS} photos.`;
+		if (photos.length > MAX_QUOTE_PHOTOS) {
+			errors.photos = `You can upload up to ${MAX_QUOTE_PHOTOS} photos.`;
+		}
+
+		if (totalPhotoBytes(photos) > MAX_QUOTE_PHOTO_TOTAL_BYTES) {
+			errors.photos = `Total photo size must be ${MAX_QUOTE_PHOTO_TOTAL_MB} MB or smaller.`;
 		}
 
 		for (const photo of photos) {
-			if (photo.size > MAX_PHOTO_BYTES) {
-				errors.photos = 'Each photo must be 10 MB or smaller.';
-				break;
-			}
 			const mime = photo.type || 'application/octet-stream';
 			if (!ALLOWED_PHOTO_TYPES.has(mime)) {
 				errors.photos = 'Photos must be JPG, PNG, or WEBP files.';
