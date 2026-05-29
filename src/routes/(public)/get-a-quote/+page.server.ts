@@ -1,6 +1,10 @@
 import { fail } from '@sveltejs/kit';
 import { verifyRecaptchaToken } from '$lib/server/recaptcha';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
+
+export const load: PageServerLoad = ({ url }) => ({
+	populate: url.searchParams.get('populate') === 'true'
+});
 
 const RECAPTCHA_ACTION = 'quote_submit';
 

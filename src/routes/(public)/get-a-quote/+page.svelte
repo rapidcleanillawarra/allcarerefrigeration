@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import { env } from '$env/dynamic/public';
 	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+	import { getPopulatedQuoteValues, type QuoteFormValues } from '$lib/quote-form-sample-data';
 	import { executeRecaptcha, loadRecaptcha } from '$lib/recaptcha';
 	import { onMount } from 'svelte';
 	import type { PageProps } from './$types';
@@ -10,25 +11,9 @@
 	const RECAPTCHA_ACTION = 'quote_submit';
 	const recaptchaSiteKey = env.PUBLIC_RECAPTCHA_SITE_KEY ?? '';
 
-	type QuoteFormValues = {
-		fullName?: string;
-		businessName?: string;
-		phone?: string;
-		email?: string;
-		siteAddress?: string;
-		services?: string[];
-		equipment?: string[];
-		issueDescription?: string;
-		preferredDateTime?: string;
-		brandModel?: string;
-		equipmentAge?: string;
-		serialNumber?: string;
-		siteAccess?: string[];
-		accessNotes?: string;
-		contactMethods?: string[];
-	};
-
 	let { form, data }: PageProps = $props();
+
+	let draftValues = $state<QuoteFormValues | undefined>(undefined);
 
 	const serviceOptions = [
 		{ value: 'commercial-refrigeration-repair', label: 'Commercial refrigeration repair' },
@@ -83,13 +68,21 @@
 	);
 	let selectedPhotoNames = $state<string[]>([]);
 
-	const values = $derived.by(() => (form?.values ?? {}) as QuoteFormValues);
+	const values = $derived.by(() => {
+		if (form?.values) return form.values as QuoteFormValues;
+		return (draftValues ?? {}) as QuoteFormValues;
+	});
 	const errors = $derived.by(() => (form?.errors ?? {}) as Record<string, string>);
 	const submitted = $derived(form?.success === true);
 	const recaptchaReady = $derived(recaptchaStatus === 'ready');
 	const showRecaptchaStatus = $derived(Boolean(recaptchaSiteKey) || import.meta.env.DEV);
 
 	onMount(async () => {
+		if (data.populate) {
+			draftValues = await getPopulatedQuoteValues();
+			console.log('[get-a-quote] populated form:', JSON.stringify(draftValues, null, 2));
+		}
+
 		if (!recaptchaSiteKey) {
 			recaptchaStatus = 'unconfigured';
 			return;
@@ -215,6 +208,7 @@
 							});
 
 							const result = deserialize(await response.text());
+							console.log('[get-a-quote] submission JSON:', JSON.stringify(result, null, 2));
 							await applyAction(result);
 						} catch {
 							recaptchaStatus = 'error';
