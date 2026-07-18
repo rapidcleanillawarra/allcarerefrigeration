@@ -1,10 +1,12 @@
-const RECAPTCHA_SCRIPT_ID = 'recaptcha-v3-script';
+const RECAPTCHA_SCRIPT_ID = 'recaptcha-enterprise-script';
 
 declare global {
 	interface Window {
 		grecaptcha?: {
-			ready: (callback: () => void) => void;
-			execute: (siteKey: string, options: { action: string }) => Promise<string>;
+			enterprise: {
+				ready: (callback: () => void) => void;
+				execute: (siteKey: string, options: { action: string }) => Promise<string>;
+			};
 		};
 	}
 }
@@ -21,15 +23,15 @@ export function loadRecaptcha(siteKey: string): Promise<void> {
 	}
 
 	loadPromise = new Promise((resolve, reject) => {
-		if (window.grecaptcha) {
-			window.grecaptcha.ready(() => resolve());
+		if (window.grecaptcha?.enterprise) {
+			window.grecaptcha.enterprise.ready(() => resolve());
 			return;
 		}
 
 		const existingScript = document.getElementById(RECAPTCHA_SCRIPT_ID);
 		if (existingScript) {
 			existingScript.addEventListener('load', () => {
-				window.grecaptcha?.ready(() => resolve());
+				window.grecaptcha?.enterprise.ready(() => resolve());
 			});
 			existingScript.addEventListener('error', () => {
 				reject(new Error('Failed to load reCAPTCHA'));
@@ -39,11 +41,11 @@ export function loadRecaptcha(siteKey: string): Promise<void> {
 
 		const script = document.createElement('script');
 		script.id = RECAPTCHA_SCRIPT_ID;
-		script.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(siteKey)}`;
+		script.src = `https://www.google.com/recaptcha/enterprise.js?render=${encodeURIComponent(siteKey)}`;
 		script.async = true;
 		script.defer = true;
 		script.onload = () => {
-			window.grecaptcha?.ready(() => resolve());
+			window.grecaptcha?.enterprise.ready(() => resolve());
 		};
 		script.onerror = () => {
 			loadPromise = null;
@@ -57,9 +59,9 @@ export function loadRecaptcha(siteKey: string): Promise<void> {
 
 export async function executeRecaptcha(siteKey: string, action: string): Promise<string> {
 	await loadRecaptcha(siteKey);
-	if (!window.grecaptcha) {
+	if (!window.grecaptcha?.enterprise) {
 		throw new Error('reCAPTCHA is unavailable');
 	}
 
-	return window.grecaptcha.execute(siteKey, { action });
+	return window.grecaptcha.enterprise.execute(siteKey, { action });
 }

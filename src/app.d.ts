@@ -4,7 +4,7 @@
 interface ImportMetaEnv {
 	/** Canonical site URL override (scheme + host). Example: https://your-project.vercel.app or custom domain. */
 	readonly PUBLIC_SITE_URL?: string;
-	/** Google reCAPTCHA v3 site key (safe for the browser). */
+	/** Google reCAPTCHA Enterprise site key (safe for the browser). */
 	readonly PUBLIC_RECAPTCHA_SITE_KEY?: string;
 }
 

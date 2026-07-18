@@ -1,13 +1,22 @@
 import { env as privateEnv } from '$env/dynamic/private';
+import { env as publicEnv } from '$env/dynamic/public';
 
-const VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
 const DEFAULT_MIN_SCORE = 0.5;
 
-type RecaptchaVerifyResponse = {
-	success?: boolean;
-	score?: number;
-	action?: string;
-	'error-codes'?: string[];
+type RecaptchaAssessmentResponse = {
+	tokenProperties?: {
+		valid?: boolean;
+		action?: string;
+		invalidReason?: string;
+	};
+	riskAnalysis?: {
+		score?: number;
+		reasons?: string[];
+	};
+	error?: {
+		message?: string;
+		status?: string;
+	};
 };
 
 export type RecaptchaVerificationResult =
@@ -19,11 +28,15 @@ export async function verifyRecaptchaToken(
 	expectedAction: string,
 	minScore = DEFAULT_MIN_SCORE
 ): Promise<RecaptchaVerificationResult> {
-	const secret = privateEnv.RECAPTCHA_SECRET_KEY;
+	const projectId = privateEnv.RECAPTCHA_PROJECT_ID;
+	const apiKey = privateEnv.RECAPTCHA_API_KEY;
+	const siteKey = publicEnv.PUBLIC_RECAPTCHA_SITE_KEY;
 
-	if (!secret) {
+	if (!projectId || !apiKey || !siteKey) {
 		if (import.meta.env.DEV) {
-			console.warn('[recaptcha] RECAPTCHA_SECRET_KEY is not set; skipping verification in development.');
+			console.warn(
+				'[recaptcha] RECAPTCHA_PROJECT_ID, RECAPTCHA_API_KEY, or PUBLIC_RECAPTCHA_SITE_KEY is not set; skipping verification in development.'
+			);
 			return { ok: true };
 		}
 
@@ -34,12 +47,17 @@ export async function verifyRecaptchaToken(
 		return { ok: false, message: 'Security verification failed. Please refresh the page and try again.' };
 	}
 
-	const response = await fetch(VERIFY_URL, {
+	const url = `https://recaptchaenterprise.googleapis.com/v1/projects/${encodeURIComponent(projectId)}/assessments?key=${encodeURIComponent(apiKey)}`;
+
+	const response = await fetch(url, {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-		body: new URLSearchParams({
-			secret,
-			response: token
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			event: {
+				token,
+				siteKey,
+				expectedAction
+			}
 		})
 	});
 
@@ -47,19 +65,24 @@ export async function verifyRecaptchaToken(
 		return { ok: false, message: 'Security verification failed. Please try again.' };
 	}
 
-	const data = (await response.json()) as RecaptchaVerifyResponse;
+	const data = (await response.json()) as RecaptchaAssessmentResponse;
 
-	if (!data.success) {
+	if (data.error?.message) {
 		return { ok: false, message: 'Security verification failed. Please try again.' };
 	}
 
-	if (data.action !== expectedAction) {
+	if (!data.tokenProperties?.valid) {
 		return { ok: false, message: 'Security verification failed. Please try again.' };
 	}
 
-	if (typeof data.score === 'number' && data.score < minScore) {
+	if (data.tokenProperties.action !== expectedAction) {
+		return { ok: false, message: 'Security verification failed. Please try again.' };
+	}
+
+	const score = data.riskAnalysis?.score;
+	if (typeof score === 'number' && score < minScore) {
 		return { ok: false, message: 'Your submission could not be verified. Please try again.' };
 	}
 
-	return { ok: true, score: data.score };
+	return { ok: true, score };
 }
