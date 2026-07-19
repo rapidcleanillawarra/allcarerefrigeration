@@ -141,8 +141,8 @@
 				openingHoursSpecification: [
 					{
 						'@type': 'OpeningHoursSpecification',
-						dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-						opens: '08:00',
+						dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+						opens: '07:00',
 						closes: '17:00'
 					}
 				],
@@ -677,7 +677,7 @@
 					</svg>
 				</span>
 				<h3>Operating Hours</h3>
-				<p>Monday - Saturday<br />8:00 a.m - 5:00 p.m</p>
+				<p>Monday - Friday<br />7:00 a.m - 5:00 p.m<br />24hrs breakdown available</p>
 			</div>
 		</div>
 	</div>

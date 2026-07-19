@@ -276,7 +276,7 @@
 			<div class="reveal reveal--up site-footer__visit">
 				<h4>Visit us</h4>
 				<p>157 Church St, Albion Park NSW 2527, Australia</p>
-				<p>Mon - Sat · 8:00am - 5:00pm</p>
+				<p>Mon - Fri · 7:00am - 5:00pm</p>
 				<div class="site-footer__map-shell">
 					<iframe
 						class="site-footer__map"
@@ -294,7 +294,7 @@
 				<p>
 					<a href="tel:0411532233">0411 532 233</a>
 				</p>
-				<p>24/7 emergency breakdown response</p>
+				<p>24hrs breakdown available</p>
 			</div>
 
 			<div class="reveal reveal--up">

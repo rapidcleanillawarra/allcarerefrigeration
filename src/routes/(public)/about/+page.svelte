@@ -69,7 +69,7 @@
 		{
 			id: 'hours',
 			title: 'Operating Hours',
-			content: 'Monday - Sunday: 8:00 a.m - 5:00 p.m'
+			content: 'Monday - Friday: 7:00 a.m - 5:00 p.m. 24hrs breakdown available'
 		}
 	];
 </script>
