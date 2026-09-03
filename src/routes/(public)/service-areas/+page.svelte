@@ -186,12 +186,14 @@
 
 	<!-- FINAL CTA -->
 	<section class="section-shell cta-section">
-		<div class="section-inner section-inner--wide cta-box">
-			<h2>Ready to Book a Service or Need Urgent Breakdown Help?</h2>
-			<p>AllCare Refrigeration is on call across the Illawarra, Shoalhaven, and Highlands.</p>
-			<div class="cta-actions">
-				<a class="btn-primary" href="tel:{PRIMARY_PHONE_TEL}">Call {PRIMARY_PHONE}</a>
-				<a class="btn-ghost" href={resolve('/get-a-quote')}>Submit Online Quote</a>
+		<div class="section-inner section-inner--wide">
+			<div class="cta-box">
+				<h2>Ready to Book a Service or Need Urgent Breakdown Help?</h2>
+				<p>AllCare Refrigeration is on call across the Illawarra, Shoalhaven, and Highlands.</p>
+				<div class="cta-actions">
+					<a class="btn-primary" href="tel:{PRIMARY_PHONE_TEL}">Call {PRIMARY_PHONE}</a>
+					<a class="btn-ghost" href={resolve('/get-a-quote')}>Submit Online Quote</a>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -199,7 +201,7 @@
 
 <style>
 	.service-areas-hub { color: var(--color-ink); }
-	.breadcrumb-nav { padding-top: 1rem; padding-bottom: 0.5rem; }
+	.breadcrumb-nav { padding-top: 1rem; padding-bottom: 0.75rem; }
 	.breadcrumb-nav ol { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; list-style: none; margin: 0; padding: 0; font-size: 0.82rem; color: var(--color-ink-soft); }
 	.breadcrumb-nav a { color: var(--color-ink-soft); text-decoration: none; }
 	.breadcrumb-nav a:hover { color: var(--color-brand); }
@@ -208,13 +210,13 @@
 	.hub-hero {
 		background: linear-gradient(135deg, var(--color-brand-deeper) 0%, var(--color-brand) 55%, var(--color-brand-light) 100%);
 		color: #ffffff;
-		padding: clamp(2.5rem, 5vw, 4rem) 0;
+		padding: clamp(3rem, 6vw, 4.5rem) 0;
 	}
 
 	.hub-hero__grid {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 2rem;
+		gap: 2.5rem;
 		align-items: center;
 	}
 
@@ -242,6 +244,45 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.8rem;
+	}
+
+	.btn-primary,
+	.btn-ghost {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		padding: 0.85rem 1.4rem;
+		font-weight: 800;
+		font-size: 0.95rem;
+		text-decoration: none;
+		border-radius: 999px;
+		transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease, border-color 200ms ease;
+		cursor: pointer;
+	}
+
+	.btn-primary {
+		background: #ffffff;
+		color: var(--color-brand);
+		box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+	}
+
+	.btn-primary:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 14px 30px -5px rgba(0, 0, 0, 0.25);
+		color: var(--color-brand-deeper);
+	}
+
+	.btn-ghost {
+		background: rgba(255, 255, 255, 0.12);
+		color: #ffffff;
+		border: 1px solid rgba(255, 255, 255, 0.45);
+		backdrop-filter: blur(8px);
+	}
+
+	.btn-ghost:hover {
+		background: rgba(255, 255, 255, 0.22);
+		transform: translateY(-2px);
 	}
 
 	.hub-hero__card {
@@ -287,7 +328,39 @@
 		font-weight: 800;
 	}
 
+	.section-shell {
+		padding-block: clamp(3.5rem, 6vw, 5.5rem);
+	}
+
 	.section-shell--alt { background: var(--color-frost); }
+
+	.cta-section {
+		padding-block: clamp(2.5rem, 5vw, 4rem) clamp(1rem, 2vw, 2rem);
+	}
+
+	.section-intro {
+		max-width: 52rem;
+		margin: 0 auto clamp(2rem, 4vw, 3rem);
+		text-align: center;
+		display: grid;
+		gap: 0.65rem;
+		justify-items: center;
+	}
+
+	.section-intro h2 {
+		font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+		line-height: 1.15;
+		color: var(--color-ink);
+		margin: 0;
+	}
+
+	.section-intro p {
+		margin: 0;
+		max-width: 44rem;
+		font-size: 1rem;
+		color: var(--color-ink-soft);
+		line-height: 1.6;
+	}
 
 	.regions-grid {
 		display: grid;
@@ -327,13 +400,14 @@
 	.region-card__header h3 {
 		font-size: 1.25rem;
 		color: var(--color-ink);
+		margin: 0;
 	}
 
 	.region-card__tagline {
 		font-size: 0.92rem;
 		line-height: 1.55;
 		color: var(--color-ink-soft);
-		margin-bottom: 1.2rem;
+		margin: 0 0 1.2rem;
 	}
 
 	.region-card__meta {
@@ -404,6 +478,7 @@
 		text-decoration: none;
 		color: var(--color-ink);
 		transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+		box-shadow: 0 4px 12px -6px rgba(0, 0, 0, 0.06);
 	}
 
 	.srv-nav-card:hover {
@@ -428,20 +503,23 @@
 		background: linear-gradient(135deg, var(--color-brand-deeper), var(--color-brand));
 		color: #ffffff;
 		border-radius: 22px;
-		padding: clamp(2rem, 5vw, 3.5rem);
+		padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem);
 		text-align: center;
 	}
 
 	.cta-box h2 {
 		color: #ffffff;
 		font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-		margin-bottom: 0.6rem;
+		margin: 0 0 0.8rem;
+		line-height: 1.2;
 	}
 
 	.cta-box p {
 		color: rgba(255, 255, 255, 0.9);
-		max-width: 36rem;
-		margin: 0 auto 1.5rem;
+		max-width: 38rem;
+		margin: 0 auto 1.8rem;
+		font-size: 1.05rem;
+		line-height: 1.6;
 	}
 
 	.cta-actions {
@@ -449,5 +527,19 @@
 		justify-content: center;
 		flex-wrap: wrap;
 		gap: 0.8rem;
+	}
+
+	@media (max-width: 640px) {
+		.hero-ctas,
+		.cta-actions {
+			flex-direction: column;
+			width: 100%;
+		}
+
+		.btn-primary,
+		.btn-ghost {
+			width: 100%;
+			text-align: center;
+		}
 	}
 </style>
