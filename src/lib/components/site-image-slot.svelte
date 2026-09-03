@@ -8,6 +8,11 @@
 		edit: boolean;
 		imageUrl?: string | null;
 		wrapperClass?: string;
+		alt?: string;
+		loading?: 'lazy' | 'eager';
+		fetchpriority?: 'high' | 'auto' | 'low';
+		width?: number | string;
+		height?: number | string;
 		children: Snippet;
 	};
 
@@ -17,6 +22,11 @@
 		edit,
 		imageUrl = null,
 		wrapperClass = '',
+		alt,
+		loading = 'lazy',
+		fetchpriority,
+		width,
+		height,
 		children
 	}: Props = $props();
 
@@ -74,7 +84,16 @@
 	onclick={edit ? () => inputEl?.click() : undefined}
 >
 	{#if imageUrl}
-		<img src={imageUrl} alt="" class="site-image-slot__img" loading="lazy" decoding="async" />
+		<img
+			src={imageUrl}
+			alt={alt || ariaLabel || 'AllCare Refrigeration'}
+			class="site-image-slot__img"
+			loading={loading}
+			fetchpriority={fetchpriority}
+			width={width}
+			height={height}
+			decoding="async"
+		/>
 	{:else}
 		<div class="site-image-slot__placeholder-inner">
 			{@render children()}

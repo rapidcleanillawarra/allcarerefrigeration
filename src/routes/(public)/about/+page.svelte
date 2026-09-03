@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+	import { SITE_ORIGIN } from '$lib/service-areas';
 
 	let { data }: { data: PageData } = $props();
 
@@ -64,7 +65,7 @@
 		{
 			id: 'phone',
 			title: 'Call Us',
-			content: '041-1532-233'
+			content: '0411 532 233'
 		},
 		{
 			id: 'hours',
@@ -72,14 +73,56 @@
 			content: 'Monday - Friday: 7:00 a.m - 5:00 p.m. 24hrs breakdown available'
 		}
 	];
+
+	const aboutJsonLd = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@graph': [
+			{
+				'@type': ['LocalBusiness', 'HVACBusiness'],
+				'@id': `${SITE_ORIGIN}/about#business`,
+				name: 'AllCare Refrigeration',
+				url: `${SITE_ORIGIN}/`,
+				telephone: '+61411532233',
+				address: {
+					'@type': 'PostalAddress',
+					streetAddress: '157 Church St',
+					addressLocality: 'Albion Park',
+					addressRegion: 'NSW',
+					postalCode: '2527',
+					addressCountry: 'AU'
+				}
+			},
+			{
+				'@type': 'BreadcrumbList',
+				'@id': `${SITE_ORIGIN}/about#breadcrumb`,
+				itemListElement: [
+					{ '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_ORIGIN}/` },
+					{ '@type': 'ListItem', position: 2, name: 'About Us', item: `${SITE_ORIGIN}/about` }
+				]
+			}
+		]
+	});
 </script>
 
 <svelte:head>
 	<title>About Us | AllCare Refrigeration</title>
 	<meta
 		name="description"
-		content="Learn about AllCare Refrigeration, our mission, values, and commitment to reliable refrigeration and air-conditioning services."
+		content="Learn about AllCare Refrigeration, our mission, values, and commitment to reliable commercial refrigeration and air conditioning services across Illawarra."
 	/>
+	<link rel="canonical" href="{SITE_ORIGIN}/about" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="About Us | AllCare Refrigeration" />
+	<meta property="og:description" content="Commercial refrigeration and air conditioning specialists in the Illawarra. ARCtick AU53597 certified." />
+	<meta property="og:url" content="{SITE_ORIGIN}/about" />
+	<meta property="og:site_name" content="AllCare Refrigeration" />
+	<meta property="og:locale" content="en_AU" />
+	<meta property="og:image" content="https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="About Us | AllCare Refrigeration" />
+	<meta name="twitter:description" content="Commercial refrigeration and air conditioning specialists in the Illawarra." />
+	<meta name="twitter:image" content="https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png" />
+	{@html `<script type="application/ld+json">${aboutJsonLd}</script>`}
 </svelte:head>
 
 <!-- HERO ------------------------------------------------------------- -->

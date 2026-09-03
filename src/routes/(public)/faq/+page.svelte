@@ -231,12 +231,27 @@
 </script>
 
 <svelte:head>
-	<title>FAQs | AllCare Refrigeration</title>
+	<title>Frequently Asked Questions | AllCare Refrigeration</title>
 	<meta
 		name="description"
 		content="Answers to common questions about commercial refrigeration service, maintenance, repairs, installations and emergency breakdown support across Illawarra NSW."
 	/>
-	<script type="application/ld+json">{faqJsonLd}</script>
+	<link rel="canonical" href="{SITE_ORIGIN}/faq" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Frequently Asked Questions | AllCare Refrigeration" />
+	<meta
+		property="og:description"
+		content="Answers to common questions about commercial refrigeration service, maintenance, repairs, installations and emergency breakdown support across Illawarra NSW."
+	/>
+	<meta property="og:url" content="{SITE_ORIGIN}/faq" />
+	<meta property="og:site_name" content="AllCare Refrigeration" />
+	<meta property="og:locale" content="en_AU" />
+	<meta property="og:image" content="https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Frequently Asked Questions | AllCare Refrigeration" />
+	<meta name="twitter:description" content="Answers to common questions about commercial refrigeration service across Illawarra NSW." />
+	<meta name="twitter:image" content="https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png" />
+	{@html `<script type="application/ld+json">${faqJsonLd}</script>`}
 </svelte:head>
 
 <!-- HERO ------------------------------------------------------------- -->

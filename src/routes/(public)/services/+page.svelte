@@ -1,14 +1,32 @@
 <svelte:head>
-	<title>Services | AllCare Refrigeration</title>
+	<title>Commercial Refrigeration & Air Conditioning Services | AllCare</title>
 	<meta
 		name="description"
-		content="Commercial refrigeration and air conditioning services across Illawarra and Southern Highlands, including installs, repairs, maintenance and emergency breakdown support."
+		content="Complete commercial refrigeration repairs, cool room rebuilds, planned maintenance, and air conditioning across Wollongong, Shellharbour & Illawarra. 24/7 breakdown callouts: 0411 532 233."
 	/>
+	<link rel="canonical" href="{SITE_ORIGIN}/services" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Commercial Refrigeration & Air Conditioning Services | AllCare" />
+	<meta
+		property="og:description"
+		content="Complete commercial refrigeration repairs, cool room rebuilds, planned maintenance, and air conditioning across Wollongong, Shellharbour & Illawarra."
+	/>
+	<meta property="og:url" content="{SITE_ORIGIN}/services" />
+	<meta property="og:site_name" content="AllCare Refrigeration" />
+	<meta property="og:locale" content="en_AU" />
+	<meta property="og:image" content="https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Commercial Refrigeration & Air Conditioning Services | AllCare" />
+	<meta name="twitter:description" content="Complete commercial refrigeration repairs, cool room rebuilds, and air conditioning across Illawarra." />
+	<meta name="twitter:image" content="https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png" />
+	{@html `<script type="application/ld+json">${servicesJsonLd}</script>`}
 </svelte:head>
 
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+	import { SITE_ORIGIN, serviceAreas } from '$lib/service-areas';
 
 	let { data }: { data: PageData } = $props();
 
@@ -18,77 +36,95 @@
 
 	const services = [
 		{
-			title: 'Condenser Installation & Repairs',
-			accent: 'Condenser',
+			title: 'Commercial Refrigeration Repairs',
+			slug: 'commercial-refrigeration-repairs',
+			accent: 'Refrigeration Repairs',
 			summary:
-				'We install, repair and maintain commercial condenser units for cool rooms, freezer rooms and air conditioning systems.',
+				'Fast diagnostics and emergency repairs for display fridges, under-counter chillers, bottle shop refrigeration, and supermarket cases.',
 			items: [
-				'Condenser coil cleaning',
-				'Fan motor replacement',
-				'Head pressure diagnostics',
-				'System optimisation',
-				'Full condenser replacement'
+				'Display fridge & drink chiller repairs',
+				'Under-counter and bar refrigeration',
+				'Thermostat & electronic controller diagnostics',
+				'Refrigerant leak detection & re-gassing',
+				'Compressor & fan motor replacement'
 			],
-			outcome: 'Proper condenser performance supports energy efficiency and long-term reliability.'
+			outcome: 'Immediate fault finding to restore critical food temperatures and protect retail stock.'
 		},
 		{
-			title: 'Evaporator Repairs & Servicing',
-			accent: 'Evaporator',
+			title: 'Cool Room & Freezer Repairs',
+			slug: 'cool-room-freezer-repairs',
+			accent: 'Cool Rooms & Freezers',
 			summary:
-				'We service evaporator units in cool rooms, freezer systems and air conditioning equipment across Illawarra and the Southern Highlands.',
+				'Walk-in cool room and freezer breakdown repairs across the Illawarra, including evaporator de-icing, fan motor swaps, and door sealing.',
 			items: [
-				'Coil cleaning and sanitising',
-				'Defrost system repairs',
-				'Fan motor replacement',
-				'Ice build-up fault diagnosis',
-				'Temperature performance testing'
+				'Evaporator coil de-icing & cleaning',
+				'Defrost heater & timer diagnostics',
+				'Walk-in door seal & gasket replacement',
+				'Expansion valve tuning & pressure tests',
+				'Rooftop condensing unit repairs'
 			],
-			outcome: 'Maintained evaporator systems improve airflow, temperature stability and energy efficiency.'
+			outcome: 'Guaranteed temperature stability compliant with NSW food safety standards.'
 		},
 		{
-			title: 'Commercial Air Conditioning Installation & Repairs',
-			accent: 'Air Conditioning',
+			title: 'Commercial Refrigeration Installation',
+			slug: 'commercial-refrigeration-installation',
+			accent: 'Installation & Fit-Out',
 			summary:
-				'We provide installation, maintenance and repairs for commercial and residential clients.',
+				'Custom commercial cool rooms, walk-in freezers, and refrigeration plant engineered, supplied, and commissioned for food businesses.',
 			items: [
-				'Split systems',
-				'Ducted air conditioning',
-				'Commercial packaged units',
-				'Multi-head systems'
+				'Custom insulated panel cool room buildouts',
+				'Walk-in freezer design & installation',
+				'Condensing unit and evaporator sizing',
+				'Heat load engineering & energy efficiency',
+				'Full commissioning & temperature verification'
 			],
-			outcome:
-				'From system design and installation to breakdown repairs and scheduled servicing, we keep systems performing reliably.'
+			outcome: 'Robust, purpose-built cold storage designed to handle harsh Australian summers.'
 		},
 		{
 			title: 'Preventative Maintenance Programs',
+			slug: 'preventative-maintenance',
 			accent: 'Maintenance',
-			summary: 'Regular servicing reduces breakdowns and extends equipment life.',
+			summary:
+				'Scheduled servicing, coil chemical cleaning, and mechanical safety inspections that slash power consumption and prevent catastrophic failures.',
 			items: [
-				'Refrigerant level checks',
-				'Electrical testing',
-				'Airflow verification',
-				'Component inspections',
-				'Performance reporting'
+				'Quarterly & bi-annual scheduled servicing',
+				'High-pressure chemical coil washing',
+				'Electrical terminal torque & safety audits',
+				'Refrigerant charge & leak checks',
+				'Comprehensive digital service compliance reports'
 			],
-			outcome: 'Scheduled maintenance protects your investment and helps prevent costly downtime.'
+			outcome: 'Up to 25% lower energy consumption and drastically reduced breakdown callouts.'
+		},
+		{
+			title: '24/7 Emergency Breakdown Service',
+			slug: 'emergency-refrigeration-repairs',
+			accent: 'Emergency Support',
+			summary:
+				'Round-the-clock priority emergency callouts dispatched across Wollongong, Shellharbour, Kiama, and Shoalhaven to save valuable stock.',
+			items: [
+				'24/7 immediate phone triage',
+				'Rapid dispatch from Albion Park central depot',
+				'Fully equipped service vans with common parts',
+				'Stock preservation & temperature emergency control',
+				'Transparent upfront diagnosis'
+			],
+			outcome: 'Minimised business downtime and protection against thousands of dollars in lost stock.'
+		},
+		{
+			title: 'Air Conditioning Installation & Repairs',
+			slug: 'air-conditioning-installation-repairs',
+			accent: 'Air Conditioning',
+			summary:
+				'Commercial split systems, multi-head units, and ducted HVAC supplied, installed, and serviced by ARCtick AU53597 certified mechanics.',
+			items: [
+				'Commercial split & multi-split installations',
+				'Ducted reverse-cycle HVAC servicing',
+				'Daikin, Mitsubishi & ActronAir specialist',
+				'Diagnostic fault-finding & gas repairs',
+				'Filter sanitisation & airflow balancing'
+			],
+			outcome: 'Reliable climate control for retail stores, offices, hospitality venues, and medical suites.'
 		}
-	];
-
-	const serviceAreas = [
-		'Bowral',
-		'Bulli',
-		'Helensburgh',
-		'Huskisson',
-		'Jervis Bay',
-		'Kiama',
-		'Mittagong',
-		'Moss Vale',
-		'Nowra',
-		'Robertson',
-		'Shellharbour',
-		'South Nowra',
-		'Thirroul',
-		'Wollongong'
 	];
 
 	const contactDetails = [
@@ -98,13 +134,62 @@
 		},
 		{
 			title: 'Call Us',
-			value: '041-1532-233'
+			value: '0411 532 233'
 		},
 		{
 			title: 'Operating Hours',
 			value: 'Monday - Friday: 7:00 a.m - 5:00 p.m. 24hrs breakdown available'
 		}
 	];
+
+	const servicesJsonLd = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@graph': [
+			{
+				'@type': 'Service',
+				'@id': `${SITE_ORIGIN}/services#services`,
+				name: 'Commercial Refrigeration and Air Conditioning Services',
+				provider: {
+					'@type': 'LocalBusiness',
+					name: 'AllCare Refrigeration',
+					url: `${SITE_ORIGIN}/`,
+					telephone: '+61411532233'
+				},
+				areaServed: 'Illawarra, NSW',
+				hasOfferCatalog: {
+					'@type': 'OfferCatalog',
+					name: 'AllCare Commercial Services',
+					itemListElement: services.map((service) => ({
+						'@type': 'Offer',
+						itemOffered: {
+							'@type': 'Service',
+							name: service.title,
+							description: service.summary,
+							url: `${SITE_ORIGIN}/services/${service.slug}`
+						}
+					}))
+				}
+			},
+			{
+				'@type': 'BreadcrumbList',
+				'@id': `${SITE_ORIGIN}/services#breadcrumb`,
+				itemListElement: [
+					{
+						'@type': 'ListItem',
+						position: 1,
+						name: 'Home',
+						item: `${SITE_ORIGIN}/`
+					},
+					{
+						'@type': 'ListItem',
+						position: 2,
+						name: 'Services',
+						item: `${SITE_ORIGIN}/services`
+					}
+				]
+			}
+		]
+	});
 </script>
 
 <!-- HERO ------------------------------------------------------------- -->
@@ -121,18 +206,16 @@
 				Commercial Refrigeration & Air Conditioning Services
 			</p>
 			<h1 id="services-heading" class="reveal reveal--up">
-				Professional service for
-				<span class="hero-highlight">reliable year-round performance.</span>
+				Commercial Refrigeration Repairs &
+				<span class="hero-highlight">Air Conditioning Services Illawarra</span>
 			</h1>
 			<p class="hero-lead reveal reveal--up">
-				AllCare Refrigeration & Air Conditioning delivers professional service across Illawarra
-				and the Southern Highlands, from Helensburgh to Nowra and west to Bowral, Mittagong,
-				Robertson and Moss Vale.
+				AllCare Refrigeration delivers professional, licensed commercial refrigeration and HVAC solutions across Wollongong,
+				Shellharbour, Kiama, Nowra, and the Southern Highlands.
 			</p>
 			<p class="reveal reveal--up">
-				We specialise in commercial refrigeration systems, condensers, evaporators and air
-				conditioning installations for businesses that rely on consistent temperature control and
-				system reliability.
+				We specialise in commercial refrigeration systems, custom cool rooms, walk-in freezers, preventative maintenance,
+				and commercial air conditioning for businesses that cannot afford unexpected downtime.
 			</p>
 			<div class="hero-actions reveal reveal--up" aria-label="Services page actions">
 				<a class="btn-primary" href="tel:0411532233">
@@ -149,9 +232,9 @@
 							d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"
 						/>
 					</svg>
-					Call 041-1532-233
+					Call 0411 532 233
 				</a>
-				<a class="btn-ghost" href="#core-services">Explore services</a>
+				<a class="btn-ghost" href="#core-services">Explore dedicated services</a>
 			</div>
 		</div>
 
@@ -168,12 +251,12 @@
 				<span>Emergency breakdown service</span>
 			</div>
 			<div class="hero-stat">
-				<strong>{services.length}</strong>
-				<span>Core service categories</span>
+				<strong>6</strong>
+				<span>Specialist service areas</span>
 			</div>
 			<div class="hero-stat">
-				<strong>{serviceAreas.length}</strong>
-				<span>Key service area locations</span>
+				<strong>AU53597</strong>
+				<span>ARCtick certified licence</span>
 			</div>
 		</div>
 	</div>
@@ -183,21 +266,23 @@
 <section class="services-section section-shell" id="core-services" aria-labelledby="core-heading">
 	<div class="section-inner section-inner--wide">
 		<header class="section-intro">
-			<p class="eyebrow reveal reveal--up">How can we help you?</p>
-			<h2 id="core-heading" class="reveal reveal--up">Core Services</h2>
+			<p class="eyebrow reveal reveal--up">Our Specialist Capabilities</p>
+			<h2 id="core-heading" class="reveal reveal--up">Commercial Refrigeration & HVAC Services</h2>
 			<p class="reveal reveal--up">
-				Comprehensive refrigeration and air conditioning support tailored for commercial sites
-				across Illawarra and the Southern Highlands.
+				Dedicated cooling and climate solutions tailored for hospitality, supermarkets, butchers, bottle shops, and commercial facilities across the Illawarra.
 			</p>
 		</header>
 
 		<div class="service-grid" data-stagger>
-			{#each services as service, i (service.title)}
+			{#each services as service, i (service.slug)}
 				<article class="service-card reveal reveal--up" style="--i: {i}">
 					<div class="service-card__media">
 						<SiteImageSlot
 							placeholderKey={`services:card:${cardKey(service.accent)}`}
-							ariaLabel={`${service.accent} service image`}
+							ariaLabel={`${service.title} image`}
+							alt={`AllCare Refrigeration ${service.title}`}
+							width={400}
+							height={260}
 							edit={data.edit}
 							imageUrl={data.imageMap[`services:card:${cardKey(service.accent)}`]}
 							wrapperClass="service-image"
@@ -230,6 +315,12 @@
 							{/each}
 						</ul>
 						<p class="service-outcome">{service.outcome}</p>
+						<a class="service-btn" href={`/services/${service.slug}`}>
+							<span>View {service.title} Details</span>
+							<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+								<path d="M5 12h14M12 5l7 7-7 7"/>
+							</svg>
+						</a>
 					</div>
 				</article>
 			{/each}
@@ -290,7 +381,7 @@
 					/>
 				</svg>
 				<span>Call emergency support</span>
-				<strong>041-1532-233</strong>
+				<strong>0411 532 233</strong>
 			</a>
 		</div>
 	</div>
@@ -708,6 +799,29 @@
 		border: 1px solid rgba(15, 87, 251, 0.22);
 		font-weight: 700;
 		color: var(--color-brand-deep);
+	}
+
+	.service-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 0.75rem;
+		padding: 0.65rem 1.1rem;
+		background: var(--color-frost);
+		color: var(--color-brand-deeper);
+		border-radius: 999px;
+		font-size: 0.85rem;
+		font-weight: 800;
+		text-decoration: none;
+		border: 1px solid rgba(15, 87, 251, 0.2);
+		transition: all 200ms ease;
+	}
+
+	.service-btn:hover {
+		background: var(--color-brand);
+		color: #ffffff;
+		border-color: var(--color-brand);
+		transform: translateX(4px);
 	}
 
 	/* EMERGENCY */

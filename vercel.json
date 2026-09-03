@@ -1,0 +1,15 @@
+{
+	"redirects": [
+		{
+			"source": "/(.*)",
+			"has": [
+				{
+					"type": "host",
+					"value": "allcarerefrigeration.vercel.app"
+				}
+			],
+			"destination": "https://www.allcarerefrigeration.com/$1",
+			"permanent": true
+		}
+	]
+}

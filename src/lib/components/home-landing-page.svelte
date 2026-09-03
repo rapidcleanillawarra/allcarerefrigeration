@@ -7,13 +7,15 @@
 	<meta property="og:title" content={pageTitle} />
 	<meta property="og:description" content={metaDescription} />
 	<meta property="og:url" content={canonicalUrl} />
-	<meta property="og:site_name" content="Allcare Refrigeration" />
+	<meta property="og:site_name" content="AllCare Refrigeration" />
 	<meta property="og:locale" content="en_AU" />
+	<meta property="og:image" content="https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png" />
 	<meta name="theme-color" content="#0f57fb" />
-	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={pageTitle} />
 	<meta name="twitter:description" content={metaDescription} />
-	<script type="application/ld+json">{localBusinessJsonLd}</script>
+	<meta name="twitter:image" content="https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png" />
+	{@html `<script type="application/ld+json">${localBusinessJsonLd}</script>`}
 </svelte:head>
 
 <script lang="ts">
@@ -26,6 +28,7 @@
 		locationAnchorId,
 		SITE_ORIGIN,
 		serviceAreas,
+		regionalServiceAreas,
 		type ServiceAreaLanding
 	} from '$lib/service-areas';
 
@@ -41,19 +44,23 @@
 		landing.pathname === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${landing.pathname}`
 	);
 
-	/** SEO title: service + location + brand (see marketing / SEO spec). */
+	/** SEO title: shortened and sharpened as recommended. */
 	const pageTitle = $derived(
-		`Commercial Refrigeration & Air Conditioning Services ${landing.name} | Allcare Refrigeration`
+		landing.pathname === '/'
+			? 'Commercial Refrigeration Wollongong & Illawarra | AllCare'
+			: `Commercial Refrigeration & Air Conditioning ${landing.name} | AllCare`
 	);
 
 	const metaDescription = $derived(
-		`Commercial refrigeration and air conditioning in ${landing.name}: repairs, installations and maintenance for homes and businesses across Illawarra Region NSW. Local team — Allcare Refrigeration · 0411 532 233.`
+		landing.pathname === '/'
+			? 'Commercial refrigeration repairs, cool room servicing, and air conditioning across Wollongong, Shellharbour & Illawarra. 24/7 breakdown callouts: 0411 532 233.'
+			: `Commercial refrigeration and air conditioning in ${landing.name}: repairs, installations and maintenance for businesses across Illawarra NSW. Local team — AllCare Refrigeration · 0411 532 233.`
 	);
 
 	const trustHighlights = [
 		'Illawarra NSW specialists',
-		'Residential and commercial support',
-		'Clear advice before work begins'
+		'ARCtick AU53597 certified team',
+		'Clear upfront advice before work begins'
 	];
 
 	const stats = [
@@ -64,107 +71,176 @@
 
 	const services = [
 		{
-			title: 'Commercial Refrigeration & Condenser Services',
-			text: 'Installation, repairs and planned maintenance for cool rooms, freezers, rooftop units and commercial condensers, including fan motors, coil cleaning and pressure diagnostics.',
-			label: 'Image placeholder: condenser units'
+			title: 'Commercial Refrigeration Repairs',
+			slug: 'commercial-refrigeration-repairs',
+			text: 'Fast diagnostics and repairs for display fridges, under-counter chillers, bottle shop refrigeration, and supermarket cases.',
+			label: 'Commercial display refrigeration diagnostics and repairs',
+			alt: 'Technician repairing commercial display fridge and refrigeration unit'
 		},
 		{
-			title: 'Evaporator, Cool Room & Freezer Repairs',
-			text: 'Cool room, freezer and air conditioning evaporator support that improves airflow, temperature consistency, stock protection and long-term system reliability.',
-			label: 'Image placeholder: evaporator servicing'
+			title: 'Cool Room & Freezer Repairs',
+			slug: 'cool-room-freezer-repairs',
+			text: 'Walk-in cool rooms and freezer repairs: evaporator de-icing, door seal replacement, fan motor swaps, and temperature stabilization.',
+			label: 'Walk-in cool room and freezer breakdown repairs',
+			alt: 'Walk-in cool room evaporator and temperature control repair'
+		},
+		{
+			title: 'Commercial Refrigeration Installation',
+			slug: 'commercial-refrigeration-installation',
+			text: 'Custom cool room design, cold storage buildouts, condensing plant installation, and precision engineering for food businesses.',
+			label: 'Custom commercial cool room design and installation',
+			alt: 'New custom commercial cool room and refrigeration installation'
+		},
+		{
+			title: 'Preventative Maintenance',
+			slug: 'preventative-maintenance',
+			text: 'Scheduled servicing, chemical coil cleaning, refrigerant leak audits, and food-safe compliance checks that cut power bills and prevent breakdowns.',
+			label: 'Scheduled preventative refrigeration maintenance',
+			alt: 'Technician performing preventative coil cleaning and refrigeration servicing'
+		},
+		{
+			title: 'Emergency Breakdown Repairs',
+			slug: 'emergency-refrigeration-repairs',
+			text: '24/7 priority emergency response across Wollongong and the Illawarra to protect stock from spoil and get trade moving again quickly.',
+			label: 'Emergency 24/7 commercial refrigeration breakdown triage',
+			alt: 'Emergency refrigeration repair van and technician on site'
 		},
 		{
 			title: 'Air Conditioning Installation & Repairs',
-			text: 'Split and ducted air conditioning supply, installation, HVAC fault finding and preventative servicing for homes, offices and light commercial properties.',
-			label: 'Image placeholder: air conditioning work'
+			slug: 'air-conditioning-installation-repairs',
+			text: 'Commercial and light commercial HVAC: ducted, split, and multi-head systems supplied, installed, and serviced. ARCtick AU53597 certified.',
+			label: 'Commercial air conditioning installation and HVAC servicing',
+			alt: 'Commercial ducted and split air conditioning unit installation'
 		}
 	];
 
 	const recentWork = [
-		'Commercial cool room fit-out',
-		'Condenser replacement',
-		'Split system installation',
-		'Preventative maintenance program',
-		'Urgent breakdown repair',
-		'Evaporator performance upgrade'
+		{ title: 'Commercial Cool Room Condenser Replacement', suburb: 'Wollongong' },
+		{ title: 'Emergency Butcher Evaporator Defrost Repair', suburb: 'Bulli' },
+		{ title: 'Multi-Deck Display Chiller Servicing', suburb: 'Corrimal' },
+		{ title: 'Twin-Room Cool Room & Freezer Fit-Out', suburb: 'Albion Park' },
+		{ title: 'Seaside Restaurant Marine Coil Treatment', suburb: 'Kiama' },
+		{ title: 'Wholesale Produce Evaporator Motor Retrofit', suburb: 'Nowra' }
+	];
+
+	const equipmentBrands = [
+		'Kirby',
+		'Heatcraft',
+		'Bitzer',
+		'Copeland',
+		'Danfoss',
+		'ActronAir',
+		'Daikin',
+		'Mitsubishi Heavy Industries',
+		'Carel',
+		'Dixell'
 	];
 
 	const testimonials = [
 		{
 			quote:
-				'Our cool room failed during business hours and the team got us back up quickly. Honest advice, fair pricing and excellent workmanship.',
-			name: 'Ben',
-			location: 'Albion Park'
+				'Our kitchen cool room failed during lunch prep on a Friday. AllCare attended within 45 minutes, pinpointed the gas leak, repaired the fitting, and saved our entire weekend stock.',
+			name: 'Ben T.',
+			location: 'Albion Park',
+			role: 'Butchery Owner'
 		},
 		{
 			quote:
-				'Fast response, professional technicians and everything explained in plain language. Exactly the kind of service you want in an emergency.',
-			name: 'Sarah',
-			location: 'Wollongong'
+				'Fast response, licensed refrigeration mechanics, and clear quotes before any parts were replaced. Exactly who you want on speed dial for commercial cooling breakdowns.',
+			name: 'Sarah M.',
+			location: 'Wollongong',
+			role: 'Venue Operations Manager'
 		},
 		{
 			quote:
-				'We now use AllCare for routine servicing across all sites. Reliable, punctual and easy to work with.',
-			name: 'David',
-			location: 'Shellharbour'
+				'We use AllCare for scheduled maintenance across multiple retail bottle shop sites. Regular coil cleaning and pressure checks have dramatically cut our breakdown callouts.',
+			name: 'David P.',
+			location: 'Shellharbour',
+			role: 'Retail Liquor Operations'
 		}
 	];
 
 	const localBusinessJsonLd = $derived(
-	JSON.stringify({
-		'@context': 'https://schema.org',
-		'@graph': [
-			{
-				'@type': ['LocalBusiness', 'HVACBusiness'],
-				'@id': `${SITE_ORIGIN}/#business`,
-				name: 'AllCare Refrigeration',
-				url: `${SITE_ORIGIN}/`,
-				telephone: '+61411532233',
-				address: {
-					'@type': 'PostalAddress',
-					streetAddress: '157 Church St',
-					addressLocality: 'Albion Park',
-					addressRegion: 'NSW',
-					postalCode: '2527',
-					addressCountry: 'AU'
-				},
-				areaServed: [
-					{
-						'@type': 'AdministrativeArea',
-						name: 'Illawarra NSW'
+		JSON.stringify({
+			'@context': 'https://schema.org',
+			'@graph': [
+				{
+					'@type': ['LocalBusiness', 'HVACBusiness'],
+					'@id': `${SITE_ORIGIN}/#business`,
+					name: 'AllCare Refrigeration',
+					url: `${SITE_ORIGIN}/`,
+					telephone: '+61411532233',
+					address: {
+						'@type': 'PostalAddress',
+						streetAddress: '157 Church St',
+						addressLocality: 'Albion Park',
+						addressRegion: 'NSW',
+						postalCode: '2527',
+						addressCountry: 'AU'
 					},
-					...serviceAreas.map((area) => ({
-						'@type': 'City',
-						name: `${area} NSW`
-					}))
-				],
-				openingHoursSpecification: [
-					{
-						'@type': 'OpeningHoursSpecification',
-						dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-						opens: '07:00',
-						closes: '17:00'
-					}
-				],
-				priceRange: '$$',
-				description:
-					'Refrigeration, air conditioning and HVAC repairs, installations and maintenance for homes, businesses and commercial sites across Illawarra NSW.',
-				hasOfferCatalog: {
-					'@type': 'OfferCatalog',
-					name: 'Refrigeration and air conditioning services',
-					itemListElement: services.map((service) => ({
-						'@type': 'Offer',
-						itemOffered: {
-							'@type': 'Service',
-							name: service.title,
-							description: service.text,
-							areaServed: 'Illawarra NSW'
+					geo: {
+						'@type': 'GeoCoordinates',
+						latitude: -34.5714,
+						longitude: 150.7725
+					},
+					areaServed: [
+						{
+							'@type': 'AdministrativeArea',
+							name: 'Illawarra NSW'
+						},
+						{
+							'@type': 'AdministrativeArea',
+							name: 'Shoalhaven NSW'
+						},
+						{
+							'@type': 'AdministrativeArea',
+							name: 'Southern Highlands NSW'
+						},
+						...serviceAreas.map((area) => ({
+							'@type': 'City',
+							name: `${area} NSW`
+						}))
+					],
+					openingHoursSpecification: [
+						{
+							'@type': 'OpeningHoursSpecification',
+							dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+							opens: '07:00',
+							closes: '17:00'
 						}
-					}))
+					],
+					priceRange: '$$',
+					description:
+						'Commercial refrigeration repairs, walk-in cool rooms, freezers, and air conditioning across Wollongong, Shellharbour, Kiama, Nowra, and Southern Highlands. ARCtick AU53597.',
+					hasOfferCatalog: {
+						'@type': 'OfferCatalog',
+						name: 'Commercial Refrigeration & HVAC Services',
+						itemListElement: services.map((service) => ({
+							'@type': 'Offer',
+							itemOffered: {
+								'@type': 'Service',
+								name: service.title,
+								description: service.text,
+								url: `${SITE_ORIGIN}/services/${service.slug}`,
+								areaServed: 'Illawarra NSW'
+							}
+						}))
+					}
+				},
+				{
+					'@type': 'BreadcrumbList',
+					'@id': `${SITE_ORIGIN}/#breadcrumb`,
+					itemListElement: [
+						{
+							'@type': 'ListItem',
+							position: 1,
+							name: 'Home',
+							item: `${SITE_ORIGIN}/`
+						}
+					]
 				}
-			}
-		]
-	})
+			]
+		})
 	);
 </script>
 
@@ -181,7 +257,12 @@
 			<div class="hero-cutout">
 				<SiteImageSlot
 					placeholderKey="home:hero"
-					ariaLabel="Image placeholder for a refrigeration technician working on a commercial system"
+					ariaLabel="Commercial refrigeration technician inspecting a cooling system in the Illawarra"
+					alt="AllCare Refrigeration technician performing commercial refrigeration diagnostics"
+					loading="eager"
+					fetchpriority="high"
+					width={640}
+					height={640}
 					edit={data.edit}
 					imageUrl={data.imageMap['home:hero']}
 					wrapperClass="image-placeholder hero-cutout-slot"
@@ -230,9 +311,12 @@
 				Local refrigeration, Air conditioning · Illawarra NSW
 			</p>
 			<h1 id="hero-heading" class="reveal reveal--up">
-				Refrigeration and air conditioning service for
-				<span class="hero-highlight">{landing.name}</span>
-				and Illawarra Region.
+				{#if landing.pathname === '/'}
+					Commercial Refrigeration Repairs & Air Conditioning Across Illawarra
+				{:else}
+					Commercial Refrigeration & Air Conditioning in
+					<span class="hero-highlight">{landing.name}</span>
+				{/if}
 			</h1>
 			<p class="hero-lead reveal reveal--up">
 				AllCare Refrigeration helps local businesses and commercial sites with refrigeration repairs & installations, 
@@ -307,7 +391,10 @@
 		<div class="about-visual reveal reveal--scale" data-parallax="0.05">
 			<SiteImageSlot
 				placeholderKey="home:about"
-				ariaLabel="Image placeholder for the AllCare Refrigeration team or service vehicle"
+				ariaLabel="AllCare Refrigeration service vehicle and technicians based in Albion Park"
+				alt="AllCare Refrigeration workshop and commercial service vehicle in Albion Park NSW"
+				width={600}
+				height={450}
 				edit={data.edit}
 				imageUrl={data.imageMap['home:about']}
 				wrapperClass="image-placeholder"
@@ -325,13 +412,13 @@
 <section class="services-section section-shell" aria-labelledby="services-heading">
 	<div class="section-inner section-inner--wide">
 		<header class="section-intro">
-			<p class="eyebrow reveal reveal--up">How can we help you?</p>
+			<p class="eyebrow reveal reveal--up">Commercial Cooling Solutions</p>
 			<h2 id="services-heading" class="reveal reveal--up">
-				HVAC, refrigeration and air conditioning services for local properties
+				Refrigeration, cool rooms and air conditioning services
 			</h2>
 			<p class="reveal reveal--up">
-				Get practical support for the equipment that matters most, from urgent refrigeration faults
-				and air conditioning repairs through to planned servicing that reduces downtime.
+				Practical, licensed support for your critical refrigeration plant — from rapid emergency breakdown repairs
+				and cool room rebuilds through to planned preventative maintenance programs.
 			</p>
 		</header>
 
@@ -342,6 +429,9 @@
 						<SiteImageSlot
 							placeholderKey={`home:service:${idx}`}
 							ariaLabel={service.label}
+							alt={service.alt}
+							width={400}
+							height={280}
 							edit={data.edit}
 							imageUrl={data.imageMap[`home:service:${idx}`]}
 							wrapperClass="image-placeholder card-placeholder"
@@ -355,6 +445,12 @@
 						<span class="service-card__num">0{idx + 1}</span>
 						<h3>{service.title}</h3>
 						<p>{service.text}</p>
+						<a class="service-link" href={`/services/${service.slug}`}>
+							<span>View details</span>
+							<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+								<path d="M5 12h14M12 5l7 7-7 7"/>
+							</svg>
+						</a>
 					</div>
 				</article>
 			{/each}
@@ -386,34 +482,35 @@
 			</p>
 		</header>
 
-		<ul class="area-grid reveal reveal--up" aria-label="Illawarra service areas" data-stagger>
-			{#each serviceAreas as area, i (area)}
-				<li class="reveal reveal--up" id={locationAnchorId(area)} style="--i: {i}">
-					<a
-						class="area-pill"
-						href={resolve(`/service-areas/${areaNameToSlug(area)}`)}
-						aria-current={landing.pathname !== '/' &&
-						areaNameToSlug(area) === areaNameToSlug(landing.name)
-							? 'page'
-							: undefined}
-					>
-						<svg
-							aria-hidden="true"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						>
+		<div class="regional-hubs-grid reveal reveal--up" data-stagger>
+			{#each regionalServiceAreas as region, i (region.slug)}
+				<a class="regional-hub-card reveal reveal--up" href={resolve(`/service-areas/${region.slug}`)} style="--i: {i}">
+					<div class="regional-hub-card__header">
+						<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
 							<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z" />
 							<circle cx="12" cy="10" r="3" />
 						</svg>
-						{area}
-					</a>
-				</li>
+						<h3>{region.name}</h3>
+					</div>
+					<p>{region.tagline}</p>
+					<div class="regional-hub-card__suburbs">
+						<small><strong>Key suburbs:</strong> {region.suburbsCovered.slice(0, 4).join(', ')} & more</small>
+					</div>
+					<span class="regional-hub-card__link">
+						<span>Explore regional services</span>
+						<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+							<path d="M5 12h14M12 5l7 7-7 7"/>
+						</svg>
+					</span>
+				</a>
 			{/each}
-		</ul>
+		</div>
+
+		<div class="areas-all-cta reveal reveal--up">
+			<a class="btn-ghost" href={resolve('/service-areas')}>
+				View Complete Service Area & Coverage Guide &rarr;
+			</a>
+		</div>
 	</div>
 </section>
 
@@ -456,7 +553,10 @@
 		<div class="emergency-visual reveal reveal--scale" data-parallax="0.04">
 			<SiteImageSlot
 				placeholderKey="home:emergency"
-				ariaLabel="Image placeholder for urgent refrigeration repair support"
+				ariaLabel="24/7 emergency commercial refrigeration breakdown response vehicle"
+				alt="AllCare emergency commercial refrigeration breakdown response vehicle"
+				width={600}
+				height={450}
 				edit={data.edit}
 				imageUrl={data.imageMap['home:emergency']}
 				wrapperClass="image-placeholder emergency-placeholder"
@@ -501,7 +601,7 @@
 							</span>
 							<cite>
 								<strong>{testimonial.name}</strong>
-								<small>{testimonial.location}</small>
+								<small>{testimonial.role ? `${testimonial.role} · ` : ''}{testimonial.location}</small>
 							</cite>
 						</footer>
 					</blockquote>
@@ -511,7 +611,10 @@
 			<aside class="recent-work reveal reveal--up" aria-labelledby="recent-work-heading">
 				<SiteImageSlot
 					placeholderKey="home:recent-work"
-					ariaLabel="Image placeholder for a recent completed refrigeration project"
+					ariaLabel="Recent commercial walk-in cool room installation completed in Illawarra"
+					alt="Completed commercial cool room fit-out and condensing unit setup"
+					width={500}
+					height={380}
 					edit={data.edit}
 					imageUrl={data.imageMap['home:recent-work']}
 					wrapperClass="image-placeholder recent-placeholder"
@@ -523,7 +626,7 @@
 				<div class="recent-work__body">
 					<h3 id="recent-work-heading">Recent work highlights</h3>
 					<ul>
-						{#each recentWork.slice(0, 4) as item (item)}
+						{#each recentWork.slice(0, 4) as item (item.title)}
 							<li>
 								<svg
 									aria-hidden="true"
@@ -536,7 +639,7 @@
 								>
 									<path d="m5 12 5 5L20 7" />
 								</svg>
-								{item}
+								<span><strong>{item.title}</strong> — {item.suburb}</span>
 							</li>
 						{/each}
 					</ul>
@@ -550,28 +653,48 @@
 <section class="gallery-section section-shell" aria-labelledby="gallery-heading">
 	<div class="section-inner section-inner--wide">
 		<header class="section-intro">
-			<p class="eyebrow reveal reveal--up">Gallery & Work</p>
-			<h2 id="gallery-heading" class="reveal reveal--up">Recent Work</h2>
+			<p class="eyebrow reveal reveal--up">Gallery & Projects</p>
+			<h2 id="gallery-heading" class="reveal reveal--up">Recent Commercial Projects</h2>
+			<p class="reveal reveal--up">Real cooling systems and plant equipment engineered and serviced across Illawarra sites.</p>
 		</header>
 
 		<div class="gallery-grid" data-stagger>
-			{#each recentWork as item, idx (item)}
+			{#each recentWork as item, idx (item.title)}
 				<article class="gallery-item reveal reveal--up" style="--i: {idx}">
 					<SiteImageSlot
 						placeholderKey={`home:gallery:${idx}`}
-						ariaLabel={`Image placeholder for ${item.toLowerCase()}`}
+						ariaLabel={`Completed project: ${item.title} in ${item.suburb}`}
+						alt={`${item.title} in ${item.suburb} NSW`}
+						width={400}
+						height={320}
 						edit={data.edit}
 						imageUrl={data.imageMap[`home:gallery:${idx}`]}
 						wrapperClass="image-placeholder gallery-placeholder"
 					>
 						{#snippet children()}
-							<span>{item}</span>
-							<small>Replace with project image</small>
+							<span>{item.title}</span>
+							<small>{item.suburb}</small>
 						{/snippet}
 					</SiteImageSlot>
-					<span class="gallery-item__caption">{item}</span>
+					<span class="gallery-item__caption">
+						<strong>{item.title}</strong> · {item.suburb}
+					</span>
 				</article>
 			{/each}
+		</div>
+	</div>
+</section>
+
+<!-- BRANDS ----------------------------------------------------------- -->
+<section class="brands-section section-shell" aria-label="Commercial refrigeration equipment brands">
+	<div class="section-inner section-inner--wide">
+		<div class="brands-strip reveal reveal--up">
+			<span class="brands-strip__title">Equipment Brands Serviced & Installed:</span>
+			<div class="brands-strip__list">
+				{#each equipmentBrands as brand}
+					<span class="brand-badge">{brand}</span>
+				{/each}
+			</div>
 		</div>
 	</div>
 </section>
@@ -610,7 +733,10 @@
 			<div class="contact-visual reveal reveal--scale" data-parallax="0.04">
 				<SiteImageSlot
 					placeholderKey="home:contact"
-					ariaLabel="Image placeholder for customer support or booking contact"
+					ariaLabel="Contact AllCare Refrigeration customer support and dispatch desk"
+					alt="AllCare Refrigeration customer support desk in Albion Park"
+					width={500}
+					height={400}
 					edit={data.edit}
 					imageUrl={data.imageMap['home:contact']}
 					wrapperClass="image-placeholder contact-placeholder"
@@ -1130,55 +1256,132 @@
 		margin: 0;
 	}
 
-	/* ============================================================
-	 *  SERVICE AREAS
-	 * ============================================================ */
-	.area-grid {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.65rem;
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		justify-content: center;
-	}
-
-	.area-pill {
+	.service-link {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.45rem;
-		padding: 0.6rem 0.95rem;
+		gap: 0.4rem;
+		margin-top: 0.5rem;
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: var(--color-brand);
+		text-decoration: none;
+		transition: gap 200ms ease;
+	}
+
+	.service-link:hover {
+		gap: 0.65rem;
+		color: var(--color-brand-deeper);
+	}
+
+	.regional-hubs-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.25rem;
+		margin-bottom: 2rem;
+	}
+
+	.regional-hub-card {
+		display: flex;
+		flex-direction: column;
+		padding: 1.5rem;
 		background: #ffffff;
 		border: 1px solid var(--color-line);
-		border-radius: 999px;
-		color: var(--color-ink);
-		font-weight: 700;
-		font-size: 0.9rem;
-		box-shadow: 0 4px 14px -8px rgba(4, 45, 122, 0.18);
-		transition:
-			transform 220ms var(--ease-spring),
-			border-color 220ms var(--ease-spring),
-			background 220ms var(--ease-spring),
-			color 220ms var(--ease-spring);
+		border-radius: 18px;
 		text-decoration: none;
+		color: var(--color-ink);
+		box-shadow: 0 8px 24px -10px rgba(4, 45, 122, 0.12);
+		transition: transform 240ms var(--ease-spring), box-shadow 240ms var(--ease-spring), border-color 240ms ease;
 	}
 
-	.area-pill svg {
-		width: 0.95rem;
-		height: 0.95rem;
+	.regional-hub-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 16px 36px -12px rgba(15, 87, 251, 0.22);
+		border-color: rgba(15, 87, 251, 0.4);
+	}
+
+	.regional-hub-card__header {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		margin-bottom: 0.6rem;
+	}
+
+	.regional-hub-card__header svg {
 		color: var(--color-brand);
-		transition: color 220ms var(--ease-spring);
+		flex-shrink: 0;
 	}
 
-	.area-pill:hover {
-		transform: translateY(-3px);
-		border-color: rgba(15, 87, 251, 0.5);
-		background: linear-gradient(135deg, #ffffff, #eef7ff);
-		color: var(--color-brand-deeper);
+	.regional-hub-card__header h3 {
+		font-size: 1.15rem;
+		font-weight: 800;
+		color: var(--color-ink);
 	}
 
-	.area-pill:hover svg {
+	.regional-hub-card p {
+		font-size: 0.9rem;
+		line-height: 1.5;
+		margin-bottom: 0.8rem;
+		flex-grow: 1;
+	}
+
+	.regional-hub-card__suburbs {
+		padding-top: 0.6rem;
+		border-top: 1px solid var(--color-line);
+		margin-bottom: 0.8rem;
+		color: var(--color-ink-soft);
+	}
+
+	.regional-hub-card__link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: 0.82rem;
+		font-weight: 800;
+		color: var(--color-brand);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+
+	.areas-all-cta {
+		text-align: center;
+		margin-top: 1.5rem;
+	}
+
+	.brands-strip {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: 0.8rem 1.2rem;
+		padding: 1.5rem;
+		background: #ffffff;
+		border-radius: 16px;
+		border: 1px solid var(--color-line);
+		box-shadow: 0 6px 20px -8px rgba(0, 0, 0, 0.08);
+	}
+
+	.brands-strip__title {
+		font-size: 0.82rem;
+		font-weight: 800;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--color-ink-soft);
+	}
+
+	.brands-strip__list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.brand-badge {
+		padding: 0.35rem 0.75rem;
+		background: var(--color-frost);
+		border-radius: 8px;
+		font-size: 0.82rem;
+		font-weight: 700;
 		color: var(--color-brand-deeper);
+		border: 1px solid rgba(15, 87, 251, 0.12);
 	}
 
 	/* ============================================================

@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import { env } from '$env/dynamic/public';
 	import SiteImageSlot from '$lib/components/site-image-slot.svelte';
+	import { SITE_ORIGIN } from '$lib/service-areas';
 	import {
 		clearQuoteFormDraft,
 		loadQuoteFormDraft,
@@ -339,8 +340,20 @@
 	<title>Get a Quote | AllCare Refrigeration</title>
 	<meta
 		name="description"
-		content="Request a refrigeration or air conditioning quote from AllCare Refrigeration. Tell us about your equipment, issue, and site details for a fast, accurate response."
+		content="Request a commercial refrigeration or air conditioning quote from AllCare Refrigeration. Tell us about your equipment, issue, and site details for a fast, accurate response."
 	/>
+	<link rel="canonical" href="{SITE_ORIGIN}/get-a-quote" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Get a Quote | AllCare Refrigeration" />
+	<meta property="og:description" content="Request a commercial refrigeration or air conditioning quote from AllCare Refrigeration across Illawarra NSW." />
+	<meta property="og:url" content="{SITE_ORIGIN}/get-a-quote" />
+	<meta property="og:site_name" content="AllCare Refrigeration" />
+	<meta property="og:locale" content="en_AU" />
+	<meta property="og:image" content="https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Get a Quote | AllCare Refrigeration" />
+	<meta name="twitter:description" content="Request a commercial refrigeration or air conditioning quote from AllCare Refrigeration." />
+	<meta name="twitter:image" content="https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png" />
 </svelte:head>
 
 <svelte:window

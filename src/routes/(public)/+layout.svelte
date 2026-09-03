@@ -1,11 +1,21 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import ArctickLicenseBadge from '$lib/components/arctick-license-badge.svelte';
-	import { areaNameToSlug, serviceAreas } from '$lib/service-areas';
+	import { regionalServiceAreas } from '$lib/service-areas';
 
 	let { children, data } = $props();
 
 	let locationsMenuOpen = $state(false);
+	let servicesMenuOpen = $state(false);
+
+	const navServices = [
+		{ name: 'Commercial Refrigeration Repairs', slug: 'commercial-refrigeration-repairs' },
+		{ name: 'Cool Room & Freezer Repairs', slug: 'cool-room-freezer-repairs' },
+		{ name: 'Refrigeration Installation', slug: 'commercial-refrigeration-installation' },
+		{ name: 'Preventative Maintenance', slug: 'preventative-maintenance' },
+		{ name: '24/7 Emergency Repairs', slug: 'emergency-refrigeration-repairs' },
+		{ name: 'Air Conditioning Services', slug: 'air-conditioning-installation-repairs' }
+	];
 
 	/** Embed URL from Maps share → resolves without an Maps Embed API key */
 	const VISIT_MAP_EMBED_SRC =
@@ -152,8 +162,36 @@
 				<nav class="primary-nav" aria-label="Public navigation">
 					<a href={resolve('/')}>Home</a>
 					<a href={resolve('/about')}>About</a>
-					<a href={resolve('/services')}>Services</a>
-					<a href={resolve('/faq')}>FAQs</a>
+					<details class="nav-dropdown" bind:open={servicesMenuOpen}>
+						<summary class="nav-dropdown__summary">
+							Services
+							<svg
+								class="nav-dropdown__chev"
+								aria-hidden="true"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2.2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="m6 9 6 6 6-6" />
+							</svg>
+						</summary>
+						<div class="nav-dropdown__panel" role="group" aria-label="Services">
+							<a href={resolve('/services')} onclick={() => (servicesMenuOpen = false)}>
+								<strong>All Services Overview &rarr;</strong>
+							</a>
+							{#each navServices as srv (srv.slug)}
+								<a
+									href={`/services/${srv.slug}`}
+									onclick={() => (servicesMenuOpen = false)}
+								>
+									{srv.name}
+								</a>
+							{/each}
+						</div>
+					</details>
 					<details class="nav-dropdown" bind:open={locationsMenuOpen}>
 						<summary class="nav-dropdown__summary">
 							Locations
@@ -171,16 +209,20 @@
 							</svg>
 						</summary>
 						<div class="nav-dropdown__panel" role="group" aria-label="Service locations">
-							{#each serviceAreas as area (area)}
+							<a href={resolve('/service-areas')} onclick={() => (locationsMenuOpen = false)}>
+								<strong>All Service Areas &rarr;</strong>
+							</a>
+							{#each regionalServiceAreas as region (region.slug)}
 								<a
-									href={resolve(`/service-areas/${areaNameToSlug(area)}`)}
+									href={resolve(`/service-areas/${region.slug}`)}
 									onclick={() => (locationsMenuOpen = false)}
 								>
-									{area}
+									{region.name}
 								</a>
 							{/each}
 						</div>
 					</details>
+					<a href={resolve('/faq')}>FAQs</a>
 				</nav>
 
 				<a class="quote-btn" href={resolve('/get-a-quote')}>
@@ -215,21 +257,39 @@
 				<div id="mobile-nav" class="mobile-nav" role="navigation" aria-label="Mobile navigation">
 					<a href={resolve('/')} onclick={() => (mobileOpen = false)}>Home</a>
 					<a href={resolve('/about')} onclick={() => (mobileOpen = false)}>About</a>
-					<a href={resolve('/services')} onclick={() => (mobileOpen = false)}>Services</a>
-					<a href={resolve('/faq')} onclick={() => (mobileOpen = false)}>FAQs</a>
 					<details class="mobile-nav__dropdown">
-						<summary class="mobile-nav__summary">Locations</summary>
-						<div class="mobile-nav__sub" role="group" aria-label="Service locations">
-							{#each serviceAreas as area (area)}
+						<summary class="mobile-nav__summary">Services</summary>
+						<div class="mobile-nav__sub" role="group" aria-label="Services">
+							<a href={resolve('/services')} onclick={() => (mobileOpen = false)}>
+								<strong>All Services Overview &rarr;</strong>
+							</a>
+							{#each navServices as srv (srv.slug)}
 								<a
-									href={resolve(`/service-areas/${areaNameToSlug(area)}`)}
+									href={`/services/${srv.slug}`}
 									onclick={() => (mobileOpen = false)}
 								>
-									{area}
+									{srv.name}
 								</a>
 							{/each}
 						</div>
 					</details>
+					<details class="mobile-nav__dropdown">
+						<summary class="mobile-nav__summary">Locations</summary>
+						<div class="mobile-nav__sub" role="group" aria-label="Service locations">
+							<a href={resolve('/service-areas')} onclick={() => (mobileOpen = false)}>
+								<strong>All Service Areas &rarr;</strong>
+							</a>
+							{#each regionalServiceAreas as region (region.slug)}
+								<a
+									href={resolve(`/service-areas/${region.slug}`)}
+									onclick={() => (mobileOpen = false)}
+								>
+									{region.name}
+								</a>
+							{/each}
+						</div>
+					</details>
+					<a href={resolve('/faq')} onclick={() => (mobileOpen = false)}>FAQs</a>
 					<a
 						class="mobile-nav__cta"
 						href={resolve('/get-a-quote')}
@@ -273,10 +333,33 @@
 				<ArctickLicenseBadge variant="inline" />
 			</div>
 
+			<div class="reveal reveal--up">
+				<h4>Services</h4>
+				<nav aria-label="Footer Services">
+					<a href={resolve('/services')}>All Services Overview</a>
+					{#each navServices as srv (srv.slug)}
+						<a href={`/services/${srv.slug}`}>{srv.name}</a>
+					{/each}
+				</nav>
+			</div>
+
+			<div class="reveal reveal--up">
+				<h4>Service Areas</h4>
+				<nav aria-label="Footer Service Areas">
+					<a href={resolve('/service-areas')}>Regional Hub Overview</a>
+					{#each regionalServiceAreas as region (region.slug)}
+						<a href={resolve(`/service-areas/${region.slug}`)}>{region.name}</a>
+					{/each}
+				</nav>
+			</div>
+
 			<div class="reveal reveal--up site-footer__visit">
-				<h4>Visit us</h4>
-				<p>157 Church St, Albion Park NSW 2527, Australia</p>
-				<p>Mon - Fri · 7:00am - 5:00pm</p>
+				<h4>Albion Park Depot</h4>
+				<p>157 Church St, Albion Park NSW 2527</p>
+				<p>
+					<a href="tel:0411532233" style="color: #6ee7b7; font-weight: 800;">0411 532 233</a>
+				</p>
+				<p>Mon - Fri: 7am - 5pm · 24/7 Breakdown</p>
 				<div class="site-footer__map-shell">
 					<iframe
 						class="site-footer__map"
@@ -287,24 +370,6 @@
 						allowfullscreen
 					></iframe>
 				</div>
-			</div>
-
-			<div class="reveal reveal--up">
-				<h4>Contact</h4>
-				<p>
-					<a href="tel:0411532233">0411 532 233</a>
-				</p>
-				<p>24hrs breakdown available</p>
-			</div>
-
-			<div class="reveal reveal--up">
-				<h4>Explore</h4>
-				<nav aria-label="Footer">
-					<a href={resolve('/')}>Home</a>
-					<a href={resolve('/about')}>About</a>
-					<a href={resolve('/services')}>Services</a>
-					<a href={resolve('/faq')}>FAQs</a>
-				</nav>
 			</div>
 		</div>
 		<div class="section-inner section-inner--wide site-footer__base">
