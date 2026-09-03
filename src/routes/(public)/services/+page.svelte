@@ -489,17 +489,31 @@
 		margin: 0 0 1rem;
 	}
 
+	.section-shell {
+		padding-block: clamp(3.5rem, 6vw, 5.5rem);
+	}
+
 	.section-intro {
-		max-width: 50rem;
-		margin: 0 auto clamp(1.5rem, 3vw, 2.5rem);
+		max-width: 52rem;
+		margin: 0 auto clamp(2rem, 4vw, 3rem);
 		text-align: center;
 		display: grid;
-		gap: 0.5rem;
+		gap: 0.65rem;
 		justify-items: center;
+	}
+
+	.section-intro h2 {
+		font-size: clamp(1.75rem, 3.2vw, 2.6rem);
+		line-height: 1.15;
+		margin: 0;
 	}
 
 	.section-intro p {
 		margin: 0;
+		max-width: 44rem;
+		font-size: 1rem;
+		color: var(--color-ink-soft);
+		line-height: 1.6;
 	}
 
 	/* HERO */
@@ -684,7 +698,7 @@
 	.service-grid {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: clamp(1rem, 2vw, 1.4rem);
+		gap: clamp(1.2rem, 2.5vw, 1.8rem);
 	}
 
 	.service-card {
@@ -759,15 +773,28 @@
 	}
 
 	.service-content {
-		padding: clamp(1.1rem, 2.5vw, 1.5rem);
-		display: grid;
-		gap: 0.6rem;
+		padding: clamp(1.2rem, 2.5vw, 1.6rem);
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.service-content h3 {
+		font-size: clamp(1.15rem, 1.8vw, 1.35rem);
+		line-height: 1.2;
+		color: var(--color-brand-deeper);
+		margin: 0;
+	}
+
+	.service-content p {
+		margin: 0;
+		line-height: 1.55;
 	}
 
 	.service-content ul {
 		display: grid;
-		gap: 0.45rem;
-		margin: 0.65rem 0;
+		gap: 0.5rem;
+		margin: 0.4rem 0;
 		padding: 0;
 		list-style: none;
 	}
@@ -779,6 +806,7 @@
 		color: var(--color-ink);
 		font-weight: 600;
 		line-height: 1.45;
+		font-size: 0.92rem;
 	}
 
 	.service-content li svg {
@@ -792,25 +820,28 @@
 	}
 
 	.service-outcome {
-		margin-bottom: 0;
-		padding: 0.7rem 0.85rem;
+		margin: 0.25rem 0 0.5rem;
+		padding: 0.75rem 0.9rem;
 		border-radius: 0.7rem;
 		background: linear-gradient(135deg, rgba(15, 87, 251, 0.12), rgba(15, 87, 251, 0.04));
 		border: 1px solid rgba(15, 87, 251, 0.22);
 		font-weight: 700;
+		font-size: 0.88rem;
 		color: var(--color-brand-deep);
+		line-height: 1.5;
 	}
 
 	.service-btn {
+		align-self: flex-start;
+		margin-top: auto;
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
-		margin-top: 0.75rem;
-		padding: 0.65rem 1.1rem;
+		padding: 0.7rem 1.2rem;
 		background: var(--color-frost);
 		color: var(--color-brand-deeper);
 		border-radius: 999px;
-		font-size: 0.85rem;
+		font-size: 0.88rem;
 		font-weight: 800;
 		text-decoration: none;
 		border: 1px solid rgba(15, 87, 251, 0.2);
@@ -834,10 +865,10 @@
 		isolation: isolate;
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) auto;
-		gap: clamp(1.2rem, 4vw, 2rem);
+		gap: clamp(1.5rem, 4vw, 2.5rem);
 		align-items: center;
 		overflow: hidden;
-		padding: clamp(1.8rem, 4vw, 3rem);
+		padding: clamp(2rem, 5vw, 3.5rem);
 		border-radius: var(--radius-xl);
 		background:
 			radial-gradient(ellipse at 90% 20%, rgba(77, 132, 255, 0.28), transparent 60%),
@@ -993,16 +1024,16 @@
 	.contact-grid {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 1rem;
+		gap: 1.25rem;
 	}
 
 	.contact-card {
-		padding: 1.4rem;
+		padding: 1.6rem;
 		border: 1px solid var(--color-line);
 		border-radius: var(--radius-md);
 		background: #ffffff;
 		display: grid;
-		gap: 0.5rem;
+		gap: 0.6rem;
 		box-shadow: var(--shadow-soft);
 		transition:
 			transform 220ms var(--ease-spring),

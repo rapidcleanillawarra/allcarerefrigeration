@@ -24,22 +24,23 @@
 	const COMPANY_LOGO_URL =
 		'https://coywobndzyvslurwqtdt.supabase.co/storage/v1/object/public/allcare/company_logo.png';
 
-	let scrollY = $state(0);
+	let condensed = $state(false);
 	let mobileOpen = $state(false);
 
-	const condensed = $derived(scrollY > 24);
+	function updateCondensed() {
+		const isCondensed = window.scrollY > 24;
+		if (isCondensed !== condensed) {
+			condensed = isCondensed;
+		}
+	}
 
 	function onScroll() {
-		const y = window.scrollY;
-		scrollY = y;
-		if (typeof document !== 'undefined') {
-			document.documentElement.style.setProperty('--scroll-y', String(y));
-		}
+		updateCondensed();
 	}
 
 	$effect(() => {
 		// Initial scroll sync (covers refresh-with-scroll-position case).
-		onScroll();
+		updateCondensed();
 
 		// Reveal-on-scroll observer.
 		const observer = new IntersectionObserver(
@@ -87,25 +88,34 @@
 			const vh = window.innerHeight;
 			const revealMargin = vh * 0.04;
 
-			document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => {
-				const factor = parseFloat(el.dataset.parallax || '0');
-				if (!factor) return;
-				const rect = el.getBoundingClientRect();
-				if (rect.bottom < -200 || rect.top > vh + 200) return;
-				const center = rect.top + rect.height / 2;
-				const offset = (center - vh / 2) * -factor;
-				el.style.setProperty('--py', `${offset.toFixed(2)}px`);
-			});
+			const parallaxNodes = document.querySelectorAll<HTMLElement>('[data-parallax]');
+			if (parallaxNodes.length > 0) {
+				const updates: { el: HTMLElement; offset: number }[] = [];
+				for (let i = 0; i < parallaxNodes.length; i++) {
+					const el = parallaxNodes[i];
+					const factor = parseFloat(el.dataset.parallax || '0');
+					if (!factor) continue;
+					const rect = el.getBoundingClientRect();
+					if (rect.bottom < -200 || rect.top > vh + 200) continue;
+					const center = rect.top + rect.height / 2;
+					const offset = (center - vh / 2) * -factor;
+					updates.push({ el, offset });
+				}
+				for (let i = 0; i < updates.length; i++) {
+					updates[i].el.style.setProperty('--py', `${updates[i].offset.toFixed(2)}px`);
+				}
+			}
 
-			document
-				.querySelectorAll<HTMLElement>('.reveal:not(.is-visible)')
-				.forEach((el) => {
+			const unrevealed = document.querySelectorAll<HTMLElement>('.reveal:not(.is-visible)');
+			if (unrevealed.length > 0) {
+				unrevealed.forEach((el) => {
 					const rect = el.getBoundingClientRect();
 					if (rect.top < vh - revealMargin && rect.bottom > revealMargin) {
 						el.classList.add('is-visible');
 						observer.unobserve(el);
 					}
 				});
+			}
 		};
 
 		const onScrollFx = () => {
@@ -389,7 +399,7 @@
 			radial-gradient(1000px 600px at -10% 30%, rgba(4, 45, 122, 0.1), transparent 70%),
 			linear-gradient(180deg, var(--color-mist) 0%, #ffffff 38%, var(--color-frost) 100%);
 		color: var(--color-ink);
-		overflow: clip;
+		overflow-x: clip;
 	}
 
 	.atmosphere {
@@ -443,10 +453,7 @@
 		position: sticky;
 		top: 0;
 		z-index: 40;
-		transition:
-			backdrop-filter 240ms var(--ease-spring),
-			box-shadow 240ms var(--ease-spring),
-			background 240ms var(--ease-spring);
+		will-change: transform;
 	}
 
 	.emergency-strip {
@@ -528,11 +535,13 @@
 		border-bottom: 1px solid var(--color-line);
 		backdrop-filter: blur(18px) saturate(140%);
 		-webkit-backdrop-filter: blur(18px) saturate(140%);
-		transition: inherit;
+		transition:
+			background 240ms ease,
+			box-shadow 240ms ease;
 	}
 
 	.site-header--condensed .header-glass {
-		background: rgba(255, 255, 255, 0.92);
+		background: rgba(255, 255, 255, 0.94);
 		box-shadow: 0 16px 36px -22px rgba(4, 45, 122, 0.32);
 	}
 
@@ -561,10 +570,11 @@
 
 	.brand-logo {
 		display: block;
-		height: 5rem;
+		height: 4.75rem;
 		width: auto;
 		max-width: min(280px, 52vw);
 		object-fit: contain;
+		transform-origin: left center;
 		transition: transform 240ms var(--ease-spring);
 	}
 
@@ -587,7 +597,12 @@
 	}
 
 	.site-header--condensed .brand-logo {
-		height: 4rem;
+		transform: scale(0.92);
+	}
+
+	a.brand:hover .site-header--condensed .brand-logo,
+	.site-header--condensed a.brand:hover .brand-logo {
+		transform: scale(0.95);
 	}
 
 	.primary-nav {
@@ -1028,12 +1043,12 @@
 
 	@media (max-width: 560px) {
 		.brand-logo {
-			height: 2.95rem;
+			height: 2.85rem;
 			max-width: min(260px, 58vw);
 		}
 
 		.site-header--condensed .brand-logo {
-			height: 2.65rem;
+			transform: scale(0.92);
 		}
 
 		.brand-logo--footer {
