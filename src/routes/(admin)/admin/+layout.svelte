@@ -8,6 +8,7 @@
 		<nav aria-label="Admin navigation">
 			<a href="/admin">Dashboard</a>
 			<a href="/admin/bookings">Bookings</a>
+			<a href="/admin/pages">Pages</a>
 			<a href="/admin/settings">Settings</a>
 			<a href="/">Back to website</a>
 		</nav>

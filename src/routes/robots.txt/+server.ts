@@ -5,13 +5,17 @@ import type { RequestHandler } from './$types';
 export const GET: RequestHandler = () => {
 	const body = `User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login
 
 Sitemap: ${SITE_ORIGIN}/sitemap.xml
 `;
 	return new Response(body, {
 		headers: {
 			'Content-Type': 'text/plain; charset=utf-8',
-			'Cache-Control': 'public, max-age=3600'
+			'Cache-Control': 'public, max-age=86400'
 		}
 	});
 };
