@@ -376,23 +376,28 @@
 					<p class="field-hint">
 						Permanently delete this custom page. This URL will return a 404 status code and be removed from the XML sitemap.
 					</p>
-					<form
-						method="POST"
-						action="?/delete"
-						use:enhance={({ cancel }) => {
-							if (!confirm(`Are you sure you want to permanently delete "${title}"?`)) {
-								cancel();
-							}
-						}}
+					<button
+						type="submit"
+						form="delete-form"
+						class="btn-danger-block"
 					>
-						<button type="submit" class="btn-danger-block">
-							Delete Page
-						</button>
-					</form>
+						Delete Page
+					</button>
 				</div>
 			</div>
 		</div>
 	</form>
+
+	<form
+		id="delete-form"
+		method="POST"
+		action="?/delete"
+		use:enhance={({ cancel }) => {
+			if (!confirm(`Are you sure you want to permanently delete "${title}"?`)) {
+				cancel();
+			}
+		}}
+	></form>
 </div>
 
 <style>
