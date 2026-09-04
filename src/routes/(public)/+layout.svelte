@@ -7,6 +7,64 @@
 
 	let locationsMenuOpen = $state(false);
 	let servicesMenuOpen = $state(false);
+	let hoverCloseTimer: ReturnType<typeof setTimeout> | null = null;
+
+	function handleMenuPointerEnter(menu: 'services' | 'locations') {
+		if (hoverCloseTimer) {
+			clearTimeout(hoverCloseTimer);
+			hoverCloseTimer = null;
+		}
+		if (typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches) {
+			if (menu === 'services') {
+				servicesMenuOpen = true;
+				locationsMenuOpen = false;
+			} else {
+				locationsMenuOpen = true;
+				servicesMenuOpen = false;
+			}
+		}
+	}
+
+	function handleMenuPointerLeave() {
+		if (typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches) {
+			if (hoverCloseTimer) clearTimeout(hoverCloseTimer);
+			hoverCloseTimer = setTimeout(() => {
+				servicesMenuOpen = false;
+				locationsMenuOpen = false;
+			}, 180);
+		}
+	}
+
+	function toggleMenu(menu: 'services' | 'locations', event: MouseEvent) {
+		event.preventDefault();
+		if (hoverCloseTimer) {
+			clearTimeout(hoverCloseTimer);
+			hoverCloseTimer = null;
+		}
+		if (menu === 'services') {
+			servicesMenuOpen = !servicesMenuOpen;
+			if (servicesMenuOpen) locationsMenuOpen = false;
+		} else {
+			locationsMenuOpen = !locationsMenuOpen;
+			if (locationsMenuOpen) servicesMenuOpen = false;
+		}
+	}
+
+	function handleDocumentClick(e: MouseEvent) {
+		const target = e.target as HTMLElement | null;
+		if (!target?.closest('.primary-nav')) {
+			servicesMenuOpen = false;
+			locationsMenuOpen = false;
+		}
+	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape') {
+			servicesMenuOpen = false;
+			locationsMenuOpen = false;
+			mobileOpen = false;
+		}
+	}
 
 	const navServices = [
 		{ name: 'Commercial Refrigeration Repairs', slug: 'commercial-refrigeration-repairs' },
@@ -135,7 +193,7 @@
 	});
 </script>
 
-<svelte:window onscroll={onScroll} />
+<svelte:window onscroll={onScroll} onclick={handleDocumentClick} onkeydown={handleKeydown} />
 
 <div class="page-shell">
 	<div class="atmosphere" aria-hidden="true">
@@ -146,7 +204,7 @@
 
 	<header class="site-header" class:site-header--condensed={condensed}>
 		<div class="emergency-strip" aria-label="Emergency support">
-			<div class="section-inner section-inner--wide emergency-strip__row">
+			<div class="section-inner section-inner--header emergency-strip__row">
 				<span class="emergency-strip__dot pulse-ring" aria-hidden="true"></span>
 				<span class="emergency-strip__copy">Emergency refrigeration help available now</span>
 				<a class="emergency-strip__cta" href="tel:0411532233">
@@ -157,7 +215,7 @@
 		</div>
 
 		<div class="header-glass">
-			<div class="section-inner section-inner--wide nav-wrap">
+			<div class="section-inner section-inner--header nav-wrap">
 				<a class="brand" href={resolve('/')} aria-label="AllCare Refrigeration home">
 					<img
 						class="brand-logo"
@@ -170,11 +228,20 @@
 				</a>
 
 				<nav class="primary-nav" aria-label="Public navigation">
-					<a href={resolve('/')}>Home</a>
-					<a href={resolve('/about')}>About</a>
-					<details class="nav-dropdown" bind:open={servicesMenuOpen}>
-						<summary class="nav-dropdown__summary">
-							Services
+					<a href={resolve('/')} class="nav-link">Home</a>
+					<a href={resolve('/about')} class="nav-link">About</a>
+
+					<details
+						class="nav-dropdown"
+						bind:open={servicesMenuOpen}
+						onpointerenter={() => handleMenuPointerEnter('services')}
+						onpointerleave={handleMenuPointerLeave}
+					>
+						<summary
+							class="nav-dropdown__summary"
+							onclick={(e) => toggleMenu('services', e)}
+						>
+							<span>Services</span>
 							<svg
 								class="nav-dropdown__chev"
 								aria-hidden="true"
@@ -189,22 +256,60 @@
 							</svg>
 						</summary>
 						<div class="nav-dropdown__panel" role="group" aria-label="Services">
-							<a href={resolve('/services')} onclick={() => (servicesMenuOpen = false)}>
-								<strong>All Services Overview &rarr;</strong>
+							<a
+								href={resolve('/services')}
+								class="nav-dropdown__overview"
+								onclick={() => (servicesMenuOpen = false)}
+							>
+								<div class="nav-dropdown__overview-content">
+									<span class="nav-dropdown__overview-title">All Services Overview</span>
+									<span class="nav-dropdown__overview-sub">Commercial cooling, cool rooms & HVAC</span>
+								</div>
+								<span class="nav-dropdown__arrow-badge" aria-hidden="true">
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M5 12h14" />
+										<path d="m12 5 7 7-7 7" />
+									</svg>
+								</span>
 							</a>
-							{#each navServices as srv (srv.slug)}
-								<a
-									href={`/services/${srv.slug}`}
-									onclick={() => (servicesMenuOpen = false)}
-								>
-									{srv.name}
-								</a>
-							{/each}
+							<div class="nav-dropdown__list">
+								{#each navServices as srv (srv.slug)}
+									<a
+										href={`/services/${srv.slug}`}
+										class="nav-dropdown__link"
+										onclick={() => (servicesMenuOpen = false)}
+									>
+										<span class="nav-dropdown__bullet" aria-hidden="true"></span>
+										<span class="nav-dropdown__text">{srv.name}</span>
+										<svg
+											class="nav-dropdown__link-arrow"
+											aria-hidden="true"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2.2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										>
+											<path d="m9 18 6-6-6-6" />
+										</svg>
+									</a>
+								{/each}
+							</div>
 						</div>
 					</details>
-					<details class="nav-dropdown" bind:open={locationsMenuOpen}>
-						<summary class="nav-dropdown__summary">
-							Locations
+
+					<details
+						class="nav-dropdown"
+						bind:open={locationsMenuOpen}
+						onpointerenter={() => handleMenuPointerEnter('locations')}
+						onpointerleave={handleMenuPointerLeave}
+					>
+						<summary
+							class="nav-dropdown__summary"
+							onclick={(e) => toggleMenu('locations', e)}
+						>
+							<span>Locations</span>
 							<svg
 								class="nav-dropdown__chev"
 								aria-hidden="true"
@@ -219,48 +324,81 @@
 							</svg>
 						</summary>
 						<div class="nav-dropdown__panel" role="group" aria-label="Service locations">
-							<a href={resolve('/service-areas')} onclick={() => (locationsMenuOpen = false)}>
-								<strong>All Service Areas &rarr;</strong>
+							<a
+								href={resolve('/service-areas')}
+								class="nav-dropdown__overview"
+								onclick={() => (locationsMenuOpen = false)}
+							>
+								<div class="nav-dropdown__overview-content">
+									<span class="nav-dropdown__overview-title">All Service Areas</span>
+									<span class="nav-dropdown__overview-sub">Rapid dispatch across Illawarra & Shoalhaven</span>
+								</div>
+								<span class="nav-dropdown__arrow-badge" aria-hidden="true">
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M5 12h14" />
+										<path d="m12 5 7 7-7 7" />
+									</svg>
+								</span>
 							</a>
-							{#each regionalServiceAreas as region (region.slug)}
-								<a
-									href={resolve(`/service-areas/${region.slug}`)}
-									onclick={() => (locationsMenuOpen = false)}
-								>
-									{region.name}
-								</a>
-							{/each}
+							<div class="nav-dropdown__list">
+								{#each regionalServiceAreas as region (region.slug)}
+									<a
+										href={resolve(`/service-areas/${region.slug}`)}
+										class="nav-dropdown__link"
+										onclick={() => (locationsMenuOpen = false)}
+									>
+										<span class="nav-dropdown__bullet nav-dropdown__bullet--loc" aria-hidden="true"></span>
+										<span class="nav-dropdown__text">{region.name}</span>
+										<svg
+											class="nav-dropdown__link-arrow"
+											aria-hidden="true"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2.2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										>
+											<path d="m9 18 6-6-6-6" />
+										</svg>
+									</a>
+								{/each}
+							</div>
 						</div>
 					</details>
-					<a href={resolve('/faq')}>FAQs</a>
+
+					<a href={resolve('/faq')} class="nav-link">FAQs</a>
 				</nav>
 
-				<a class="quote-btn" href={resolve('/get-a-quote')}>
-					<span>Get a Quote</span>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2.4"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					>
-						<path d="M5 12h14" />
-						<path d="m13 5 7 7-7 7" />
-					</svg>
-				</a>
+				<div class="nav-actions">
+					<a class="quote-btn" href={resolve('/get-a-quote')}>
+						<span>Get a Quote</span>
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.4"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M5 12h14" />
+							<path d="m13 5 7 7-7 7" />
+						</svg>
+					</a>
 
-				<button
-					type="button"
-					class="menu-toggle"
-					aria-expanded={mobileOpen}
-					aria-controls="mobile-nav"
-					aria-label="Toggle navigation"
-					onclick={() => (mobileOpen = !mobileOpen)}
-				>
-					<span></span><span></span><span></span>
-				</button>
+					<button
+						type="button"
+						class="menu-toggle"
+						class:menu-toggle--open={mobileOpen}
+						aria-expanded={mobileOpen}
+						aria-controls="mobile-nav"
+						aria-label="Toggle navigation"
+						onclick={() => (mobileOpen = !mobileOpen)}
+					>
+						<span></span><span></span><span></span>
+					</button>
+				</div>
 			</div>
 
 			{#if mobileOpen}
@@ -268,7 +406,12 @@
 					<a href={resolve('/')} onclick={() => (mobileOpen = false)}>Home</a>
 					<a href={resolve('/about')} onclick={() => (mobileOpen = false)}>About</a>
 					<details class="mobile-nav__dropdown">
-						<summary class="mobile-nav__summary">Services</summary>
+						<summary class="mobile-nav__summary">
+							<span>Services</span>
+							<svg class="mobile-nav__chev" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+								<path d="m6 9 6 6 6-6" />
+							</svg>
+						</summary>
 						<div class="mobile-nav__sub" role="group" aria-label="Services">
 							<a href={resolve('/services')} onclick={() => (mobileOpen = false)}>
 								<strong>All Services Overview &rarr;</strong>
@@ -284,7 +427,12 @@
 						</div>
 					</details>
 					<details class="mobile-nav__dropdown">
-						<summary class="mobile-nav__summary">Locations</summary>
+						<summary class="mobile-nav__summary">
+							<span>Locations</span>
+							<svg class="mobile-nav__chev" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+								<path d="m6 9 6 6 6-6" />
+							</svg>
+						</summary>
 						<div class="mobile-nav__sub" role="group" aria-label="Service locations">
 							<a href={resolve('/service-areas')} onclick={() => (mobileOpen = false)}>
 								<strong>All Service Areas &rarr;</strong>
@@ -449,11 +597,18 @@
 		transform: translate3d(0, var(--py, 0px), 0);
 	}
 
+	.section-inner--header {
+		width: 100%;
+		max-width: 114rem;
+		margin-inline: auto;
+		padding-inline: clamp(1.25rem, 3.5vw, 3.5rem);
+	}
+
 	.site-header {
 		position: sticky;
 		top: 0;
 		z-index: 40;
-		will-change: transform;
+		transition: transform 260ms var(--ease-spring);
 	}
 
 	.emergency-strip {
@@ -495,12 +650,24 @@
 		position: relative;
 	}
 
+	@keyframes radar-pulse {
+		0% {
+			box-shadow: 0 0 0 0 rgba(128, 239, 209, 0.85);
+		}
+		70% {
+			box-shadow: 0 0 0 9px rgba(128, 239, 209, 0);
+		}
+		100% {
+			box-shadow: 0 0 0 0 rgba(128, 239, 209, 0);
+		}
+	}
+
 	.emergency-strip__dot {
-		width: 0.55rem;
-		height: 0.55rem;
+		width: 0.58rem;
+		height: 0.58rem;
 		border-radius: 999px;
 		background: #80efd1;
-		box-shadow: 0 0 0 0 rgba(128, 239, 209, 0.85);
+		animation: radar-pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 		flex: 0 0 auto;
 	}
 
@@ -516,8 +683,13 @@
 		color: #ffffff;
 		text-decoration: none;
 		font-weight: 700;
+		padding: 0.15rem 0.45rem;
+		border-radius: 6px;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.45);
-		transition: border-color 200ms ease;
+		transition:
+			border-color 200ms ease,
+			background 200ms ease,
+			transform 200ms var(--ease-spring);
 	}
 
 	.emergency-strip__cta strong {
@@ -528,35 +700,45 @@
 	.emergency-strip__cta:hover,
 	.emergency-strip__cta:focus-visible {
 		border-color: #ffffff;
+		background: rgba(255, 255, 255, 0.14);
+		transform: translateY(-1px);
 	}
 
 	.header-glass {
-		background: rgba(255, 255, 255, 0.7);
+		background: rgba(255, 255, 255, 0.76);
 		border-bottom: 1px solid var(--color-line);
-		backdrop-filter: blur(18px) saturate(140%);
-		-webkit-backdrop-filter: blur(18px) saturate(140%);
+		backdrop-filter: blur(20px) saturate(150%);
+		-webkit-backdrop-filter: blur(20px) saturate(150%);
 		transition:
-			background 240ms ease,
-			box-shadow 240ms ease;
+			background 280ms ease,
+			box-shadow 280ms ease,
+			border-color 280ms ease;
 	}
 
 	.site-header--condensed .header-glass {
-		background: rgba(255, 255, 255, 0.94);
-		box-shadow: 0 16px 36px -22px rgba(4, 45, 122, 0.32);
+		background: rgba(255, 255, 255, 0.96);
+		box-shadow: 0 14px 40px -12px rgba(4, 45, 122, 0.22);
+		border-bottom-color: rgba(15, 87, 251, 0.15);
 	}
 
 	.nav-wrap {
-		display: grid;
-		grid-template-columns: minmax(16rem, 1fr) auto auto auto;
+		display: flex;
 		align-items: center;
-		gap: 1rem;
+		justify-content: space-between;
+		gap: clamp(1.25rem, 2.5vw, 3rem);
 		padding-block: 0.95rem;
+		transition: padding-block 260ms var(--ease-spring);
+	}
+
+	.site-header--condensed .nav-wrap {
+		padding-block: 0.65rem;
 	}
 
 	.brand {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.7rem;
+		flex: 0 0 auto;
 		min-width: 0;
 		color: var(--color-ink);
 		text-decoration: none;
@@ -575,7 +757,7 @@
 		max-width: min(280px, 52vw);
 		object-fit: contain;
 		transform-origin: left center;
-		transition: transform 240ms var(--ease-spring);
+		transition: transform 260ms var(--ease-spring);
 	}
 
 	a.brand:hover .brand-logo,
@@ -607,46 +789,70 @@
 
 	.primary-nav {
 		display: flex;
+		align-items: center;
 		justify-content: center;
-		gap: 0.25rem;
-		flex-wrap: wrap;
+		gap: clamp(0.5rem, 1.2vw, 1.25rem);
+		flex: 1 1 auto;
 	}
 
-	.primary-nav a {
+	.primary-nav a.nav-link,
+	.nav-dropdown__summary {
 		position: relative;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.98rem;
+		font-weight: 600;
 		color: #334155;
 		text-decoration: none;
-		font-weight: 600;
-		padding: 0.6rem 0.95rem;
+		padding: 0.65rem 1.15rem;
 		border-radius: 999px;
+		letter-spacing: -0.01em;
+		white-space: nowrap;
+		cursor: pointer;
+		user-select: none;
 		transition:
 			background 200ms ease,
 			color 200ms ease,
-			transform 200ms ease;
+			transform 200ms var(--ease-spring);
 	}
 
-	.primary-nav a::after {
+	.primary-nav a.nav-link::after,
+	.nav-dropdown__summary::after {
 		content: '';
 		position: absolute;
 		left: 50%;
-		bottom: 0.35rem;
+		bottom: 0.32rem;
 		width: 0;
-		height: 2px;
-		background: linear-gradient(90deg, var(--color-brand-light), var(--color-brand-deeper));
-		border-radius: 2px;
+		height: 2.5px;
+		background: linear-gradient(90deg, var(--color-brand-light), var(--color-brand-deep));
+		border-radius: 999px;
 		transform: translateX(-50%);
-		transition: width 240ms var(--ease-spring);
+		transition: width 260ms var(--ease-spring);
+		pointer-events: none;
 	}
 
-	.primary-nav a:hover,
-	.primary-nav a:focus-visible {
-		background: rgba(15, 87, 251, 0.12);
-		color: var(--color-brand-deeper);
+	.primary-nav a.nav-link:hover,
+	.primary-nav a.nav-link:focus-visible,
+	.nav-dropdown__summary:hover,
+	.nav-dropdown__summary:focus-visible,
+	.nav-dropdown[open] .nav-dropdown__summary {
+		background: rgba(15, 87, 251, 0.08);
+		color: var(--color-brand-deep);
+		outline: none;
 	}
 
-	.primary-nav a:hover::after,
-	.primary-nav a:focus-visible::after {
-		width: calc(100% - 1.6rem);
+	.primary-nav a.nav-link:hover,
+	.nav-dropdown__summary:hover {
+		transform: translateY(-1px);
+	}
+
+	.primary-nav a.nav-link:hover::after,
+	.primary-nav a.nav-link:focus-visible::after,
+	.nav-dropdown__summary:hover::after,
+	.nav-dropdown[open] .nav-dropdown__summary::after,
+	.nav-dropdown__summary:focus-visible::after {
+		width: calc(100% - 1.8rem);
 	}
 
 	.nav-dropdown {
@@ -654,51 +860,18 @@
 		align-self: center;
 	}
 
-	.nav-dropdown__summary {
-		position: relative;
-		display: flex;
-		align-items: center;
-		gap: 0.25rem;
-		list-style: none;
-		cursor: pointer;
-		color: #334155;
-		font-weight: 600;
-		padding: 0.6rem 0.95rem;
-		border-radius: 999px;
-		transition:
-			background 200ms ease,
-			color 200ms ease,
-			transform 200ms ease;
+	/* Bridge pseudo-element to prevent cursor dropouts */
+	.nav-dropdown::before {
+		content: '';
+		position: absolute;
+		inset-inline: -1rem;
+		top: 100%;
+		height: 0.75rem;
+		pointer-events: auto;
 	}
 
 	.nav-dropdown__summary::-webkit-details-marker {
 		display: none;
-	}
-
-	.nav-dropdown__summary::after {
-		content: '';
-		position: absolute;
-		left: 50%;
-		bottom: 0.35rem;
-		width: 0;
-		height: 2px;
-		background: linear-gradient(90deg, var(--color-brand-light), var(--color-brand-deeper));
-		border-radius: 2px;
-		transform: translateX(-50%);
-		transition: width 240ms var(--ease-spring);
-	}
-
-	.nav-dropdown__summary:hover,
-	.nav-dropdown__summary:focus-visible {
-		background: rgba(15, 87, 251, 0.12);
-		color: var(--color-brand-deeper);
-		outline: none;
-	}
-
-	.nav-dropdown__summary:hover::after,
-	.nav-dropdown[open] .nav-dropdown__summary::after,
-	.nav-dropdown__summary:focus-visible::after {
-		width: calc(100% - 1.6rem);
 	}
 
 	.nav-dropdown__chev {
@@ -706,51 +879,379 @@
 		height: 1rem;
 		flex-shrink: 0;
 		opacity: 0.7;
-		transition: transform 200ms var(--ease-spring);
+		transition:
+			transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+			opacity 200ms ease;
 	}
 
 	.nav-dropdown[open] .nav-dropdown__chev {
 		transform: rotate(180deg);
+		opacity: 1;
+		color: var(--color-brand);
+	}
+
+	@keyframes dropdown-enter {
+		0% {
+			opacity: 0;
+			transform: translateX(-50%) translateY(-10px) scale(0.96);
+			filter: blur(4px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateX(-50%) translateY(0) scale(1);
+			filter: blur(0px);
+		}
 	}
 
 	.nav-dropdown__panel {
 		position: absolute;
-		top: calc(100% + 0.35rem);
+		top: calc(100% + 0.55rem);
 		left: 50%;
 		transform: translateX(-50%);
-		min-width: 12.5rem;
-		max-height: min(70vh, 22rem);
+		width: max-content;
+		min-width: 24rem;
+		max-width: min(28rem, calc(100vw - 2rem));
+		max-height: min(78vh, 32rem);
 		overflow-y: auto;
-		padding: 0.35rem;
-		background: rgba(255, 255, 255, 0.98);
-		border: 1px solid var(--color-line);
-		border-radius: 0.85rem;
-		box-shadow: 0 18px 48px -12px rgba(15, 51, 100, 0.25);
+		padding: 0.55rem;
+		background: rgba(255, 255, 255, 0.97);
+		backdrop-filter: blur(24px) saturate(160%);
+		-webkit-backdrop-filter: blur(24px) saturate(160%);
+		border: 1px solid rgba(15, 87, 251, 0.15);
+		border-radius: 1.15rem;
+		box-shadow:
+			0 24px 50px -12px rgba(4, 45, 122, 0.22),
+			0 0 0 1px rgba(255, 255, 255, 0.9) inset;
 		z-index: 50;
+		animation: dropdown-enter 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+		transform-origin: top center;
 	}
 
-	.nav-dropdown__panel a {
-		display: block;
-		padding: 0.55rem 0.85rem;
-		border-radius: 0.6rem;
-		color: #334155;
+	.nav-dropdown__overview {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.85rem;
+		padding: 0.8rem 1rem;
+		border-radius: 0.85rem;
+		background: linear-gradient(135deg, rgba(15, 87, 251, 0.08), rgba(77, 132, 255, 0.04));
+		border: 1px solid rgba(15, 87, 251, 0.12);
 		text-decoration: none;
-		font-weight: 600;
-		font-size: 0.95rem;
+		margin-bottom: 0.45rem;
 		transition:
+			background 200ms ease,
+			border-color 200ms ease,
+			transform 200ms var(--ease-spring),
+			box-shadow 200ms ease;
+	}
+
+	.nav-dropdown__overview:hover,
+	.nav-dropdown__overview:focus-visible {
+		background: linear-gradient(135deg, rgba(15, 87, 251, 0.14), rgba(77, 132, 255, 0.08));
+		border-color: rgba(15, 87, 251, 0.25);
+		transform: translateY(-1px);
+		box-shadow: 0 6px 18px -4px rgba(15, 87, 251, 0.18);
+		outline: none;
+	}
+
+	.nav-dropdown__overview-content {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+
+	.nav-dropdown__overview-title {
+		font-size: 0.92rem;
+		font-weight: 800;
+		color: var(--color-brand-deep);
+		letter-spacing: -0.01em;
+	}
+
+	.nav-dropdown__overview-sub {
+		font-size: 0.76rem;
+		font-weight: 500;
+		color: var(--color-ink-soft);
+	}
+
+	.nav-dropdown__arrow-badge {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.85rem;
+		height: 1.85rem;
+		border-radius: 999px;
+		background: rgba(15, 87, 251, 0.12);
+		color: var(--color-brand);
+		flex-shrink: 0;
+		transition:
+			transform 200ms var(--ease-spring),
 			background 200ms ease,
 			color 200ms ease;
 	}
 
-	.nav-dropdown__panel a::after {
-		display: none;
+	.nav-dropdown__arrow-badge svg {
+		width: 0.95rem;
+		height: 0.95rem;
 	}
 
-	.nav-dropdown__panel a:hover,
-	.nav-dropdown__panel a:focus-visible {
-		background: rgba(15, 87, 251, 0.1);
-		color: var(--color-brand-deeper);
+	.nav-dropdown__overview:hover .nav-dropdown__arrow-badge {
+		transform: translateX(3px);
+		background: var(--color-brand);
+		color: #ffffff;
+	}
+
+	.nav-dropdown__list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+
+	.nav-dropdown__link {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.6rem 0.85rem;
+		border-radius: 0.7rem;
+		color: #334155;
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 0.92rem;
+		white-space: nowrap;
+		transition:
+			background 180ms ease,
+			color 180ms ease,
+			transform 180ms var(--ease-spring),
+			padding 180ms ease;
+	}
+
+	.nav-dropdown__link::after {
+		display: none !important;
+	}
+
+	.nav-dropdown__bullet {
+		width: 0.45rem;
+		height: 0.45rem;
+		border-radius: 999px;
+		background: rgba(15, 87, 251, 0.35);
+		flex-shrink: 0;
+		transition:
+			transform 200ms var(--ease-spring),
+			background 200ms ease,
+			box-shadow 200ms ease;
+	}
+
+	.nav-dropdown__bullet--loc {
+		background: rgba(16, 185, 129, 0.45);
+	}
+
+	.nav-dropdown__text {
+		flex: 1 1 auto;
+		font-weight: 600;
+	}
+
+	.nav-dropdown__link-arrow {
+		width: 0.9rem;
+		height: 0.9rem;
+		color: var(--color-brand);
+		opacity: 0;
+		transform: translateX(-6px);
+		transition:
+			opacity 180ms ease,
+			transform 180ms var(--ease-spring);
+		flex-shrink: 0;
+	}
+
+	.nav-dropdown__link:hover,
+	.nav-dropdown__link:focus-visible {
+		background: rgba(15, 87, 251, 0.08);
+		color: var(--color-brand-deep);
+		transform: translateX(4px);
 		outline: none;
+	}
+
+	.nav-dropdown__link:hover .nav-dropdown__bullet {
+		transform: scale(1.4);
+		background: var(--color-brand);
+		box-shadow: 0 0 8px rgba(15, 87, 251, 0.5);
+	}
+
+	.nav-dropdown__link:hover .nav-dropdown__bullet--loc {
+		transform: scale(1.4);
+		background: #10b981;
+		box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+	}
+
+	.nav-dropdown__link:hover .nav-dropdown__link-arrow {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	.nav-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.85rem;
+		flex: 0 0 auto;
+	}
+
+	.quote-btn {
+		position: relative;
+		overflow: hidden;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		background: linear-gradient(
+			135deg,
+			var(--color-brand-light) 0%,
+			var(--color-brand) 55%,
+			var(--color-brand-deep) 100%
+		);
+		color: #ffffff;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 0.98rem;
+		padding: 0.72rem 1.4rem;
+		border-radius: 999px;
+		box-shadow: 0 12px 30px -8px rgba(15, 87, 251, 0.5);
+		letter-spacing: -0.01em;
+		white-space: nowrap;
+		transition:
+			box-shadow 240ms var(--ease-spring),
+			transform 240ms var(--ease-spring),
+			filter 240ms var(--ease-spring);
+	}
+
+	.quote-btn::after {
+		content: '';
+		position: absolute;
+		top: -50%;
+		left: -80%;
+		width: 50%;
+		height: 200%;
+		background: linear-gradient(
+			90deg,
+			rgba(255, 255, 255, 0) 0%,
+			rgba(255, 255, 255, 0.35) 50%,
+			rgba(255, 255, 255, 0) 100%
+		);
+		transform: rotate(25deg);
+		transition: transform 600ms ease;
+		pointer-events: none;
+	}
+
+	.quote-btn:hover::after {
+		transform: rotate(25deg) translateX(400%);
+	}
+
+	.quote-btn svg {
+		width: 1.05rem;
+		height: 1.05rem;
+		transition: transform 240ms var(--ease-spring);
+	}
+
+	.quote-btn:hover,
+	.quote-btn:focus-visible {
+		box-shadow: 0 16px 38px -6px rgba(15, 87, 251, 0.62);
+		transform: translateY(-2px);
+		filter: brightness(1.05);
+		outline: none;
+	}
+
+	.quote-btn:active {
+		transform: translateY(0);
+		box-shadow: 0 8px 20px -4px rgba(15, 87, 251, 0.45);
+	}
+
+	.quote-btn:hover svg {
+		transform: translateX(4px);
+	}
+
+	.menu-toggle {
+		position: relative;
+		display: none;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 5px;
+		width: 2.75rem;
+		height: 2.75rem;
+		padding: 0.6rem;
+		border: 1px solid var(--color-line);
+		border-radius: 0.85rem;
+		background: rgba(255, 255, 255, 0.9);
+		cursor: pointer;
+		transition:
+			background 200ms ease,
+			border-color 200ms ease,
+			transform 200ms ease;
+	}
+
+	.menu-toggle:hover {
+		background: rgba(15, 87, 251, 0.08);
+		border-color: rgba(15, 87, 251, 0.25);
+	}
+
+	.menu-toggle span {
+		display: block;
+		width: 1.35rem;
+		height: 2px;
+		background: #1e293b;
+		border-radius: 999px;
+		transition:
+			transform 260ms var(--ease-spring),
+			opacity 200ms ease;
+		transform-origin: center;
+	}
+
+	.menu-toggle--open span:nth-child(1) {
+		transform: translateY(7px) rotate(45deg);
+	}
+
+	.menu-toggle--open span:nth-child(2) {
+		opacity: 0;
+		transform: scaleX(0);
+	}
+
+	.menu-toggle--open span:nth-child(3) {
+		transform: translateY(-7px) rotate(-45deg);
+	}
+
+	@keyframes mobile-nav-slide {
+		0% {
+			opacity: 0;
+			transform: translateY(-10px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.mobile-nav {
+		display: none;
+		flex-direction: column;
+		gap: 0.35rem;
+		padding: 0.75rem clamp(1rem, 4vw, 2.75rem) 1.25rem;
+		background: rgba(255, 255, 255, 0.98);
+		backdrop-filter: blur(20px);
+		border-bottom: 1px solid var(--color-line);
+		box-shadow: 0 16px 36px -12px rgba(4, 45, 122, 0.15);
+		animation: mobile-nav-slide 250ms var(--ease-spring) forwards;
+	}
+
+	.mobile-nav a {
+		padding: 0.7rem 0.85rem;
+		text-decoration: none;
+		color: var(--color-ink);
+		font-weight: 700;
+		border-radius: 0.7rem;
+		transition:
+			background 180ms ease,
+			color 180ms ease;
+	}
+
+	.mobile-nav a:hover {
+		background: rgba(15, 87, 251, 0.12);
+		color: var(--color-brand-deep);
 	}
 
 	.mobile-nav__dropdown {
@@ -758,27 +1259,42 @@
 	}
 
 	.mobile-nav__summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		list-style: none;
 		padding: 0.7rem 0.85rem;
 		cursor: pointer;
 		font-weight: 700;
 		color: var(--color-ink);
 		border-radius: 0.7rem;
+		transition: background 180ms ease;
 	}
 
 	.mobile-nav__summary::-webkit-details-marker {
 		display: none;
 	}
 
+	.mobile-nav__chev {
+		width: 1rem;
+		height: 1rem;
+		opacity: 0.7;
+		transition: transform 240ms var(--ease-spring);
+	}
+
 	.mobile-nav__dropdown[open] .mobile-nav__summary {
 		background: rgba(15, 87, 251, 0.08);
+	}
+
+	.mobile-nav__dropdown[open] .mobile-nav__chev {
+		transform: rotate(180deg);
 	}
 
 	.mobile-nav__sub {
 		display: flex;
 		flex-direction: column;
-		gap: 0.15rem;
-		padding: 0.15rem 0 0.35rem 0.5rem;
+		gap: 0.2rem;
+		padding: 0.25rem 0 0.45rem 0.75rem;
 	}
 
 	.mobile-nav__sub a {
@@ -788,97 +1304,22 @@
 		color: #475569;
 		text-decoration: none;
 		border-radius: 0.55rem;
+		transition:
+			background 180ms ease,
+			color 180ms ease;
 	}
 
 	.mobile-nav__sub a:hover {
-		background: rgba(15, 87, 251, 0.12);
-	}
-
-	.quote-btn {
-		justify-self: end;
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4rem;
-		background: linear-gradient(135deg, var(--color-brand-light), var(--color-brand));
-		color: #ffffff;
-		text-decoration: none;
-		font-weight: 800;
-		padding: 0.7rem 1.1rem;
-		border-radius: 999px;
-		box-shadow: 0 14px 32px -10px rgba(15, 87, 251, 0.5);
-		transition:
-			box-shadow 220ms var(--ease-spring),
-			transform 220ms var(--ease-spring),
-			filter 220ms var(--ease-spring);
-	}
-
-	.quote-btn svg {
-		width: 1rem;
-		height: 1rem;
-		transition: transform 220ms var(--ease-spring);
-	}
-
-	.quote-btn:hover,
-	.quote-btn:focus-visible {
-		box-shadow: 0 18px 38px -8px rgba(15, 87, 251, 0.55);
-		transform: translateY(-1px);
-		filter: brightness(1.04);
-	}
-
-	.quote-btn:hover svg {
-		transform: translateX(3px);
-	}
-
-	.menu-toggle {
-		display: none;
-		grid-template-rows: repeat(3, auto);
-		align-content: center;
-		justify-self: end;
-		gap: 5px;
-		width: 2.6rem;
-		height: 2.6rem;
-		padding: 0.6rem;
-		border: 1px solid var(--color-line);
-		border-radius: 0.85rem;
-		background: rgba(255, 255, 255, 0.85);
-		cursor: pointer;
-	}
-
-	.menu-toggle span {
-		display: block;
-		width: 100%;
-		height: 2px;
-		background: #334155;
-		border-radius: 999px;
-		transition: transform 220ms var(--ease-spring);
-	}
-
-	.mobile-nav {
-		display: none;
-		flex-direction: column;
-		gap: 0.25rem;
-		padding: 0.6rem clamp(1rem, 4vw, 2.75rem) 1rem;
-		background: rgba(255, 255, 255, 0.96);
-		border-bottom: 1px solid var(--color-line);
-	}
-
-	.mobile-nav a {
-		padding: 0.7rem 0.85rem;
-		text-decoration: none;
-		color: var(--color-ink);
-		font-weight: 700;
-		border-radius: 0.7rem;
-	}
-
-	.mobile-nav a:hover {
-		background: rgba(15, 87, 251, 0.12);
+		background: rgba(15, 87, 251, 0.1);
+		color: var(--color-brand-deep);
 	}
 
 	.mobile-nav__cta {
-		margin-top: 0.4rem;
+		margin-top: 0.5rem;
 		background: linear-gradient(135deg, var(--color-brand-light), var(--color-brand));
 		color: #ffffff !important;
 		text-align: center;
+		box-shadow: 0 8px 24px -6px rgba(15, 87, 251, 0.4);
 	}
 
 	.site-main {
@@ -1020,16 +1461,11 @@
 
 	@media (max-width: 960px) {
 		.menu-toggle {
-			display: grid;
+			display: flex;
 		}
 
-		.primary-nav,
-		.quote-btn {
+		.primary-nav {
 			display: none;
-		}
-
-		.nav-wrap {
-			grid-template-columns: 1fr auto;
 		}
 
 		.mobile-nav {
@@ -1038,6 +1474,12 @@
 
 		.site-footer__grid {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+		.nav-actions .quote-btn {
+			display: none;
 		}
 	}
 
