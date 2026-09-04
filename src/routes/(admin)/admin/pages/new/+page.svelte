@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData } from './$types';
-	import { slugify } from '$lib/server/site-pages';
+	import { slugify } from '$lib/site-pages';
 
 	let { form }: { form: ActionData } = $props();
 
